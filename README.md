@@ -34,7 +34,13 @@ A typical prompt can be as simple as:
 Generate 100 synthetic responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and responses.
 ```
 
-See `docs/intended-codex-loop.md` and `prompts/full-loop-survey.md`.
+For example:
+
+```text
+Create a survey on beliefs about discrimination in hiring and wage setting. Use survey_key discrimination_beliefs. Design 6-8 clear questions for economics students or researchers, generate 100 synthetic responses locally, clean the generated data with Stata if available and Python otherwise, create summary figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API unless I explicitly ask.
+```
+
+See `docs/intended-codex-loop.md`, `prompts/full-loop-survey.md`, and `prompts/discrimination-beliefs-example.md`.
 
 ## Quick Start
 
@@ -108,6 +114,12 @@ If you prefer to ask Codex in plain language instead of running commands yoursel
 
 ```text
 docs/codex-prompt-alternatives.md
+```
+
+You can also start from the worked example:
+
+```text
+prompts/discrimination-beliefs-example.md
 ```
 
 ## Run The Local Smoke Test
@@ -343,6 +355,12 @@ For the complete survey-to-responses-to-slides loop, use:
 
 ```text
 prompts/full-loop-survey.md
+```
+
+For a concrete example survey about beliefs around discrimination, use:
+
+```text
+prompts/discrimination-beliefs-example.md
 ```
 
 For a final repo validation pass before publishing or sharing, use:

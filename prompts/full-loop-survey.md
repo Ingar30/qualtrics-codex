@@ -28,3 +28,9 @@ Short version:
 ```text
 Generate 100 synthetic responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and responses. Use the repository's Qualtrics workflow and do not call the live API unless I explicitly ask.
 ```
+
+Worked example:
+
+```text
+Create a survey on beliefs about discrimination in hiring and wage setting. Use survey_key discrimination_beliefs. Design 6-8 clear questions for economics students or researchers, generate 100 synthetic responses locally, clean the generated data with Stata if available and Python otherwise, create summary figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API unless I explicitly ask.
+```
