@@ -29,3 +29,26 @@ def test_repo_smoke_analysis_writes_outputs(tmp_path: Path) -> None:
     assert (outputs["inputs_dir"] / "workflow_familiarity.png").exists()
     assert (outputs["inputs_dir"] / "workflow_familiarity.pdf").exists()
     assert "Pipeline confidence" in outputs["summary_md"].read_text(encoding="utf-8")
+
+
+def test_read_responses_drops_qualtrics_metadata_rows(tmp_path: Path) -> None:
+    module = load_analysis_module()
+    fixture = tmp_path / "qualtrics_export.csv"
+    fixture.write_text(
+        "\n".join(
+            [
+                "ResponseId,role,workflow_familiarity,preferred_output,confidence_running_pipeline",
+                "Response ID,Which role?,How familiar?,Preferred output?,Confidence?",
+                "ImportId,response_import,workflow_import,output_import,confidence_import",
+                "R_abc123,Researcher,Very familiar,Slides,Very confident",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    data = module.read_responses(fixture)
+
+    assert len(data) == 1
+    assert data.iloc[0]["responseid"] == "R_abc123"
+    assert data.iloc[0]["role"] == "Researcher"

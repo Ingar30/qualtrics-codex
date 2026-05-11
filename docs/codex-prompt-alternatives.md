@@ -58,6 +58,20 @@ Prompt alternative:
 Run the repository smoke test without calling Qualtrics: generate synthetic responses for repo_smoke_test, analyze them, and build the slides. If Stata or LaTeX is missing, use the repository fallbacks.
 ```
 
+## Install Requirements
+
+Command:
+
+```powershell
+.\scripts\setup.ps1
+```
+
+Prompt alternative:
+
+```text
+Set up the Python environment for this repository. Prefer a local .venv, install requirements.txt, and if venv creation fails, explain the safe fallback using scripts/setup.ps1 -User.
+```
+
 ## Build The Public Demo Site
 
 Command:

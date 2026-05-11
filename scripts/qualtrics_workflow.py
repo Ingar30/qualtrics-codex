@@ -74,7 +74,8 @@ def load_requests():
     except ImportError as exc:
         raise SystemExit(
             "The Python package 'requests' is required. "
-            "Run: python -m pip install -r requirements.txt"
+            "Run: python -m pip install -r requirements.txt "
+            "or py -3 -m pip install --user -r requirements.txt"
         ) from exc
     return requests
 
@@ -82,7 +83,10 @@ def load_requests():
 def require_env(name: str) -> str:
     value = os.environ.get(name, "").strip()
     if not value:
-        raise SystemExit(f"{name} is missing. Add it to .env or your shell environment.")
+        raise SystemExit(
+            f"{name} is missing. Load it from your local secrets file or shell environment. "
+            "See docs/local-qualtrics-secrets.md."
+        )
     return value
 
 
@@ -464,6 +468,7 @@ def command_create_survey(args: argparse.Namespace) -> int:
         print("Activation was requested. Check metadata for publish/activation details.")
     else:
         print("Survey was created as a draft. Use --activate only when ready to collect responses.")
+        print("Note: draft/inactive surveys may still accept API-created test responses. Treat API access as live.")
     return 0
 
 
@@ -493,6 +498,7 @@ def command_get_link(args: argparse.Namespace) -> int:
     info_path = save_metadata(survey_key, metadata)
     print(f"Reusable link: {reusable_link}")
     print(f"Wrote metadata: {info_path}")
+    print("Keep reusable links and metadata private by default; do not commit or publish them.")
     return 0
 
 
@@ -564,6 +570,8 @@ def command_export_responses(args: argparse.Namespace) -> int:
     print(f"Downloaded ZIP: {zip_path}")
     print(f"Unzipped raw files: {raw_dir}")
     print(f"Response file: {exported_files[0]}")
+    if export_format == "csv":
+        print("Note: Qualtrics CSV exports may include metadata rows after the header; analysis scripts should filter real ResponseId values that start with R_.")
     return 0
 
 

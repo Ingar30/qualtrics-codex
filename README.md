@@ -66,6 +66,18 @@ Install Python packages:
 python -m pip install -r requirements.txt
 ```
 
+Windows users can use the setup helper:
+
+```powershell
+.\scripts\setup.ps1
+```
+
+If virtual environment creation fails and leaves a partial `.venv/`, see `docs/setup-troubleshooting.md`. For a quick non-venv fallback:
+
+```powershell
+.\scripts\setup.ps1 -User
+```
+
 ## Use This Repo With Codex
 
 Clone the starter repo, enter the folder, and open it in Codex:
@@ -282,6 +294,8 @@ python scripts/run_analysis.py --survey-key repo_smoke_test
 python scripts/build_slides.py --survey-key repo_smoke_test
 ```
 
+Qualtrics CSV exports often include two metadata rows after the header. The included smoke-test analysis filters those rows when `ResponseId` is present by keeping response IDs that start with `R_`.
+
 ## GitHub Pages Demo
 
 The Pages site is a public demo built from generated synthetic responses. It publishes only synthetic artifacts:
@@ -342,6 +356,7 @@ prompts/final-validation-goal.md
 - Stata/SPSS workflow: `docs/stata-extension.md`
 - Beamer/Python slide workflow: `docs/latex-extension.md`
 - Intended Codex loop: `docs/intended-codex-loop.md`
+- Setup troubleshooting: `docs/setup-troubleshooting.md`
 - Local Qualtrics secrets: `docs/local-qualtrics-secrets.md`
 - Codex prompt alternatives: `docs/codex-prompt-alternatives.md`
 - Reproducibility notes: `docs/reproducibility.md`

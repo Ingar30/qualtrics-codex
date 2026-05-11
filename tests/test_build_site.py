@@ -37,4 +37,15 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     assert "prompts/start-with-codex.md" in index
     assert "docs/codex-prompt-alternatives.md" in index
     assert "docs/intended-codex-loop.md" in index
+    assert "docs/setup-troubleshooting.md" in index
     assert "Generate 100 synthetic responses" in index
+
+
+def test_walkthrough_mentions_qualtrics_metadata_and_link_privacy(tmp_path: Path) -> None:
+    build_site.build_walkthrough(tmp_path)
+
+    walkthrough = (tmp_path / "walkthrough.html").read_text(encoding="utf-8")
+    assert "ResponseId" in walkthrough
+    assert "R_" in walkthrough
+    assert "Reusable links" in walkthrough
+    assert "Draft or inactive surveys" in walkthrough

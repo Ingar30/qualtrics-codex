@@ -50,6 +50,10 @@ python scripts/build_slides.py --survey-key <survey_key>
 
 Raw exports, processed real data, Qualtrics metadata, survey IDs, and reusable links stay private by default.
 
+Qualtrics CSV exports often contain two metadata rows after the header. Cleaning scripts should filter those out when `ResponseId` is present by keeping real response IDs that start with `R_`.
+
+Draft or inactive surveys may still accept API-created test responses. Do not treat inactive status as a protection against API mutations.
+
 ## Typical Prompt
 
 ```text

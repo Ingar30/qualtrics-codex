@@ -42,6 +42,7 @@ DISPLAY_NAMES = {
     "preferred_output": "Preferred output",
     "confidence_running_pipeline": "Pipeline confidence",
 }
+RESPONSE_ID_COLUMNS = ("responseid", "response_id")
 
 
 def normalize_column(name: str) -> str:
@@ -66,6 +67,11 @@ def read_responses(input_csv: Path) -> pd.DataFrame:
     data = pd.read_csv(input_csv)
     data = data.rename(columns={column: normalize_column(str(column)) for column in data.columns})
     data = data.dropna(how="all")
+    for response_id_column in RESPONSE_ID_COLUMNS:
+        if response_id_column in data.columns:
+            response_ids = data[response_id_column].fillna("").astype(str).str.strip()
+            data = data[response_ids.str.startswith("R_")].copy()
+            break
     return data
 
 

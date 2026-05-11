@@ -154,15 +154,14 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
     <h2>Run Locally</h2>
     <pre><code>git clone https://github.com/Ingar30/qualtrics-codex.git
 cd qualtrics-codex
-python -m venv .venv
-.\\.venv\\Scripts\\Activate.ps1
-python -m pip install -r requirements.txt
+.\\scripts\\setup.ps1
 codex
 python scripts/generate_synthetic_responses.py --survey-key repo_smoke_test --output build/fixtures/repo_smoke_test_responses.csv
 python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
 python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
     <p>After opening Codex, paste the starter prompt from <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/start-with-codex.md">prompts/start-with-codex.md</a>.</p>
     <p>For plain-language Codex prompts that mirror the commands, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/codex-prompt-alternatives.md">docs/codex-prompt-alternatives.md</a>.</p>
+    <p>If virtual environment setup fails or Stata is not found, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/setup-troubleshooting.md">docs/setup-troubleshooting.md</a>.</p>
   </section>
   <section class="warning">
     <strong>Private by default.</strong>
@@ -217,9 +216,11 @@ python scripts/build_slides.py --survey-key my_survey</code></pre>
   <h2>4. Analyze And Build Real Local Exports</h2>
   <pre><code>python scripts/run_analysis.py --survey-key my_survey
 python scripts/build_slides.py --survey-key my_survey</code></pre>
+  <p>Qualtrics CSV exports may include metadata rows after the header. The example analysis filters them when <code>ResponseId</code> exists by keeping IDs that start with <code>R_</code>.</p>
 
   <h2>Public Boundary</h2>
-  <p>Publish synthetic/demo artifacts freely. Do not publish raw exports, processed real data, survey links, metadata, or secrets by default.</p>
+  <p>Publish synthetic/demo artifacts freely. Do not publish raw exports, processed real data, survey links, metadata, or secrets by default. Reusable links printed by <code>get-link</code> are local/private by default.</p>
+  <p>Draft or inactive surveys may still accept API-created test responses. Treat API response submission as a live mutation.</p>
 </main>
 <footer><div class="inner"><a href="index.html">Back to demo artifacts</a></div></footer>
 """

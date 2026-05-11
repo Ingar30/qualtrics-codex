@@ -39,6 +39,14 @@ log using "`metadata_dir'/stata-analysis.log", replace text
 * Import the Qualtrics CSV export. The smoke-test fixture already uses
 * clean snake_case variable names; real surveys can add renaming here.
 import delimited using "`input_csv'", clear varnames(1) stringcols(_all)
+
+* Qualtrics CSV exports often include two metadata rows after the header.
+* Real response IDs start with R_, so keep only those rows when ResponseId exists.
+capture confirm variable responseid
+if !_rc {
+    keep if substr(responseid, 1, 2) == "R_"
+}
+
 drop if missing(role) & missing(workflow_familiarity) & missing(preferred_output) & missing(confidence_running_pipeline)
 
 * Save a clean CSV so the fallback and review workflow can inspect it

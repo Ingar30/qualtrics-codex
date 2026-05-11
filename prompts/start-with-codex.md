@@ -14,17 +14,18 @@ Inputs:
 - audience: <respondents or class context>
 
 Please scaffold the workflow using the repository's existing patterns:
-1. Create code/<survey_key>/survey_spec.json with 4-8 simple questions.
-2. Create Stata-first analysis in code/<survey_key>/analysis/run.do.
-3. Create the Python fallback in code/<survey_key>/analysis/run.py.
-4. Create Beamer slides in slides/<survey_key>/main.tex.
-5. Create native Python/HTML fallback slides in slides/<survey_key>/slides.md.
-6. Ask or infer whether I want a synthetic-only local test, a live draft/test link, or export/download of existing real responses.
-7. Unless I explicitly ask for a live Qualtrics action, generate synthetic responses into build/fixtures/<survey_key>_responses.csv.
-8. Run analysis against the synthetic responses.
-9. Build slides.
-10. Explain where I should store local Qualtrics API keys before any live API call.
-11. Report the exact commands I should run next for a live test link and live Qualtrics export.
+1. Confirm dependencies are installed, or tell me to run `.\scripts\setup.ps1` on Windows.
+2. Create code/<survey_key>/survey_spec.json with 4-8 simple questions.
+3. Create Stata-first analysis in code/<survey_key>/analysis/run.do.
+4. Create the Python fallback in code/<survey_key>/analysis/run.py.
+5. Create Beamer slides in slides/<survey_key>/main.tex.
+6. Create native Python/HTML fallback slides in slides/<survey_key>/slides.md.
+7. Ask or infer whether I want a synthetic-only local test, a live draft/test link, or export/download of existing real responses.
+8. Unless I explicitly ask for a live Qualtrics action, generate synthetic responses into build/fixtures/<survey_key>_responses.csv.
+9. Run analysis against the synthetic responses.
+10. Build slides.
+11. Explain where I should store local Qualtrics API keys before any live API call.
+12. Report the exact commands I should run next for a live test link and live Qualtrics export.
 
 Safety rules:
 - Do not call the live Qualtrics API unless I explicitly ask.
@@ -34,6 +35,7 @@ Safety rules:
 - Keep secrets outside the repository, preferably in $HOME/.secrets/qualtrics.env.ps1 on Windows or $HOME/.secrets/qualtrics.env on macOS/Linux.
 - If checking secrets, verify only that QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set; never print their values.
 - Prefer Stata and Beamer when available, but fall back to Python and native HTML slides if they are missing.
+- If analyzing a Qualtrics CSV export, filter out metadata rows by keeping rows where ResponseId starts with R_ when that column exists.
 
 Also show me prompt alternatives from docs/codex-prompt-alternatives.md for any command I am likely to run next.
 ```

@@ -22,6 +22,8 @@ The intended loop is:
 - Default to local synthetic responses before live Qualtrics calls.
 - Treat "test link" as a live Qualtrics action: it requires local `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN`, and the user must explicitly ask for it.
 - Treat "download responses" or "export responses" as a live Qualtrics read/export action: verify credentials are present without printing values.
+- Treat API-created response submission as a live mutation even if the survey is draft or inactive.
+- When cleaning Qualtrics CSV exports, filter metadata rows by keeping `ResponseId` values that start with `R_` when that column exists.
 - Never print token values, survey metadata, reusable links, raw real response contents, or local secret file contents.
 
 ## Commands

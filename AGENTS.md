@@ -17,6 +17,7 @@ Instructions for Codex and other automation agents working in this starter repo.
 - Do not edit files under `data/<survey_key>/raw/` after export unless explicitly asked.
 - Do not create, activate, delete, or modify live Qualtrics surveys unless the user explicitly requests that API action.
 - Prefer draft survey creation. Use activation flags only when the user intends to collect responses.
+- Do not assume draft/inactive Qualtrics surveys cannot receive API-created test responses; treat API response submission as a live mutation.
 - Do not publish raw exports, processed real data, survey IDs, reusable links, or Qualtrics metadata to GitHub Pages by default.
 
 ## Layout
@@ -44,6 +45,7 @@ site/
 - `scripts/build_slides.py` tries Beamer first and falls back to native HTML slides.
 - `scripts/render_slides.py` handles Markdown-to-HTML slide rendering with the Python standard library.
 - `scripts/build_site.py` builds the synthetic-data public Pages site.
+- Qualtrics CSV exports often include metadata rows after the header; cleaning code should keep real rows where `ResponseId` starts with `R_` when that column exists.
 
 ## Expected Agent Loop
 
