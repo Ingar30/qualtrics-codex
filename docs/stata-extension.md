@@ -36,7 +36,7 @@ macOS/Linux users should adapt the runner script to call their local Stata batch
 2. Stata imports the newest `.sav` under `data/<survey_key>/raw/`.
 3. Stata writes `data/<survey_key>/processed/clean.dta`.
 4. Stata writes slide inputs under `slides/<survey_key>/inputs/`.
-5. Quarto can still render `slides/<survey_key>/slides.qmd` using Stata-generated figures.
+5. The native HTML renderer can still render `slides/<survey_key>/slides.md` using Stata-generated figures.
 
 ## Codex Skill Tip
 

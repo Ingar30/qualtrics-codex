@@ -10,12 +10,12 @@ Inputs:
 - survey_name: <human readable survey name>
 - topic: <short research or teaching topic>
 - audience: <respondents or class context>
-- outputs: Python cleaning, summary table, 3-5 simple figures, and Quarto slides
+- outputs: Python cleaning, summary table, 3-5 simple figures, and native HTML slides
 
 Please:
 1. Create code/<survey_key>/survey_spec.json with 4-8 simple questions. Use short snake_case tags. Use "mc" for multiple choice and "text" for one optional open-ended question.
 2. Create code/<survey_key>/analysis/run.py modeled on code/repo_smoke_test/analysis/run.py, but adapted to the new question tags and labels.
-3. Create slides/<survey_key>/slides.qmd as a Quarto RevealJS deck that reads generated figures from slides/<survey_key>/inputs/.
+3. Create slides/<survey_key>/slides.md for scripts/render_slides.py. Use `---` slide separators and read generated figures from slides/<survey_key>/inputs/.
 4. Add slides/<survey_key>/inputs/.gitkeep.
 5. Do not create or call a live Qualtrics survey unless I explicitly ask.
 6. Do not write any API token or secret into the repository.

@@ -1,6 +1,6 @@
 # Qualtrics Research Workflow Starter
 
-A small starter repository for researchers who want a reproducible path from a Qualtrics survey to cleaned data, figures, and Quarto slides.
+A small starter repository for researchers who want a reproducible path from a Qualtrics survey to cleaned data, figures, and HTML slides.
 
 The default workflow is deliberately low-friction:
 
@@ -8,7 +8,7 @@ The default workflow is deliberately low-friction:
 2. Use Python to create or connect to a Qualtrics survey.
 3. Export responses as CSV.
 4. Analyze the CSV with Python.
-5. Render slides with Quarto.
+5. Render browser-based slides with the built-in Python slide renderer.
 
 Stata and LaTeX/Beamer are supported as optional extensions, not required for the first run.
 
@@ -17,13 +17,6 @@ Stata and LaTeX/Beamer are supported as optional extensions, not required for th
 Install prerequisites:
 
 - Python 3.10 or newer.
-- Quarto from <https://quarto.org/docs/download/>.
-
-Check Quarto after installing:
-
-```bash
-quarto check
-```
 
 Create and activate a Python environment:
 
@@ -140,14 +133,14 @@ Use the prompt in:
 prompts/scaffold-workflow.md
 ```
 
-It asks Codex to create a new `code/<survey_key>/` folder, a Python analysis script, a Quarto slide deck, and safe ignored output folders.
+It asks Codex to create a new `code/<survey_key>/` folder, a Python analysis script, a Markdown slide deck, and safe ignored output folders.
 
 ## Optional Extensions
 
 - Stata/SPSS workflow: `docs/stata-extension.md`
-- LaTeX/Beamer workflow: `docs/latex-extension.md`
+- LaTeX/Beamer or PDF workflow: `docs/latex-extension.md`
 
-These are useful if you want the more traditional economist stack. The base repo should still run without Stata or LaTeX.
+These are useful if you want the more traditional economist stack. The base repo should still run without Stata, LaTeX, Quarto, R, or Node.
 
 ## Safety Defaults
 

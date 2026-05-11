@@ -2,6 +2,7 @@
 .env
 *.env
 .secrets/
+.Rhistory
 
 # Python
 .venv/

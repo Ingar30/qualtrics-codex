@@ -1,25 +1,10 @@
-# LaTeX And Beamer Extension
+# LaTeX, Beamer, And PDF Extension
 
-The default starter workflow uses Quarto RevealJS slides because they render to HTML without a TeX installation. Use this extension if you prefer Beamer or PDF slides.
+The default starter workflow uses native HTML slides because they render without Quarto, R, Node, or a TeX installation. Use this extension if you prefer Beamer or PDF slides.
 
-## Option 1: Quarto To Beamer
+## Option 1: Print HTML Slides To PDF
 
-Quarto can render Beamer when a LaTeX distribution is installed.
-
-Create a `.qmd` file with:
-
-```yaml
----
-title: "Survey Results"
-format: beamer
----
-```
-
-Then render:
-
-```bash
-quarto render slides/<survey_key>/slides.qmd --to beamer
-```
+Open `build/slides/<survey_key>/slides.html` in a browser and print to PDF. This keeps the base workflow dependency-light.
 
 ## Option 2: Native Beamer
 

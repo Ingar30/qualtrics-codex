@@ -1,13 +1,13 @@
 ---
-title: "Repository Smoke Test Survey"
-subtitle: "Qualtrics, Python, and Quarto"
-author: "Qualtrics Research Workflow Starter"
-format:
-  revealjs:
-    theme: simple
-    slide-number: true
-    chalkboard: false
-    preview-links: auto
+title: Repository Smoke Test Survey
+subtitle: Qualtrics, Python, and native HTML slides
+author: Qualtrics Research Workflow Starter
+---
+
+# Repository Smoke Test Survey
+
+Qualtrics, Python, and native HTML slides
+
 ---
 
 ## Workflow
@@ -16,7 +16,9 @@ format:
 2. Create or connect to a Qualtrics survey.
 3. Export responses as CSV.
 4. Clean and summarize responses with Python.
-5. Render slides with Quarto.
+5. Render slides with the built-in HTML renderer.
+
+---
 
 ## Analysis Outputs
 
@@ -28,21 +30,37 @@ python code/repo_smoke_test/analysis/run.py --input tests/fixtures/repo_smoke_te
 
 The analysis writes tables and figures to `slides/repo_smoke_test/inputs/`.
 
+---
+
+## Descriptive Summary
+
+{{ include inputs/summary.md }}
+
+---
+
 ## Role
 
-![](inputs/role.png){fig-alt="Bar chart of respondent roles."}
+![Bar chart of respondent roles.](inputs/role.png)
+
+---
 
 ## Workflow Familiarity
 
-![](inputs/workflow_familiarity.png){fig-alt="Bar chart of familiarity with reproducible data workflows."}
+![Bar chart of familiarity with reproducible data workflows.](inputs/workflow_familiarity.png)
+
+---
 
 ## Preferred Output
 
-![](inputs/preferred_output.png){fig-alt="Bar chart of preferred workflow outputs."}
+![Bar chart of preferred workflow outputs.](inputs/preferred_output.png)
+
+---
 
 ## Pipeline Confidence
 
-![](inputs/confidence_running_pipeline.png){fig-alt="Bar chart of confidence running the workflow."}
+![Bar chart of confidence running the workflow.](inputs/confidence_running_pipeline.png)
+
+---
 
 ## Teaching Point
 
