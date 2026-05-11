@@ -1,3 +1,10 @@
+---
+name: qualtrics-survey-loop
+description: Use when the user asks Codex to create, test, download, analyze, or present a Qualtrics survey workflow with local synthetic responses, live Qualtrics draft/test links, Qualtrics exports, Stata/Python analysis, and Beamer/native slides.
+metadata:
+  short-description: Run Qualtrics survey workflow
+---
+
 # Qualtrics Survey Loop
 
 Use this skill when the user asks Codex to create, test, download, analyze, or present a Qualtrics survey workflow.
