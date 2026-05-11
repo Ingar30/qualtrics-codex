@@ -245,7 +245,7 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
     subtitle = metadata.get("subtitle", "")
     author = metadata.get("author", "")
     slides = "\n".join(
-        f'<section class="slide" data-slide="{index}">{content}</section>'
+        f'<section class="slide {"title-slide" if index == 1 else ""}" data-slide="{index}">{content}</section>'
         for index, content in enumerate(slide_html, start=1)
     )
     return f"""<!doctype html>
@@ -255,50 +255,98 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
   <style>
+    @page {{
+      size: 16in 9in;
+      margin: 0;
+    }}
     :root {{
       color-scheme: light;
-      --ink: #17202a;
-      --muted: #52606d;
-      --accent: #2f6f8f;
-      --accent-2: #b7553d;
-      --paper: #fbfbf8;
+      --ink: #111827;
+      --muted: #4b5563;
+      --accent: #1f5f7a;
+      --accent-2: #c7522a;
+      --accent-3: #e8b44f;
+      --paper: #e9edf0;
       --panel: #ffffff;
-      --rule: #d8ded8;
+      --rule: #d4d9df;
+      --shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
     }}
     * {{ box-sizing: border-box; }}
     body {{
       margin: 0;
       min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--paper);
+      background: linear-gradient(135deg, #dfe6ea 0%, #f6f7f5 100%);
       color: var(--ink);
     }}
     .deck {{
       min-height: 100vh;
-      display: grid;
-      grid-template-rows: 1fr auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
     }}
     .slide {{
       display: none;
-      min-height: 100vh;
-      padding: clamp(2rem, 5vw, 5rem);
+      position: relative;
+      width: min(96vw, 1280px);
+      aspect-ratio: 16 / 9;
+      max-height: calc(100vh - 6rem);
+      padding: clamp(2.1rem, 3.2vw, 4.4rem);
+      background: var(--panel);
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      align-content: start;
+    }}
+    .slide::before {{
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0.62rem;
+      height: 100%;
+      background: var(--accent);
+    }}
+    .slide::after {{
+      content: attr(data-slide);
+      position: absolute;
+      right: 1.8rem;
+      bottom: 1.15rem;
+      color: #9aa3ad;
+      font-size: 0.82rem;
+      font-variant-numeric: tabular-nums;
+    }}
+    .slide.active {{ display: grid; gap: clamp(0.85rem, 1.4vw, 1.35rem); }}
+    .title-slide {{
+      background:
+        linear-gradient(115deg, rgba(31, 95, 122, 0.94) 0%, rgba(31, 95, 122, 0.94) 48%, transparent 48.2%),
+        linear-gradient(180deg, #ffffff 0%, #f7faf9 100%);
+      color: #ffffff;
       align-content: center;
-      max-width: 1180px;
-      width: 100%;
-      margin: 0 auto;
     }}
-    .slide.active {{ display: grid; gap: 1.25rem; }}
-    h1, h2, h3 {{ margin: 0; line-height: 1.08; letter-spacing: 0; }}
-    h1 {{ font-size: clamp(2.5rem, 7vw, 5.8rem); max-width: 12ch; }}
-    h2 {{ font-size: clamp(2rem, 5vw, 4rem); color: var(--accent); }}
-    h3 {{ font-size: clamp(1.4rem, 3vw, 2.2rem); }}
+    .title-slide::before {{ background: var(--accent-3); width: 1rem; }}
+    .title-slide::after {{ color: rgba(255, 255, 255, 0.72); }}
+    h1, h2, h3 {{ margin: 0; line-height: 1.06; letter-spacing: 0; }}
+    h1 {{ font-size: clamp(2.7rem, 5.8vw, 5.2rem); max-width: 13ch; }}
+    h2 {{
+      font-size: clamp(1.9rem, 3.6vw, 3.35rem);
+      color: var(--accent);
+      padding-bottom: 0.75rem;
+      border-bottom: 0.16rem solid var(--accent-3);
+      max-width: 18ch;
+    }}
+    h3 {{ font-size: clamp(1.25rem, 2vw, 2rem); }}
+    .title-slide h1 {{ color: #ffffff; max-width: 10ch; }}
+    .title-slide p {{ color: rgba(255, 255, 255, 0.9); max-width: 28ch; font-size: clamp(1.25rem, 2.2vw, 2rem); }}
     p, li, td, th {{
-      font-size: clamp(1.05rem, 2vw, 1.55rem);
-      line-height: 1.45;
+      font-size: clamp(1rem, 1.5vw, 1.42rem);
+      line-height: 1.34;
     }}
-    p {{ max-width: 70ch; color: var(--muted); }}
-    ol, ul {{ margin: 0; padding-left: 1.5em; max-width: 70ch; }}
-    li + li {{ margin-top: 0.45rem; }}
+    p {{ max-width: 58ch; color: var(--muted); margin: 0; }}
+    ol, ul {{ margin: 0; padding-left: 1.25em; max-width: 56ch; }}
+    li + li {{ margin-top: 0.4rem; }}
+    li::marker {{ color: var(--accent-2); font-weight: 800; }}
     code {{
       font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
       background: #eef3f1;
@@ -307,32 +355,39 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
       color: #12313f;
     }}
     pre {{
-      width: min(100%, 980px);
+      width: min(100%, 900px);
+      max-height: 42vh;
       overflow-x: auto;
       background: #10252f;
       color: #eef8fb;
-      padding: 1rem 1.2rem;
+      padding: 0.85rem 1rem;
       border-radius: 8px;
       border-left: 6px solid var(--accent-2);
     }}
     pre code {{ background: transparent; color: inherit; padding: 0; }}
-    figure {{ margin: 0; display: grid; gap: 0.5rem; justify-items: start; }}
+    figure {{
+      margin: 0;
+      display: grid;
+      gap: 0.45rem;
+      justify-items: center;
+      width: 100%;
+    }}
     img {{
       max-width: min(100%, 980px);
-      max-height: 68vh;
+      max-height: 52vh;
       border: 1px solid var(--rule);
       background: var(--panel);
-      box-shadow: 0 18px 48px rgba(20, 35, 45, 0.12);
+      box-shadow: 0 12px 32px rgba(20, 35, 45, 0.1);
     }}
-    figcaption {{ color: var(--muted); font-size: 0.95rem; }}
+    figcaption {{ color: var(--muted); font-size: 0.82rem; text-align: center; }}
     table {{
       border-collapse: collapse;
-      min-width: min(100%, 760px);
+      width: min(100%, 820px);
       background: var(--panel);
       border: 1px solid var(--rule);
-      box-shadow: 0 14px 36px rgba(20, 35, 45, 0.08);
+      box-shadow: 0 10px 24px rgba(20, 35, 45, 0.08);
     }}
-    th, td {{ padding: 0.75rem 1rem; border-bottom: 1px solid var(--rule); text-align: left; }}
+    th, td {{ padding: 0.62rem 0.8rem; border-bottom: 1px solid var(--rule); text-align: left; }}
     th {{ color: var(--accent); font-weight: 700; }}
     .asset-placeholder {{
       width: min(100%, 820px);
@@ -352,7 +407,7 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
       align-items: center;
       gap: 1rem;
       padding: 0.75rem 1rem;
-      background: rgba(251, 251, 248, 0.92);
+      background: rgba(246, 247, 245, 0.92);
       border-top: 1px solid var(--rule);
       backdrop-filter: blur(8px);
     }}
@@ -377,9 +432,32 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
       transition: width 140ms ease-out;
     }}
     @media print {{
-      .slide {{ display: grid; min-height: 100vh; page-break-after: always; }}
+      body {{ background: #ffffff; }}
+      .deck {{ display: block; padding: 0; }}
+      .slide {{
+        display: grid;
+        width: 16in;
+        height: 9in;
+        max-height: none;
+        page-break-after: always;
+        box-shadow: none;
+        border: 0;
+      }}
       .chrome, .progress {{ display: none; }}
       img, table {{ box-shadow: none; }}
+    }}
+    @media (max-width: 720px) {{
+      .deck {{ padding: 0; }}
+      .slide {{
+        width: 100vw;
+        min-height: 100vh;
+        max-height: none;
+        aspect-ratio: auto;
+        box-shadow: none;
+        border: 0;
+      }}
+      .chrome {{ gap: 0.45rem; }}
+      .meta {{ display: none; }}
     }}
   </style>
 </head>
