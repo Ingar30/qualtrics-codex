@@ -20,7 +20,7 @@ Please:
 5. Do not create or call a live Qualtrics survey unless I explicitly ask.
 6. Do not write any API token or secret into the repository.
 7. Keep raw data under data/<survey_key>/raw/ and processed data under data/<survey_key>/processed/.
-8. After scaffolding, tell me the commands to create the survey, export CSV responses, run analysis, and render slides.
+8. After scaffolding, tell me the commands to create the survey, export CSV responses, run analysis, render HTML slides, and optionally export a PDF with `--pdf`.
 ```
 
 Recommended follow-up after reviewing the scaffold:

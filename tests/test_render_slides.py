@@ -49,3 +49,9 @@ subtitle: Native HTML
     assert "<table>" in html
     assert "inputs/figure.png" in html
     assert (tmp_path / "build" / "slides" / "demo" / "inputs" / "figure.png").exists()
+
+
+def test_candidate_browser_paths_include_major_platform_defaults() -> None:
+    assert "msedge" in render_slides.candidate_browser_paths("Windows")
+    assert "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" in render_slides.candidate_browser_paths("Darwin")
+    assert "chromium" in render_slides.candidate_browser_paths("Linux")

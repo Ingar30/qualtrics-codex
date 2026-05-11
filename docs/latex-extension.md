@@ -2,9 +2,15 @@
 
 The default starter workflow uses native HTML slides because they render without Quarto, R, Node, or a TeX installation. Use this extension if you prefer Beamer or PDF slides.
 
-## Option 1: Print HTML Slides To PDF
+## Option 1: Export Native HTML Slides To PDF
 
-Open `build/slides/<survey_key>/slides.html` in a browser and print to PDF. This keeps the base workflow dependency-light.
+Use the built-in renderer's optional browser export:
+
+```bash
+python scripts/render_slides.py --survey-key <survey_key> --pdf
+```
+
+This uses Chrome, Edge, or Chromium when one is installed. If browser discovery fails, open `build/slides/<survey_key>/slides.html` and use Print to PDF manually.
 
 ## Option 2: Native Beamer
 

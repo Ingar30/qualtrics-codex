@@ -57,6 +57,14 @@ The rendered slide deck is written to:
 build/slides/repo_smoke_test/slides.html
 ```
 
+Optional PDF export uses an installed Chrome, Edge, or Chromium browser:
+
+```bash
+python scripts/render_slides.py --survey-key repo_smoke_test --pdf
+```
+
+If the script cannot find a browser, open the HTML deck and use your browser's Print to PDF command.
+
 ## Configure Qualtrics
 
 Copy the example environment file and fill in your local values:

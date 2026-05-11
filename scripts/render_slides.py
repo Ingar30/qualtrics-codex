@@ -2,13 +2,37 @@ from __future__ import annotations
 
 import argparse
 import html
+import platform
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+WINDOWS_BROWSER_PATHS = [
+    r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+]
+
+MACOS_BROWSER_PATHS = [
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+]
+
+LINUX_BROWSER_COMMANDS = [
+    "google-chrome",
+    "google-chrome-stable",
+    "microsoft-edge",
+    "microsoft-edge-stable",
+    "chromium",
+    "chromium-browser",
+]
 
 
 def safe_survey_key(value: str) -> str:
@@ -399,6 +423,58 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
 """
 
 
+def candidate_browser_paths(system: str | None = None) -> list[str]:
+    system_name = system or platform.system()
+    if system_name == "Windows":
+        commands = ["msedge", "chrome", "chromium", "chromium-browser"]
+        return commands + WINDOWS_BROWSER_PATHS
+    if system_name == "Darwin":
+        commands = ["google-chrome", "microsoft-edge", "chromium"]
+        return commands + MACOS_BROWSER_PATHS
+    return LINUX_BROWSER_COMMANDS
+
+
+def find_browser() -> str | None:
+    for candidate in candidate_browser_paths():
+        path = Path(candidate)
+        if path.is_absolute() and path.exists():
+            return str(path)
+        resolved = shutil.which(candidate)
+        if resolved:
+            return resolved
+    return None
+
+
+def export_pdf(html_file: Path, pdf_file: Path, browser: str | None = None) -> Path:
+    browser_path = browser or find_browser()
+    if not browser_path:
+        raise SystemExit(
+            "Could not find Chrome, Edge, or Chromium for PDF export. "
+            "Open the HTML deck in a browser and use Print to PDF, or install one of those browsers."
+        )
+
+    html_uri = html_file.resolve().as_uri()
+    pdf_file.parent.mkdir(parents=True, exist_ok=True)
+    command = [
+        browser_path,
+        "--headless",
+        "--disable-gpu",
+        "--no-first-run",
+        "--print-to-pdf-no-header",
+        f"--print-to-pdf={pdf_file}",
+        html_uri,
+    ]
+    result = subprocess.run(command, check=False, capture_output=True, text=True)
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout or "").strip()
+        if detail:
+            detail = f" Details: {detail[:800]}"
+        raise SystemExit(f"Browser PDF export failed with exit code {result.returncode}.{detail}")
+    if not pdf_file.exists():
+        raise SystemExit(f"Browser PDF export completed, but expected PDF was not created: {pdf_file}")
+    return pdf_file
+
+
 def render_slides(survey_key: str, project_root: Path = PROJECT_ROOT) -> Path:
     survey_key = safe_survey_key(survey_key)
     source_dir = project_root / "slides" / survey_key
@@ -422,6 +498,8 @@ def render_slides(survey_key: str, project_root: Path = PROJECT_ROOT) -> Path:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Render a survey Markdown deck to native HTML slides.")
     parser.add_argument("--survey-key", default="repo_smoke_test")
+    parser.add_argument("--pdf", action="store_true", help="Also export slides.pdf using Chrome/Edge/Chromium.")
+    parser.add_argument("--browser", help="Path to Chrome, Edge, or Chromium for --pdf.")
     return parser
 
 
@@ -429,6 +507,10 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     output_file = render_slides(args.survey_key)
     print(f"Rendered slides: {output_file}")
+    if args.pdf:
+        pdf_file = output_file.with_suffix(".pdf")
+        export_pdf(output_file, pdf_file, browser=args.browser)
+        print(f"Rendered PDF: {pdf_file}")
     return 0
 
 
