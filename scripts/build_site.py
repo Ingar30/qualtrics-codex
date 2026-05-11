@@ -12,6 +12,8 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SURVEY_KEY = "repo_smoke_test"
 SYNTHETIC_FIXTURE = Path("build/fixtures/repo_smoke_test_responses.csv")
+DEMO_SURVEY_KEY = "discrimination_beliefs_demo"
+DEMO_SYNTHETIC_FIXTURE = Path("build/fixtures/discrimination_beliefs_demo_responses.csv")
 
 
 def run_command(command: list[str], project_root: Path) -> None:
@@ -171,7 +173,7 @@ python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
   </section>
   <section>
     <h2>Live Qualtrics Loop</h2>
-    <p>Store credentials outside the repository, then run the live export locally. See <a href="walkthrough.html">the walkthrough</a>.</p>
+    <p>Store credentials outside the repository, start with <code>check-auth</code>, submit one synthetic response first, then resume after local inspection. See <a href="walkthrough.html">the walkthrough</a>.</p>
   </section>
 </main>
 <footer>
@@ -207,15 +209,21 @@ export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"</code></pre>
   <pre><code>source "$HOME/.secrets/qualtrics.env"</code></pre>
 
   <h2>2. Export Responses</h2>
-  <pre><code>python scripts/qualtrics_workflow.py list-surveys
+  <pre><code>python scripts/qualtrics_workflow.py check-auth
 python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id SV_... --format csv</code></pre>
 
-  <h2>3. Smoke Test With Synthetic Responses</h2>
+  <h2>3. Live Synthetic Test</h2>
+  <pre><code>python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv --n 100
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv --limit 1
+python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --format csv
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv --resume</code></pre>
+
+  <h2>4. Smoke Test With Local Synthetic Responses</h2>
   <pre><code>python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv
 python scripts/run_analysis.py --survey-key my_survey --input build/fixtures/my_survey_responses.csv
 python scripts/build_slides.py --survey-key my_survey</code></pre>
 
-  <h2>4. Analyze And Build Real Local Exports</h2>
+  <h2>5. Analyze And Build Real Local Exports</h2>
   <pre><code>python scripts/run_analysis.py --survey-key my_survey
 python scripts/build_slides.py --survey-key my_survey</code></pre>
   <p>Qualtrics CSV exports may include metadata rows after the header. The example analysis filters them when <code>ResponseId</code> exists by keeping IDs that start with <code>R_</code>.</p>
@@ -247,6 +255,19 @@ def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None
     run_command(
         [
             sys.executable,
+            "scripts/generate_synthetic_responses.py",
+            "--survey-key",
+            DEMO_SURVEY_KEY,
+            "--output",
+            str(DEMO_SYNTHETIC_FIXTURE),
+            "--n",
+            "100",
+        ],
+        project_root,
+    )
+    run_command(
+        [
+            sys.executable,
             "scripts/run_analysis.py",
             "--survey-key",
             SURVEY_KEY,
@@ -270,24 +291,51 @@ def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None
         ],
         project_root,
     )
+    run_command(
+        [
+            sys.executable,
+            "scripts/run_analysis.py",
+            "--survey-key",
+            DEMO_SURVEY_KEY,
+            "--input",
+            str(DEMO_SYNTHETIC_FIXTURE),
+            "--mode",
+            "python",
+        ],
+        project_root,
+    )
+    run_command([sys.executable, "scripts/build_slides.py", "--survey-key", DEMO_SURVEY_KEY, "--mode", "auto"], project_root)
+    run_command(
+        [
+            sys.executable,
+            "scripts/build_slides.py",
+            "--survey-key",
+            DEMO_SURVEY_KEY,
+            "--mode",
+            "python",
+            "--no-python-pdf",
+        ],
+        project_root,
+    )
 
     artifacts_dir = output_dir / "artifacts"
-    slide_build_dir = project_root / "build" / "slides" / SURVEY_KEY
-    inputs_dir = project_root / "slides" / SURVEY_KEY / "inputs"
     copied: list[str] = []
 
-    for source, name in [
-        (slide_build_dir / "slides.pdf", "slides.pdf"),
-        (slide_build_dir / "slides.html", "slides.html"),
-    ]:
-        if copy_file(source, artifacts_dir / name):
-            copied.append(name)
+    for key, prefix in [(SURVEY_KEY, "smoke"), (DEMO_SURVEY_KEY, "discrimination-beliefs-demo")]:
+        slide_build_dir = project_root / "build" / "slides" / key
+        inputs_dir = project_root / "slides" / key / "inputs"
+        for source, name in [
+            (slide_build_dir / "slides.pdf", f"{prefix}-slides.pdf"),
+            (slide_build_dir / "slides.html", f"{prefix}-slides.html"),
+        ]:
+            if copy_file(source, artifacts_dir / name):
+                copied.append(name)
 
-    figure_paths = sorted(inputs_dir.glob("*.pdf")) + sorted(inputs_dir.glob("*.png"))
-    table_paths = [path for path in [inputs_dir / "summary.md", inputs_dir / "summary.tex"] if path.exists()]
-    zip_matching(figure_paths, artifacts_dir / "figures.zip")
-    zip_matching(table_paths, artifacts_dir / "tables.zip")
-    copied.extend(["figures.zip", "tables.zip"])
+        figure_paths = sorted(inputs_dir.glob("*.pdf")) + sorted(inputs_dir.glob("*.png"))
+        table_paths = [path for path in [inputs_dir / "summary.md", inputs_dir / "summary.tex"] if path.exists()]
+        zip_matching(figure_paths, artifacts_dir / f"{prefix}-figures.zip")
+        zip_matching(table_paths, artifacts_dir / f"{prefix}-tables.zip")
+        copied.extend([f"{prefix}-figures.zip", f"{prefix}-tables.zip"])
 
     build_walkthrough(output_dir)
     copied.append("walkthrough.html")

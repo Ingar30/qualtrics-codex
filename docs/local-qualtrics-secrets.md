@@ -116,7 +116,9 @@ Do not paste token values into a Codex prompt. Tell Codex where your local secre
 After loading the file, the first small live check is:
 
 ```bash
-python scripts/qualtrics_workflow.py list-surveys
+python scripts/qualtrics_workflow.py check-auth
 ```
+
+Use `list-surveys` only when you explicitly need to browse surveys. By default, it hides survey IDs; use `--show-private-ids` only for local troubleshooting.
 
 Create, activate, modify, or delete live surveys only after you explicitly ask Codex to do that action.

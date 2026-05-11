@@ -38,6 +38,12 @@ Create a public opinion survey on beliefs about discrimination in hiring in Qual
 
 This is a live API workflow. Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses.
 
+Prompt for the safer one-response live test:
+
+```text
+Create the Qualtrics draft survey, generate 100 synthetic responses locally, submit only the first synthetic response to Qualtrics, export it, clean it, and build slides. If that works, ask me before submitting the remaining 99 with the resume option.
+```
+
 Local-only prompt:
 
 ```text
@@ -134,13 +140,19 @@ Check whether QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set in my shell w
 Command:
 
 ```bash
-python scripts/qualtrics_workflow.py list-surveys
+python scripts/qualtrics_workflow.py check-auth
 ```
 
 Prompt alternative:
 
 ```text
-Use the local Qualtrics environment variables to list my surveys. This is a read-only API call. Do not print any token values.
+Use the local Qualtrics environment variables to run the lightweight authentication check. This is a read-only API call. Do not print token values, survey IDs, links, or metadata.
+```
+
+Full survey listing is available when explicitly needed:
+
+```bash
+python scripts/qualtrics_workflow.py list-surveys
 ```
 
 ## Export Responses
@@ -155,6 +167,13 @@ Prompt alternative:
 
 ```text
 Export CSV responses for survey id SV_... into this repo's ignored raw data folder for survey key my_survey. Do not commit raw data or metadata, and do not print secrets.
+```
+
+For Stata/SPSS:
+
+```bash
+python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id SV_... --format spss
+python scripts/run_analysis.py --survey-key my_survey --mode stata
 ```
 
 ## Analyze Real Local Exports

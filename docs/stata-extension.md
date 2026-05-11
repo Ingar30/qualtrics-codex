@@ -12,7 +12,8 @@ python scripts/run_analysis.py --survey-key <survey_key>
 
 The analysis script:
 
-- looks for `code/<survey_key>/analysis/run.do`;
+- first looks for the lab-style pair `code/<survey_key>/cleaning/run.do` and `code/<survey_key>/figures/run.do` with `scripts/stata/survey_pipeline.do`;
+- otherwise looks for `code/<survey_key>/analysis/run.do`;
 - tries to run it with `STATA_EXE`, Stata on PATH, or common Stata install locations;
 - writes Stata logs under `data/<survey_key>/metadata/`;
 - falls back to `code/<survey_key>/analysis/run.py` if Stata is missing or fails.
@@ -33,6 +34,14 @@ code/<survey_key>/analysis/run.do
 code/<survey_key>/analysis/run.py
 ```
 
+For the lab-style SPSS/Stata path, use:
+
+```text
+code/<survey_key>/cleaning/run.do
+code/<survey_key>/figures/run.do
+code/<survey_key>/analysis/run.py
+```
+
 Keep Stata files survey-specific and readable. Add comments before each major block so the workflow remains teachable. Keep the Python file as the guaranteed fallback.
 
 ## Environment
@@ -42,20 +51,21 @@ Set `STATA_EXE` to your Stata executable if it is not on PATH.
 Windows PowerShell example:
 
 ```powershell
-$env:STATA_EXE = "C:\Stata19\StataSE-64.exe"
+$env:STATA_EXE = "C:\Program Files\Stata19\StataMP-64.exe"
 ```
 
 macOS/Linux users can set `STATA_EXE` to the local `stata-mp`, `stata-se`, or `stata` batch executable if it is not already on PATH.
 
 ## Data Flow
 
-1. Export CSV from Qualtrics:
+1. Export CSV or SPSS/SAV from Qualtrics:
 
    ```bash
    python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
+   python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format spss
    ```
 
-2. `scripts/run_analysis.py` passes the newest raw CSV to Stata when Stata is available.
+2. `scripts/run_analysis.py` passes the newest raw CSV or SAV to Stata when Stata is available.
 3. Stata or Python writes `data/<survey_key>/processed/clean.csv`.
 4. Stata or Python writes slide inputs under `slides/<survey_key>/inputs/`.
 5. Figure PDFs are for Beamer; figure PNGs are for the Python HTML fallback.

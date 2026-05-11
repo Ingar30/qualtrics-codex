@@ -35,3 +35,27 @@ def test_resolve_input_csv_prefers_explicit_relative_path(tmp_path: Path) -> Non
     explicit = Path("tests/fixture.csv")
 
     assert run_analysis.resolve_input_csv(tmp_path, "demo", explicit) == tmp_path / explicit
+
+
+def test_stata_do_file_prefers_lab_style_pipeline(tmp_path: Path) -> None:
+    pipeline = tmp_path / "scripts" / "stata" / "survey_pipeline.do"
+    cleaning = tmp_path / "code" / "demo" / "cleaning" / "run.do"
+    figures = tmp_path / "code" / "demo" / "figures" / "run.do"
+    for path in [pipeline, cleaning, figures]:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("* test\n", encoding="utf-8")
+
+    do_file, label = run_analysis.stata_do_file(tmp_path, "demo")
+
+    assert do_file == pipeline
+    assert label == "Stata cleaning/figures pipeline"
+
+
+def test_stata_setup_guidance_mentions_windows_env_var(monkeypatch) -> None:
+    monkeypatch.setattr(run_analysis.platform, "system", lambda: "Windows")
+
+    message = run_analysis.stata_setup_guidance()
+
+    assert "STATA_EXE" in message
+    assert "Stata19" in message
+    assert "qualtrics.env.ps1" in message

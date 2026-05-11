@@ -7,7 +7,7 @@ Paste this into Codex after cloning the repository and installing requirements.
 ```text
 Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
 
-Use survey_key: discrimination_beliefs
+Use survey_key: discrimination_beliefs_demo
 Use survey_name: Discrimination Beliefs Survey
 Audience: economics students or researchers
 
@@ -16,15 +16,18 @@ Please:
 2. Keep question wording neutral and suitable for a classroom or research-methods demonstration.
 3. Create the Qualtrics-ready survey spec and the repository's Stata/Python analysis files.
 4. Create Beamer slides and native Python/HTML fallback slides.
-5. Verify QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing their values.
+5. Verify QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing their values, using check-auth for the first API check.
 6. Ask me before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses.
-7. Download the generated Qualtrics responses into the ignored raw data folder.
-8. Clean the downloaded data in Stata if available, otherwise Python.
-9. Generate summary tables and figures.
-10. Compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
-11. Report the generated artifact paths and note any fallback used.
+7. Generate 100 local synthetic rows with realistic synthetic_weights where useful.
+8. Submit only the first synthetic response to Qualtrics, export it, clean it, and build slides.
+9. Ask me before submitting the remaining 99; then use the resume option so row 1 is not duplicated.
+10. Download the generated Qualtrics responses into the ignored raw data folder.
+11. Clean the downloaded data in Stata if available, otherwise Python.
+12. Generate summary tables and figures.
+13. Compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+14. Report the generated artifact paths and note any fallback used.
 
-Do not print secrets, publish raw data, or commit private metadata or reusable links.
+Do not print secrets, survey IDs, response IDs, reusable links, raw data, or private metadata.
 ```
 
 ## Local-Only Smoke Test
@@ -32,11 +35,11 @@ Do not print secrets, publish raw data, or commit private metadata or reusable l
 Use this version when you do not want Codex to call Qualtrics:
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring. Use survey_key discrimination_beliefs. Generate 100 synthetic responses locally, clean the generated data with Stata if available and Python otherwise, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API.
+Create a public opinion survey on beliefs about discrimination in hiring. Use survey_key discrimination_beliefs_demo. Generate 100 synthetic responses locally, clean the generated data with Stata if available and Python otherwise, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API.
 ```
 
 After collecting real responses, you can ask for the local export and rebuild:
 
 ```text
-Export the real Qualtrics responses for discrimination_beliefs, clean the newest local export in Stata if available and Python otherwise, regenerate figures, and rebuild the slides. Keep raw data, processed real data, metadata, and reusable links private by default.
+Export the real Qualtrics responses for discrimination_beliefs_demo, clean the newest local export in Stata if available and Python otherwise, regenerate figures, and rebuild the slides. Keep raw data, processed real data, metadata, IDs, and reusable links private by default.
 ```

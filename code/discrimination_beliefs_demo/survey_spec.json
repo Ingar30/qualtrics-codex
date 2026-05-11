@@ -1,0 +1,93 @@
+{
+  "questions": [
+    {
+      "tag": "role",
+      "type": "mc",
+      "text": "Which role best describes you?",
+      "choices": [
+        "Undergraduate student",
+        "Graduate student",
+        "Faculty or instructor",
+        "Researcher",
+        "Other"
+      ],
+      "synthetic_weights": {
+        "Undergraduate student": 0.35,
+        "Graduate student": 0.25,
+        "Faculty or instructor": 0.15,
+        "Researcher": 0.15,
+        "Other": 0.1
+      }
+    },
+    {
+      "tag": "prevalence_discrimination",
+      "type": "mc",
+      "text": "In your view, how common is discrimination in hiring decisions today?",
+      "choices": [
+        "Very uncommon",
+        "Somewhat uncommon",
+        "Neither common nor uncommon",
+        "Somewhat common",
+        "Very common"
+      ],
+      "synthetic_weights": [0.05, 0.12, 0.18, 0.42, 0.23]
+    },
+    {
+      "tag": "main_mechanism",
+      "type": "mc",
+      "text": "Which mechanism do you think most often explains discrimination in hiring?",
+      "choices": [
+        "Explicit preferences",
+        "Implicit bias",
+        "Statistical discrimination",
+        "Network-based recruiting",
+        "Unequal access to credentials"
+      ],
+      "synthetic_weights": [0.12, 0.32, 0.26, 0.16, 0.14]
+    },
+    {
+      "tag": "persuasive_evidence",
+      "type": "mc",
+      "text": "Which kind of evidence would you find most persuasive for detecting hiring discrimination?",
+      "choices": [
+        "Audit or correspondence studies",
+        "Administrative hiring records",
+        "Interviews with applicants",
+        "Employer surveys",
+        "Labor market outcome gaps"
+      ],
+      "synthetic_weights": [0.38, 0.24, 0.12, 0.08, 0.18]
+    },
+    {
+      "tag": "policy_response",
+      "type": "mc",
+      "text": "Which policy response would you be most willing to consider?",
+      "choices": [
+        "Anonymous initial screening",
+        "Structured interview rubrics",
+        "Pay transparency",
+        "Public reporting of hiring data",
+        "No additional policy"
+      ],
+      "synthetic_weights": [0.24, 0.3, 0.2, 0.16, 0.1]
+    },
+    {
+      "tag": "confidence",
+      "type": "mc",
+      "text": "How confident are you in your answers to this survey?",
+      "choices": [
+        "Not confident",
+        "Slightly confident",
+        "Moderately confident",
+        "Very confident",
+        "Extremely confident"
+      ],
+      "synthetic_weights": [0.06, 0.18, 0.42, 0.26, 0.08]
+    },
+    {
+      "tag": "open_reasoning",
+      "type": "text",
+      "text": "Briefly describe what would change your view about discrimination in hiring."
+    }
+  ]
+}

@@ -6,8 +6,8 @@ The default workflow is deliberately low-friction:
 
 1. Write a simple JSON survey specification.
 2. Use Python to create or connect to a Qualtrics survey.
-3. Export responses as CSV.
-4. Analyze the CSV with Stata when available.
+3. Export responses as CSV or SPSS/SAV.
+4. Analyze with lab-style Stata cleaning/figure scripts when available.
 5. Fall back to Python analysis when Stata is missing or broken.
 6. Build Beamer slides when LaTeX is available.
 7. Fall back to the built-in Python slide renderer when LaTeX is missing or broken.
@@ -35,6 +35,8 @@ Create a public opinion survey on beliefs about discrimination in hiring in Qual
 ```
 
 Because that prompt asks Codex to create a survey and generate responses on Qualtrics, Codex should treat it as a live API workflow: first verify local credentials without printing them, then ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate the synthetic responses locally instead.
+
+The repo also includes granular Codex skills for the main pieces of the loop: survey creation, synthetic responses, SAV export, Stata cleaning, Stata figures, Beamer slides, reusable links, and slide review. The top-level `qualtrics-survey-loop` skill routes among them.
 
 See `docs/intended-codex-loop.md`, `prompts/full-loop-survey.md`, and `prompts/discrimination-beliefs-example.md`.
 
@@ -149,11 +151,37 @@ python scripts/build_slides.py --survey-key repo_smoke_test --mode python
 
 The repository also keeps a committed synthetic fixture at `tests/fixtures/repo_smoke_test_responses.csv` for unit tests. For new local checks, prefer generating fresh synthetic responses into `build/fixtures/` so test data is clearly disposable.
 
+## Live Qualtrics Test Loop
+
+Live API actions are local/manual by default. Store credentials outside the repo, load them in your shell, and run:
+
+```bash
+python scripts/qualtrics_workflow.py check-auth
+python scripts/qualtrics_workflow.py create-survey --survey-key discrimination_beliefs_demo --survey-name "Discrimination Beliefs Demo" --spec-file code/discrimination_beliefs_demo/survey_spec.json
+python scripts/generate_synthetic_responses.py --survey-key discrimination_beliefs_demo --output build/fixtures/discrimination_beliefs_demo_responses.csv --n 100
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key discrimination_beliefs_demo --input build/fixtures/discrimination_beliefs_demo_responses.csv --limit 1
+python scripts/qualtrics_workflow.py export-responses --survey-key discrimination_beliefs_demo --format csv
+python scripts/run_analysis.py --survey-key discrimination_beliefs_demo
+python scripts/build_slides.py --survey-key discrimination_beliefs_demo
+```
+
+After inspecting the one-response export locally, submit the remaining rows without duplicating the first row:
+
+```bash
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key discrimination_beliefs_demo --input build/fixtures/discrimination_beliefs_demo_responses.csv --resume
+python scripts/qualtrics_workflow.py export-responses --survey-key discrimination_beliefs_demo --format csv
+python scripts/run_analysis.py --survey-key discrimination_beliefs_demo
+python scripts/build_slides.py --survey-key discrimination_beliefs_demo
+```
+
+If you explicitly want one command for the synthetic response submission, use `--smoke-then-rest`. The scripts do not print survey IDs, response IDs, reusable links, tokens, or raw response contents by default.
+
 ## Analysis Workflow
 
 The base repo optimizes for a Stata-first workflow with a Python fallback:
 
-- Write the preferred analysis in `code/<survey_key>/analysis/run.do`.
+- For the lab-style economist path, write Stata cleaning in `code/<survey_key>/cleaning/run.do` and Stata figures in `code/<survey_key>/figures/run.do`.
+- For the compact fallback path, write Stata analysis in `code/<survey_key>/analysis/run.do`.
 - Keep a Python fallback in `code/<survey_key>/analysis/run.py`.
 - Run `scripts/run_analysis.py`.
 - Let Codex diagnose Stata locally when it can.
@@ -180,6 +208,28 @@ python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/
 
 This lets Codex validate cleaning, figures, tables, and slides without creating a survey, calling the API, or touching private data.
 
+For SPSS/SAV exports and lab-style Stata scripts:
+
+```bash
+python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format spss
+python scripts/run_analysis.py --survey-key <survey_key> --mode stata
+```
+
+Windows users can use the compatibility wrappers:
+
+```powershell
+.\scripts\load-project.ps1 -RequireQualtrics
+.\scripts\run-survey-pipeline.ps1 -SurveyKey <survey_key> -SurveyName "<survey name>" -Format spss
+.\scripts\run-stata-analysis.ps1 -SurveyKey <survey_key>
+.\scripts\build-slides.ps1 -SurveyKey <survey_key>
+```
+
+If Stata is installed but not discoverable, set `STATA_EXE`, for example:
+
+```powershell
+$env:STATA_EXE = "C:\Program Files\Stata19\StataMP-64.exe"
+```
+
 ## Slide Workflow
 
 The base repo optimizes for a Beamer-first workflow with a Python escape hatch:
@@ -191,6 +241,39 @@ The base repo optimizes for a Beamer-first workflow with a Python escape hatch:
 - Fall back to Python slides without installing any slide software.
 
 Both slide paths read generated tables and figures from `slides/<survey_key>/inputs/`. The first run should still work without Stata, LaTeX, Quarto, R, Node, Jinja2, or YAML.
+
+## Synthetic Response Weights
+
+Survey specs can make local synthetic data less uniform with `synthetic_weights` on multiple-choice questions. Use either a list matching `choices`:
+
+```json
+"synthetic_weights": [0.05, 0.12, 0.18, 0.42, 0.23]
+```
+
+or an object keyed by choice label:
+
+```json
+"synthetic_weights": {
+  "Somewhat common": 0.42,
+  "Very common": 0.23
+}
+```
+
+Missing object keys get zero weight. Weights must be nonnegative and sum above zero.
+
+## Run Tests
+
+Normal pytest works:
+
+```bash
+python -m pytest
+```
+
+In restricted environments, the PowerShell helper keeps pytest temp/cache directories under `build/`:
+
+```powershell
+.\scripts\run_tests.ps1
+```
 
 ## Configure Local Qualtrics Secrets
 
@@ -274,6 +357,7 @@ code/repo_smoke_test/survey_spec.json
 Create the survey as a draft:
 
 ```bash
+python scripts/qualtrics_workflow.py check-auth
 python scripts/qualtrics_workflow.py create-survey --survey-key repo_smoke_test --survey-name "Repository Smoke Test Survey" --spec-file code/repo_smoke_test/survey_spec.json
 ```
 
@@ -288,6 +372,8 @@ Get the reusable anonymous link:
 ```bash
 python scripts/qualtrics_workflow.py get-link --survey-key repo_smoke_test
 ```
+
+By default, the link is saved to ignored local metadata without printing it. Add `--show-private-link` only when you need to see it in your local terminal.
 
 Download responses as CSV:
 
@@ -311,10 +397,14 @@ The Pages site is a public demo built from generated synthetic responses. It pub
 ```text
 site/index.html
 site/walkthrough.html
-site/artifacts/slides.pdf
-site/artifacts/slides.html
-site/artifacts/figures.zip
-site/artifacts/tables.zip
+site/artifacts/smoke-slides.pdf
+site/artifacts/smoke-slides.html
+site/artifacts/smoke-figures.zip
+site/artifacts/smoke-tables.zip
+site/artifacts/discrimination-beliefs-demo-slides.pdf
+site/artifacts/discrimination-beliefs-demo-slides.html
+site/artifacts/discrimination-beliefs-demo-figures.zip
+site/artifacts/discrimination-beliefs-demo-tables.zip
 ```
 
 Build it locally:
@@ -345,7 +435,7 @@ For a shorter scaffold-only version, use:
 prompts/scaffold-workflow.md
 ```
 
-It asks Codex to create a new `code/<survey_key>/` folder, a Stata analysis script, a Python analysis fallback, a Beamer deck, a Python-native Markdown fallback deck, and safe ignored output folders.
+It asks Codex to create a new `code/<survey_key>/` folder, lab-style Stata cleaning/figure scripts or a compact Stata analysis script, a Python analysis fallback, a Beamer deck, a Python-native Markdown fallback deck, and safe ignored output folders.
 
 For the complete survey-to-responses-to-slides loop, use:
 
@@ -385,3 +475,4 @@ These document the traditional economist stack and the fallback contract. The ba
 - The generated `site/` directory is ignored by git and rebuilt by GitHub Actions from synthetic data.
 - Live API actions require explicit commands and environment variables.
 - API tokens are never printed intentionally by the scripts.
+- New `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default unless explicitly allowlisted as public demos.

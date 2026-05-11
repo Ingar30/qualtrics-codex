@@ -18,7 +18,7 @@ The intended loop is:
    - live draft/test link, only after explicit user approval and local secrets are loaded;
    - export/download existing real responses, only after explicit user approval and local secrets are loaded.
 4. Codex generates or downloads responses.
-5. Codex cleans data with `scripts/run_analysis.py`, preferring Stata when available and falling back to Python.
+5. Codex cleans data with `scripts/run_analysis.py`, preferring lab-style Stata cleaning/figures when available and falling back to Python for CSV workflows.
 6. Codex builds slides with `scripts/build_slides.py`, preferring Beamer when available and falling back to native HTML slides.
 7. Codex reports artifact paths and the public/private boundary.
 
@@ -27,11 +27,14 @@ The intended loop is:
 - If the user gives a broad survey idea, infer a simple 4-8 question survey and state the assumptions.
 - Ask a short clarification only when the answer changes a live API action, privacy boundary, or core research design.
 - Default to local synthetic responses before live Qualtrics calls.
+- For live credentials, use `check-auth` rather than `list-surveys`; full listing is only for explicit survey browsing.
 - Treat "test link" as a live Qualtrics action: it requires local `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN`, and the user must explicitly ask for it.
 - Treat "download responses" or "export responses" as a live Qualtrics read/export action: verify credentials are present without printing values.
 - Treat API-created response submission as a live mutation even if the survey is draft or inactive.
+- Submit one synthetic response first when validating a new live survey, export/check locally, then continue with `--resume` or use `--smoke-then-rest` only when the user explicitly wants the one-command path.
 - When cleaning Qualtrics CSV exports, filter metadata rows by keeping `ResponseId` values that start with `R_` when that column exists.
-- Never print token values, survey metadata, reusable links, raw real response contents, or local secret file contents.
+- Never print token values, survey metadata, reusable links, survey IDs, response IDs, raw real response contents, or local secret file contents.
+- Use the granular skills in this repo when a user asks for one part of the loop: `create-qualtrics-survey`, `generate-synthetic-responses`, `download-qualtrics-sav`, `clean-sav-file`, `stata-figures`, `beamer-slides`, `get-survey-link`, and `slide-review-panel`.
 
 ## Commands
 
@@ -56,7 +59,16 @@ python scripts/build_slides.py --survey-key <survey_key>
 Create a live draft survey only after explicit approval:
 
 ```bash
+python scripts/qualtrics_workflow.py check-auth
 python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --survey-name "<survey_name>" --spec-file code/<survey_key>/survey_spec.json
+```
+
+Submit synthetic responses to Qualtrics only after explicit approval:
+
+```bash
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --limit 1
+python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --resume
 ```
 
 Get a reusable anonymous link only after explicit approval:
@@ -69,6 +81,13 @@ Export real responses only after explicit approval:
 
 ```bash
 python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --survey-id SV_... --format csv
+```
+
+Download SPSS/SAV for the lab-style Stata path:
+
+```bash
+python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format spss
+python scripts/run_analysis.py --survey-key <survey_key> --mode stata
 ```
 
 Analyze newest real local export:

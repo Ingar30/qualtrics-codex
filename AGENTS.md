@@ -40,8 +40,8 @@ site/
 
 ## Defaults
 
-- Python handles Qualtrics API calls, CSV import, cleaning, tables, and figures.
-- `scripts/run_analysis.py` tries Stata first and falls back to Python.
+- Python handles Qualtrics API calls, local synthetic CSV generation, and fallback cleaning/tables/figures.
+- `scripts/run_analysis.py` tries lab-style Stata cleaning/figures first when present, then compact Stata analysis, then Python.
 - `scripts/build_slides.py` tries Beamer first and falls back to native HTML slides.
 - `scripts/render_slides.py` handles Markdown-to-HTML slide rendering with the Python standard library.
 - `scripts/build_site.py` builds the synthetic-data public Pages site.
@@ -54,5 +54,8 @@ When the user asks for a survey workflow, use the repo-local skill in `.agents/s
 Default to a synthetic local smoke test first. Before live Qualtrics actions, distinguish among:
 
 - draft/test link: create or use a live draft survey and retrieve the reusable link;
-- synthetic responses: generate local fake responses for testing, or import fake responses only if the user explicitly asks for live API submission;
+- synthetic responses: generate local fake responses for testing, or submit fake responses only if the user explicitly asks for live API submission;
+- live synthetic test: submit one row first, export/check locally, then use `--resume` or `--smoke-then-rest` only after explicit approval;
 - real responses: export/download from Qualtrics, keep raw files ignored, clean with Stata or Python, then build figures and slides.
+
+Ad hoc `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default. Promote only public-safe demos by editing `.gitignore` intentionally.

@@ -60,3 +60,77 @@ def test_safe_extract_blocks_zip_slip(tmp_path: Path) -> None:
         zf.writestr("../escape.txt", "bad")
     with pytest.raises(SystemExit):
         qw.safe_extract(archive, tmp_path / "out")
+
+
+def test_response_values_from_row_maps_choice_labels_to_recodes() -> None:
+    spec = {
+        "questions": [
+            {
+                "tag": "satisfaction",
+                "type": "mc",
+                "text": "Satisfied?",
+                "choices": ["No", "Yes"],
+            },
+            {"tag": "feedback", "type": "text", "text": "Feedback?"},
+        ]
+    }
+    row = {"satisfaction": "Yes", "feedback": "Useful"}
+
+    values = qw.response_values_from_row(
+        row,
+        spec,
+        {"satisfaction": "QID1", "feedback": "QID2"},
+        row_number=1,
+    )
+
+    assert values["QID1"] == 2
+    assert values["QID2"] == "Useful"
+    assert values["finished"] == 1
+    assert values["progress"] == 100
+
+
+def test_redact_sensitive_text_hides_qualtrics_ids_links_and_tokens() -> None:
+    text = (
+        "token secret-token survey SV_abc123 block BL_abc123 flow FL_abc123 "
+        "response R_abc123456 https://nhh.eu.qualtrics.com/jfe/form/SV_abc123"
+    )
+
+    redacted = qw.redact_sensitive_text(text, token="secret-token")
+
+    assert "secret-token" not in redacted
+    assert "SV_abc123" not in redacted
+    assert "BL_abc123" not in redacted
+    assert "FL_abc123" not in redacted
+    assert "R_abc123456" not in redacted
+    assert "qualtrics.com" not in redacted
+    assert "[QUALTRICS_API_TOKEN]" in redacted
+    assert "[QUALTRICS_LINK]" in redacted
+
+
+def test_next_resume_offset_reads_private_import_metadata(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(qw, "DATA_DIR", tmp_path / "data")
+    path = qw.synthetic_import_path("demo")
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({"offset": 1, "submitted_count": 9}), encoding="utf-8")
+
+    assert qw.next_resume_offset("demo") == 10
+
+
+def test_parser_includes_live_workflow_commands() -> None:
+    parser = qw.build_parser()
+
+    auth_args = parser.parse_args(["check-auth"])
+    submit_args = parser.parse_args(
+        [
+            "submit-synthetic-responses",
+            "--survey-key",
+            "demo",
+            "--input",
+            "build/fixtures/demo.csv",
+            "--smoke-then-rest",
+        ]
+    )
+
+    assert auth_args.func is qw.command_check_auth
+    assert submit_args.func is qw.command_submit_synthetic_responses
+    assert submit_args.smoke_then_rest is True

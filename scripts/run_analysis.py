@@ -66,6 +66,28 @@ def find_stata_executable(requested: str | None = None) -> str | None:
     return None
 
 
+def stata_setup_guidance() -> str:
+    if platform.system() == "Windows":
+        return (
+            "Could not locate Stata. Set STATA_EXE to your Stata executable, for example: "
+            '$env:STATA_EXE = "C:\\Program Files\\Stata19\\StataMP-64.exe". '
+            "To persist it, add that line to $HOME\\.secrets\\qualtrics.env.ps1 or your PowerShell profile."
+        )
+    return "Could not locate Stata. Install Stata on PATH or set STATA_EXE to the Stata executable."
+
+
+def find_newest_response_file(project_root: Path, survey_key: str) -> Path | None:
+    raw_root = project_root / "data" / survey_key / "raw"
+    if not raw_root.exists():
+        return None
+    candidates = sorted(
+        [path for path in raw_root.rglob("*") if path.suffix.lower() in {".csv", ".sav"}],
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    return candidates[0] if candidates else None
+
+
 def find_newest_csv(project_root: Path, survey_key: str) -> Path | None:
     raw_root = project_root / "data" / survey_key / "raw"
     if not raw_root.exists():
@@ -74,12 +96,29 @@ def find_newest_csv(project_root: Path, survey_key: str) -> Path | None:
     return candidates[0] if candidates else None
 
 
+def resolve_input_file(project_root: Path, survey_key: str, input_file: Path | None) -> Path | None:
+    if input_file is None:
+        return find_newest_response_file(project_root, survey_key)
+    if input_file.is_absolute():
+        return input_file
+    return project_root / input_file
+
+
 def resolve_input_csv(project_root: Path, survey_key: str, input_csv: Path | None) -> Path | None:
-    if input_csv is None:
-        return find_newest_csv(project_root, survey_key)
-    if input_csv.is_absolute():
-        return input_csv
-    return project_root / input_csv
+    return resolve_input_file(project_root, survey_key, input_csv)
+
+
+def stata_do_file(project_root: Path, survey_key: str) -> tuple[Path | None, str]:
+    lab_pipeline = project_root / "scripts" / "stata" / "survey_pipeline.do"
+    cleaning_do = project_root / "code" / survey_key / "cleaning" / "run.do"
+    figures_do = project_root / "code" / survey_key / "figures" / "run.do"
+    if lab_pipeline.exists() and cleaning_do.exists() and figures_do.exists():
+        return lab_pipeline, "Stata cleaning/figures pipeline"
+
+    analysis_do = project_root / "code" / survey_key / "analysis" / "run.do"
+    if analysis_do.exists():
+        return analysis_do, "Stata analysis script"
+    return None, "Stata analysis script"
 
 
 def stata_command(stata_exe: str, do_file: Path, project_root: Path, survey_key: str, input_csv: Path) -> list[str]:
@@ -104,23 +143,23 @@ def run_stata_analysis(
     stata_exe: str | None = None,
 ) -> AnalysisResult:
     survey_key = render_slides.safe_survey_key(survey_key)
-    do_file = project_root / "code" / survey_key / "analysis" / "run.do"
-    if not do_file.exists():
-        return AnalysisResult("stata", "skipped", f"Stata analysis script not found: {do_file}")
+    do_file, do_label = stata_do_file(project_root, survey_key)
+    if not do_file:
+        return AnalysisResult("stata", "skipped", f"Stata analysis script not found for {survey_key}.")
 
-    resolved_input = resolve_input_csv(project_root, survey_key, input_csv)
+    resolved_input = resolve_input_file(project_root, survey_key, input_csv)
     if not resolved_input or not resolved_input.exists():
-        return AnalysisResult("stata", "skipped", "No CSV input found for Stata analysis.")
+        return AnalysisResult("stata", "skipped", "No CSV or SAV input found for Stata analysis.")
 
     resolved_stata = find_stata_executable(stata_exe)
     if not resolved_stata:
-        return AnalysisResult("stata", "skipped", "Could not locate Stata. Set STATA_EXE or install Stata on PATH.")
+        return AnalysisResult("stata", "skipped", stata_setup_guidance())
 
     command = stata_command(resolved_stata, do_file, project_root, survey_key, resolved_input)
     result = subprocess.run(command, cwd=project_root, capture_output=True, text=True, check=False)
     if result.returncode != 0:
         return AnalysisResult("stata", "failed", summarize_subprocess_failure(result, "Stata"))
-    return AnalysisResult("stata", "success", "Ran Stata analysis.")
+    return AnalysisResult("stata", "success", f"Ran {do_label}.")
 
 
 def run_python_analysis(
@@ -132,6 +171,8 @@ def run_python_analysis(
     script = project_root / "code" / survey_key / "analysis" / "run.py"
     if not script.exists():
         return AnalysisResult("python", "failed", f"Python analysis script not found: {script}")
+    if input_csv is not None and Path(input_csv).suffix.lower() == ".sav":
+        return AnalysisResult("python", "failed", "Python fallback expects CSV input. Use Stata for SAV exports or export CSV.")
 
     command = [sys.executable, str(script)]
     if input_csv is not None:

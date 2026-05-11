@@ -24,6 +24,12 @@ Remove-Item -Recurse -Force .venv
 
 The fallback installs packages such as `requests`, `pandas`, `matplotlib`, and `pytest` with `--user`. It is useful for getting started, but it is less reproducible than a working `.venv`.
 
+If pytest cannot create temporary/cache directories in a restricted shell, use the helper that keeps those paths under `build/`:
+
+```powershell
+.\scripts\run_tests.ps1
+```
+
 ## Missing Requests Or Pytest
 
 If `scripts/qualtrics_workflow.py` says `requests` is missing, or `python -m pytest` says pytest is missing, install the repository requirements:
@@ -43,15 +49,17 @@ py -3 -m pip install --user -r requirements.txt
 The analysis wrapper tries Stata first and falls back to Python. If Stata is installed but not discoverable, set `STATA_EXE` explicitly:
 
 ```powershell
-$env:STATA_EXE = "C:\Program Files\Stata19\StataSE-64.exe"
+$env:STATA_EXE = "C:\Program Files\Stata19\StataMP-64.exe"
 python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
 ```
+
+To persist this for the repo, put the `STATA_EXE` line in `$HOME\.secrets\qualtrics.env.ps1` or your PowerShell profile.
 
 The Python fallback is expected to work without Stata.
 
 ## Qualtrics Credentials Not Loaded
 
-Synthetic tests do not need Qualtrics credentials. Live commands such as `list-surveys`, `create-survey`, `get-link`, and `export-responses` need local environment variables:
+Synthetic tests do not need Qualtrics credentials. Live commands such as `check-auth`, `create-survey`, `get-link`, `submit-synthetic-responses`, and `export-responses` need local environment variables:
 
 ```powershell
 . $HOME\.secrets\qualtrics.env.ps1
@@ -79,4 +87,4 @@ Do not assume a draft or inactive survey means no data can be added through the 
 
 ## Reusable Links And Metadata
 
-`get-link` prints the reusable Qualtrics link and writes it to ignored metadata under `data/<survey_key>/metadata/`. That is useful locally, but do not commit, paste, or publish reusable links or metadata by default.
+`get-link` writes the reusable Qualtrics link to ignored metadata under `data/<survey_key>/metadata/`. It does not print the link unless you pass `--show-private-link`. Do not commit, paste, or publish reusable links or metadata by default.

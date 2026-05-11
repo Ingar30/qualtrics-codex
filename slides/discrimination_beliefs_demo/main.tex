@@ -1,0 +1,99 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\usepackage{graphicx}
+
+\definecolor{DemoBlue}{RGB}{31,95,122}
+\definecolor{DemoGold}{RGB}{232,180,79}
+\definecolor{DemoInk}{RGB}{17,24,39}
+
+\setbeamercolor{normal text}{fg=DemoInk,bg=white}
+\setbeamercolor{structure}{fg=DemoBlue}
+\setbeamercolor{frametitle}{fg=white,bg=DemoBlue}
+\setbeamercolor{title}{fg=white,bg=DemoBlue}
+\setbeamercolor{block title}{fg=white,bg=DemoBlue}
+\setbeamercolor{block body}{fg=DemoInk,bg=DemoBlue!6}
+\setbeamertemplate{navigation symbols}{}
+
+\title{Beliefs About Discrimination in Hiring}
+\subtitle{Synthetic Qualtrics workflow demo}
+\author{qualtrics-codex}
+\date{}
+
+\newcommand{\chartframe}[3]{
+  \begin{frame}{#1}
+    \centering
+    \IfFileExists{inputs/#2.pdf}{
+      \includegraphics[width=0.92\linewidth,height=0.72\textheight,keepaspectratio]{inputs/#2.pdf}
+    }{
+      \IfFileExists{inputs/#2.png}{
+        \includegraphics[width=0.92\linewidth,height=0.72\textheight,keepaspectratio]{inputs/#2.png}
+      }{
+        \fbox{\parbox{0.78\linewidth}{\centering Run the analysis step to create \texttt{inputs/#2.pdf}.}}
+      }
+    }
+
+    \vspace{0.2cm}
+    {\small #3}
+  \end{frame}
+}
+
+\begin{document}
+
+{
+\setbeamercolor{background canvas}{bg=DemoBlue}
+\begin{frame}[plain]
+  \vfill
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\Huge Beliefs About\\Discrimination\\in Hiring\par}
+  \vspace{0.45cm}
+  {\Large\color{white} Synthetic Qualtrics workflow demo\par}
+  \vspace{0.35cm}
+  {\large\color{white!82} qualtrics-codex\par}
+  \vfill
+  {\small\color{DemoGold} Survey spec \quad synthetic responses \quad figures \quad slides}
+\end{frame}
+}
+
+\begin{frame}{Workflow}
+  \begin{enumerate}
+    \item Design a neutral public opinion survey.
+    \item Generate synthetic responses locally or submit them to Qualtrics after approval.
+    \item Export responses into an ignored raw folder.
+    \item Clean with Stata when available, otherwise Python.
+    \item Build figures and slides from reproducible local outputs.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Survey Design}
+  \begin{block}{Measures}
+    Perceived prevalence, likely mechanisms, persuasive evidence, policy responses, and confidence.
+  \end{block}
+  Only synthetic/demo outputs are public by default.
+\end{frame}
+
+\begin{frame}{Synthetic Response Summary}
+  \centering
+  \IfFileExists{inputs/summary.tex}{
+    \input{inputs/summary.tex}
+  }{
+    \fbox{\parbox{0.72\linewidth}{\centering Run the analysis step to create \texttt{inputs/summary.tex}.}}
+  }
+\end{frame}
+
+\chartframe{Perceived Prevalence}{prevalence_discrimination}{How common respondents think discrimination in hiring is today.}
+\chartframe{Likely Mechanisms}{main_mechanism}{Which mechanisms respondents think most often explain discrimination.}
+\chartframe{Persuasive Evidence}{persuasive_evidence}{Which evidence respondents would find most persuasive.}
+\chartframe{Policy Response}{policy_response}{Which policy response respondents would be most willing to consider.}
+\chartframe{Confidence}{confidence}{How confident respondents are in their answers.}
+
+\begin{frame}{Public Boundary}
+  \begin{block}{Publish by default}
+    Synthetic slides, tables, and figures.
+  \end{block}
+  \begin{block}{Keep private by default}
+    Survey specs, raw exports, processed real data, response IDs, reusable links, and metadata.
+  \end{block}
+\end{frame}
+
+\end{document}

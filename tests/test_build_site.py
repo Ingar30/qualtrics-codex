@@ -26,6 +26,9 @@ def test_walkthrough_mentions_local_secret_file(tmp_path: Path) -> None:
     assert "QUALTRICS_API_TOKEN" in walkthrough
     assert "qualtrics.com/support/integrations/api-integration/overview" in walkthrough
     assert "generate_synthetic_responses.py" in walkthrough
+    assert "check-auth" in walkthrough
+    assert "submit-synthetic-responses" in walkthrough
+    assert "--resume" in walkthrough
 
 
 def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
@@ -41,6 +44,7 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     assert "Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics" in index
     assert "generate the synthetic responses locally" in index
     assert "prompts/discrimination-beliefs-example.md" in index
+    assert "check-auth" in index
 
 
 def test_walkthrough_mentions_qualtrics_metadata_and_link_privacy(tmp_path: Path) -> None:

@@ -17,6 +17,25 @@ python scripts/build_slides.py --survey-key <survey_key>
 
 This local smoke test does not call Qualtrics and should not write to `data/<survey_key>/raw/`.
 
+## Live Qualtrics Test Loop
+
+The confirmed live path is:
+
+```bash
+python scripts/qualtrics_workflow.py check-auth
+python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --survey-name "<survey_name>" --spec-file code/<survey_key>/survey_spec.json
+python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --limit 1
+python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
+python scripts/run_analysis.py --survey-key <survey_key>
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --resume
+python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
+python scripts/run_analysis.py --survey-key <survey_key>
+python scripts/build_slides.py --survey-key <survey_key>
+```
+
+Use `--smoke-then-rest` only when the user explicitly wants one submission command. The scripts hide survey IDs, response IDs, reusable links, tokens, and Qualtrics URLs from normal terminal output.
+
 ## Conversational Loop
 
 The repository is meant to support a single user request such as:
@@ -29,7 +48,15 @@ Codex should interpret that as a live Qualtrics test loop. It should verify cred
 
 ## Analysis Contract
 
-`scripts/run_analysis.py` tries Stata first and falls back to Python. Both paths should write the same files:
+`scripts/run_analysis.py` tries Stata first and falls back to Python. It prefers the lab-style layout when present:
+
+```text
+code/<survey_key>/cleaning/run.do
+code/<survey_key>/figures/run.do
+scripts/stata/survey_pipeline.do
+```
+
+Otherwise it uses `code/<survey_key>/analysis/run.do`, then `code/<survey_key>/analysis/run.py`. All paths should write the same files:
 
 ```text
 data/<survey_key>/processed/clean.csv
