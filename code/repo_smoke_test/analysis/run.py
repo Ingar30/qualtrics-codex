@@ -11,6 +11,7 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib.ticker import MaxNLocator
 
 
 SURVEY_KEY = "repo_smoke_test"
@@ -91,16 +92,19 @@ def make_bar_chart(data: pd.DataFrame, variable: str, choices: list[str], output
     counts = data[variable].dropna().astype(str).value_counts()
     values = [int(counts.get(choice, 0)) for choice in choices]
 
-    height = max(3.0, 0.45 * len(choices) + 1.2)
-    fig, ax = plt.subplots(figsize=(8, height))
+    height = max(4.4, 0.58 * len(choices) + 1.6)
+    fig, ax = plt.subplots(figsize=(9.6, height))
     ax.barh(choices, values, color="#2f6f8f")
     ax.invert_yaxis()
     ax.set_xlabel("Responses")
-    ax.set_title(DISPLAY_NAMES[variable])
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax.set_xlim(0, max(1, max(values)) + 0.8)
+    ax.tick_params(axis="both", labelsize=11)
+    ax.xaxis.label.set_size(11)
     for index, value in enumerate(values):
-        ax.text(value + 0.05, index, str(value), va="center")
+        ax.text(value + 0.08, index, str(value), va="center", fontsize=11)
     fig.tight_layout()
     fig.savefig(output_path, dpi=160)
     plt.close(fig)

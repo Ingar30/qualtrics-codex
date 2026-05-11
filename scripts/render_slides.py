@@ -320,8 +320,8 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
     .slide.active {{ display: grid; gap: clamp(0.85rem, 1.4vw, 1.35rem); }}
     .title-slide {{
       background:
-        linear-gradient(115deg, rgba(31, 95, 122, 0.94) 0%, rgba(31, 95, 122, 0.94) 48%, transparent 48.2%),
-        linear-gradient(180deg, #ffffff 0%, #f7faf9 100%);
+        linear-gradient(120deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 33%, transparent 33.2%),
+        linear-gradient(135deg, #174f69 0%, #1f6f87 58%, #2f8f9b 100%);
       color: #ffffff;
       align-content: center;
     }}
@@ -337,15 +337,23 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
       max-width: 18ch;
     }}
     h3 {{ font-size: clamp(1.25rem, 2vw, 2rem); }}
-    .title-slide h1 {{ color: #ffffff; max-width: 10ch; }}
-    .title-slide p {{ color: rgba(255, 255, 255, 0.9); max-width: 28ch; font-size: clamp(1.25rem, 2.2vw, 2rem); }}
+    .title-slide h1 {{ color: #ffffff; max-width: 12ch; }}
+    .title-slide p {{ color: rgba(255, 255, 255, 0.92); max-width: 34ch; font-size: clamp(1.25rem, 2.2vw, 2rem); }}
     p, li, td, th {{
       font-size: clamp(1rem, 1.5vw, 1.42rem);
       line-height: 1.34;
     }}
     p {{ max-width: 58ch; color: var(--muted); margin: 0; }}
-    ol, ul {{ margin: 0; padding-left: 1.25em; max-width: 56ch; }}
-    li + li {{ margin-top: 0.4rem; }}
+    ol, ul {{ margin: 0; padding-left: 1.25em; max-width: 58ch; }}
+    li {{
+      padding: 0.18rem 0 0.18rem 0.15rem;
+    }}
+    li + li {{ margin-top: 0.35rem; }}
+    ol li {{
+      padding: 0.42rem 0.65rem;
+      background: #f7faf9;
+      border-left: 0.22rem solid rgba(31, 95, 122, 0.22);
+    }}
     li::marker {{ color: var(--accent-2); font-weight: 800; }}
     code {{
       font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
@@ -358,11 +366,14 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
       width: min(100%, 900px);
       max-height: 42vh;
       overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
       background: #10252f;
       color: #eef8fb;
       padding: 0.85rem 1rem;
       border-radius: 8px;
       border-left: 6px solid var(--accent-2);
+      font-size: clamp(0.78rem, 1.1vw, 1rem);
     }}
     pre code {{ background: transparent; color: inherit; padding: 0; }}
     figure {{
@@ -374,7 +385,7 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
     }}
     img {{
       max-width: min(100%, 980px);
-      max-height: 52vh;
+      max-height: 57vh;
       border: 1px solid var(--rule);
       background: var(--panel);
       box-shadow: 0 12px 32px rgba(20, 35, 45, 0.1);
@@ -383,6 +394,7 @@ def page_template(metadata: dict[str, str], slide_html: list[str]) -> str:
     table {{
       border-collapse: collapse;
       width: min(100%, 820px);
+      margin-top: 0.25rem;
       background: var(--panel);
       border: 1px solid var(--rule);
       box-shadow: 0 10px 24px rgba(20, 35, 45, 0.08);
