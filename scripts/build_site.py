@@ -145,6 +145,12 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
     </div>
   </section>
   <section>
+    <h2>Codex Loop</h2>
+    <p>Ask Codex for a survey from exact questions or a broad idea. It should scaffold the survey, ask whether you want a synthetic local test, a live draft/test link, or a real response export, then clean data and build figures and slides.</p>
+    <pre><code>Generate 100 synthetic responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and responses.</code></pre>
+    <p>For the full conversational workflow, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/intended-codex-loop.md">docs/intended-codex-loop.md</a>.</p>
+  </section>
+  <section>
     <h2>Run Locally</h2>
     <pre><code>git clone https://github.com/Ingar30/qualtrics-codex.git
 cd qualtrics-codex

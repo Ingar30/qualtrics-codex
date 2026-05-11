@@ -7,6 +7,7 @@ Instructions for Codex and other automation agents working in this starter repo.
 - Keep the default workflow easy to adopt: Stata/Beamer first when available, Python/native HTML fallback when not.
 - Keep live Qualtrics work local by default. The public Pages site uses synthetic fixture data only.
 - Prefer small, readable changes over framework-heavy abstractions.
+- Support the intended user loop: a researcher asks Codex for a survey from either detailed instructions or a broad idea; Codex scaffolds the survey, asks or infers whether the user wants synthetic responses, a live draft/test link, or an export of existing responses, then cleans data and builds figures/slides.
 
 ## Safety
 
@@ -43,3 +44,13 @@ site/
 - `scripts/build_slides.py` tries Beamer first and falls back to native HTML slides.
 - `scripts/render_slides.py` handles Markdown-to-HTML slide rendering with the Python standard library.
 - `scripts/build_site.py` builds the synthetic-data public Pages site.
+
+## Expected Agent Loop
+
+When the user asks for a survey workflow, use the repo-local skill in `.agents/skills/qualtrics-survey-loop/` if available.
+
+Default to a synthetic local smoke test first. Before live Qualtrics actions, distinguish among:
+
+- draft/test link: create or use a live draft survey and retrieve the reusable link;
+- synthetic responses: generate local fake responses for testing, or import fake responses only if the user explicitly asks for live API submission;
+- real responses: export/download from Qualtrics, keep raw files ignored, clean with Stata or Python, then build figures and slides.

@@ -16,6 +16,26 @@ The default assumes many economists already use Stata and LaTeX/Beamer. The repo
 
 The public GitHub Pages site is built only from synthetic fixture data. Live Qualtrics exports are intended to run locally on your machine with credentials stored outside the repository.
 
+## Intended Codex Loop
+
+The main use case is conversational:
+
+1. Ask Codex for a survey, either with exact questions or a broad research idea.
+2. Codex creates the survey spec, analysis scripts, and slides.
+3. Codex asks or infers whether you want a synthetic local test, a live draft/test link, or an export of real responses.
+4. Codex generates or downloads responses.
+5. Codex cleans the data in Stata when available, otherwise Python.
+6. Codex generates figures and tables.
+7. Codex compiles Beamer slides when available, otherwise native HTML slides.
+
+A typical prompt can be as simple as:
+
+```text
+Generate 100 synthetic responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and responses.
+```
+
+See `docs/intended-codex-loop.md` and `prompts/full-loop-survey.md`.
+
 ## Quick Start
 
 Install prerequisites:
@@ -305,6 +325,12 @@ prompts/scaffold-workflow.md
 
 It asks Codex to create a new `code/<survey_key>/` folder, a Stata analysis script, a Python analysis fallback, a Beamer deck, a Python-native Markdown fallback deck, and safe ignored output folders.
 
+For the complete survey-to-responses-to-slides loop, use:
+
+```text
+prompts/full-loop-survey.md
+```
+
 For a final repo validation pass before publishing or sharing, use:
 
 ```text
@@ -315,6 +341,7 @@ prompts/final-validation-goal.md
 
 - Stata/SPSS workflow: `docs/stata-extension.md`
 - Beamer/Python slide workflow: `docs/latex-extension.md`
+- Intended Codex loop: `docs/intended-codex-loop.md`
 - Local Qualtrics secrets: `docs/local-qualtrics-secrets.md`
 - Codex prompt alternatives: `docs/codex-prompt-alternatives.md`
 - Reproducibility notes: `docs/reproducibility.md`

@@ -17,6 +17,16 @@ python scripts/build_slides.py --survey-key <survey_key>
 
 This local smoke test does not call Qualtrics and should not write to `data/<survey_key>/raw/`.
 
+## Conversational Loop
+
+The repository is meant to support a single user request such as:
+
+```text
+Generate 100 synthetic responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and responses.
+```
+
+Codex should interpret that as the synthetic local path unless the user explicitly asks for live Qualtrics survey creation, a test link, or export/download of real responses.
+
 ## Analysis Contract
 
 `scripts/run_analysis.py` tries Stata first and falls back to Python. Both paths should write the same files:

@@ -36,3 +36,5 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     assert "build/fixtures/repo_smoke_test_responses.csv" in index
     assert "prompts/start-with-codex.md" in index
     assert "docs/codex-prompt-alternatives.md" in index
+    assert "docs/intended-codex-loop.md" in index
+    assert "Generate 100 synthetic responses" in index

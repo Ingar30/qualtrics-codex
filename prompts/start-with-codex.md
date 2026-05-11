@@ -10,7 +10,7 @@ I want to create a new Qualtrics research workflow in this repo.
 Inputs:
 - survey_key: <folder_safe_key>
 - survey_name: <human readable survey name>
-- topic: <short research or teaching topic>
+- topic: <short research or teaching topic, or a broad idea Codex should turn into a survey>
 - audience: <respondents or class context>
 
 Please scaffold the workflow using the repository's existing patterns:
@@ -19,11 +19,12 @@ Please scaffold the workflow using the repository's existing patterns:
 3. Create the Python fallback in code/<survey_key>/analysis/run.py.
 4. Create Beamer slides in slides/<survey_key>/main.tex.
 5. Create native Python/HTML fallback slides in slides/<survey_key>/slides.md.
-6. Generate synthetic responses into build/fixtures/<survey_key>_responses.csv.
-7. Run analysis against the synthetic responses.
-8. Build slides.
-9. Explain where I should store local Qualtrics API keys before any live API call.
-10. Report the exact commands I should run next for live Qualtrics export.
+6. Ask or infer whether I want a synthetic-only local test, a live draft/test link, or export/download of existing real responses.
+7. Unless I explicitly ask for a live Qualtrics action, generate synthetic responses into build/fixtures/<survey_key>_responses.csv.
+8. Run analysis against the synthetic responses.
+9. Build slides.
+10. Explain where I should store local Qualtrics API keys before any live API call.
+11. Report the exact commands I should run next for a live test link and live Qualtrics export.
 
 Safety rules:
 - Do not call the live Qualtrics API unless I explicitly ask.

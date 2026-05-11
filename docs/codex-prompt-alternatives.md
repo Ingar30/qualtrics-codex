@@ -28,6 +28,20 @@ Prompt:
 Create a new Qualtrics research workflow using prompts/start-with-codex.md. Use survey_key <survey_key>, survey_name <survey_name>, topic <topic>, and audience <audience>. Generate synthetic responses and run the first smoke test. Do not call the live Qualtrics API.
 ```
 
+## Full Survey-To-Slides Loop
+
+Prompt:
+
+```text
+Create a survey from this broad idea: <idea>. Use survey_key <survey_key>. Generate 100 synthetic responses, clean them in Stata or Python depending on what is available, generate figures, and compile slides with a description of the survey and the response patterns. Do not call the live Qualtrics API unless I explicitly ask.
+```
+
+Prompt for a live test link:
+
+```text
+Create the live Qualtrics survey as a draft and show me how to get the reusable test link. Verify QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing their values. Do not activate the survey unless I ask.
+```
+
 ## Fresh Synthetic Demo
 
 Command:

@@ -8,7 +8,7 @@ Create a new Qualtrics research workflow in this repository.
 Inputs:
 - survey_key: <folder_safe_key>
 - survey_name: <human readable survey name>
-- topic: <short research or teaching topic>
+- topic: <short research or teaching topic, or a broad idea Codex should turn into a survey>
 - audience: <respondents or class context>
 - outputs: Stata-first cleaning, Python fallback cleaning, summary table, 3-5 simple figures, Beamer slides, and Python fallback slides
 
@@ -19,12 +19,13 @@ Please:
 4. Create slides/<survey_key>/main.tex as the preferred Beamer deck. It should read generated summary.tex and figure PDFs from slides/<survey_key>/inputs/.
 5. Create slides/<survey_key>/slides.md as the no-install Python fallback deck for scripts/render_slides.py. Use `---` slide separators and the same generated PNG figures from slides/<survey_key>/inputs/.
 6. Add slides/<survey_key>/inputs/.gitkeep.
-7. Generate a local synthetic response CSV with `python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv` and use it for the first smoke test.
-8. Do not create or call a live Qualtrics survey unless I explicitly ask.
-9. Do not write any API token or secret into the repository.
-10. Keep raw data under data/<survey_key>/raw/ and processed data under data/<survey_key>/processed/.
-11. Do not add Quarto, R, Node, Jinja2, YAML, or new slide dependencies unless I explicitly ask for that extension.
-12. After scaffolding, tell me the commands to generate synthetic responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv`, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, create the live survey, and export CSV responses.
+7. Ask or infer whether I want a synthetic-only local test, a live draft/test link, or export/download of existing real responses.
+8. Unless I explicitly ask for a live Qualtrics action, generate a local synthetic response CSV with `python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100` and use it for the first smoke test.
+9. Do not create or call a live Qualtrics survey unless I explicitly ask.
+10. Do not write any API token or secret into the repository.
+11. Keep raw data under data/<survey_key>/raw/ and processed data under data/<survey_key>/processed/.
+12. Do not add Quarto, R, Node, Jinja2, YAML, or new slide dependencies unless I explicitly ask for that extension.
+13. After scaffolding, tell me the commands to generate synthetic responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv`, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, create a live draft/test link, and export CSV responses.
 ```
 
 Recommended follow-up after reviewing the scaffold:
