@@ -51,7 +51,8 @@ python -m pip install -r requirements.txt
 This does not call the Qualtrics API.
 
 ```bash
-python scripts/run_analysis.py --survey-key repo_smoke_test --input tests/fixtures/repo_smoke_test_responses.csv
+python scripts/generate_synthetic_responses.py --survey-key repo_smoke_test --output build/fixtures/repo_smoke_test_responses.csv
+python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
 python scripts/build_slides.py --survey-key repo_smoke_test
 ```
 
@@ -70,9 +71,11 @@ build/slides/repo_smoke_test/slides.html
 The fallback also exports a PDF when Chrome, Edge, or Chromium is already installed. To force the Python path:
 
 ```bash
-python scripts/run_analysis.py --survey-key repo_smoke_test --input tests/fixtures/repo_smoke_test_responses.csv --mode python
+python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv --mode python
 python scripts/build_slides.py --survey-key repo_smoke_test --mode python
 ```
+
+The repository also keeps a committed synthetic fixture at `tests/fixtures/repo_smoke_test_responses.csv` for unit tests. For new local checks, prefer generating fresh synthetic responses into `build/fixtures/` so test data is clearly disposable.
 
 ## Analysis Workflow
 
@@ -95,6 +98,15 @@ slides/<survey_key>/inputs/*.png
 ```
 
 Figure PDFs are the preferred Beamer inputs because they keep charts sharp in the final slide PDF. PNGs are kept for the Python HTML fallback.
+
+Before real Qualtrics responses exist, use:
+
+```bash
+python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv
+python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv
+```
+
+This lets Codex validate cleaning, figures, tables, and slides without creating a survey, calling the API, or touching private data.
 
 ## Slide Workflow
 
@@ -188,7 +200,7 @@ python scripts/build_slides.py --survey-key repo_smoke_test
 
 ## GitHub Pages Demo
 
-The Pages site is a public demo built from `tests/fixtures/repo_smoke_test_responses.csv`. It publishes only synthetic artifacts:
+The Pages site is a public demo built from generated synthetic responses. It publishes only synthetic artifacts:
 
 ```text
 site/index.html

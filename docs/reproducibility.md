@@ -7,6 +7,16 @@ python scripts/run_analysis.py --survey-key <survey_key>
 python scripts/build_slides.py --survey-key <survey_key>
 ```
 
+Before real responses exist, generate disposable synthetic responses and run the same analysis path against them:
+
+```bash
+python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv
+python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv
+python scripts/build_slides.py --survey-key <survey_key>
+```
+
+This local smoke test does not call Qualtrics and should not write to `data/<survey_key>/raw/`.
+
 ## Analysis Contract
 
 `scripts/run_analysis.py` tries Stata first and falls back to Python. Both paths should write the same files:
@@ -52,7 +62,7 @@ Forced modes are useful for debugging. The default `auto` mode is for collaborat
 
 ## Public Site Contract
 
-The GitHub Pages site is built from synthetic fixture data only:
+The GitHub Pages site is built from generated synthetic data only:
 
 ```bash
 python scripts/build_site.py --output-dir site

@@ -19,11 +19,12 @@ Please:
 4. Create slides/<survey_key>/main.tex as the preferred Beamer deck. It should read generated summary.tex and figure PDFs from slides/<survey_key>/inputs/.
 5. Create slides/<survey_key>/slides.md as the no-install Python fallback deck for scripts/render_slides.py. Use `---` slide separators and the same generated PNG figures from slides/<survey_key>/inputs/.
 6. Add slides/<survey_key>/inputs/.gitkeep.
-7. Do not create or call a live Qualtrics survey unless I explicitly ask.
-8. Do not write any API token or secret into the repository.
-9. Keep raw data under data/<survey_key>/raw/ and processed data under data/<survey_key>/processed/.
-10. Do not add Quarto, R, Node, Jinja2, YAML, or new slide dependencies unless I explicitly ask for that extension.
-11. After scaffolding, tell me the commands to create the survey, export CSV responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key>`, and build slides with `python scripts/build_slides.py --survey-key <survey_key>`.
+7. Generate a local synthetic response CSV with `python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv` and use it for the first smoke test.
+8. Do not create or call a live Qualtrics survey unless I explicitly ask.
+9. Do not write any API token or secret into the repository.
+10. Keep raw data under data/<survey_key>/raw/ and processed data under data/<survey_key>/processed/.
+11. Do not add Quarto, R, Node, Jinja2, YAML, or new slide dependencies unless I explicitly ask for that extension.
+12. After scaffolding, tell me the commands to generate synthetic responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv`, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, create the live survey, and export CSV responses.
 ```
 
 Recommended follow-up after reviewing the scaffold:

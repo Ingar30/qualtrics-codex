@@ -11,7 +11,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SURVEY_KEY = "repo_smoke_test"
-FIXTURE = Path("tests/fixtures/repo_smoke_test_responses.csv")
+SYNTHETIC_FIXTURE = Path("build/fixtures/repo_smoke_test_responses.csv")
 
 
 def run_command(command: list[str], project_root: Path) -> None:
@@ -151,7 +151,8 @@ cd qualtrics-codex
 python -m venv .venv
 .\\.venv\\Scripts\\Activate.ps1
 python -m pip install -r requirements.txt
-python scripts/run_analysis.py --survey-key repo_smoke_test --input tests/fixtures/repo_smoke_test_responses.csv
+python scripts/generate_synthetic_responses.py --survey-key repo_smoke_test --output build/fixtures/repo_smoke_test_responses.csv
+python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
 python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
   </section>
   <section class="warning">
@@ -191,7 +192,12 @@ $env:QUALTRICS_PUBLIC_HOST = "yourbrand.qualtrics.com"</code></pre>
   <pre><code>python scripts/qualtrics_workflow.py list-surveys
 python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id SV_... --format csv</code></pre>
 
-  <h2>3. Analyze And Build</h2>
+  <h2>3. Smoke Test With Synthetic Responses</h2>
+  <pre><code>python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv
+python scripts/run_analysis.py --survey-key my_survey --input build/fixtures/my_survey_responses.csv
+python scripts/build_slides.py --survey-key my_survey</code></pre>
+
+  <h2>4. Analyze And Build Real Local Exports</h2>
   <pre><code>python scripts/run_analysis.py --survey-key my_survey
 python scripts/build_slides.py --survey-key my_survey</code></pre>
 
@@ -210,11 +216,22 @@ def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None
     run_command(
         [
             sys.executable,
+            "scripts/generate_synthetic_responses.py",
+            "--survey-key",
+            SURVEY_KEY,
+            "--output",
+            str(SYNTHETIC_FIXTURE),
+        ],
+        project_root,
+    )
+    run_command(
+        [
+            sys.executable,
             "scripts/run_analysis.py",
             "--survey-key",
             SURVEY_KEY,
             "--input",
-            str(FIXTURE),
+            str(SYNTHETIC_FIXTURE),
             "--mode",
             "python",
         ],

@@ -23,3 +23,12 @@ def test_walkthrough_mentions_local_secret_file(tmp_path: Path) -> None:
     walkthrough = (tmp_path / "walkthrough.html").read_text(encoding="utf-8")
     assert "qualtrics.env.ps1" in walkthrough
     assert "QUALTRICS_API_TOKEN" in walkthrough
+    assert "generate_synthetic_responses.py" in walkthrough
+
+
+def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
+    build_site.build_index(tmp_path, ["slides.pdf"])
+
+    index = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "generate_synthetic_responses.py" in index
+    assert "build/fixtures/repo_smoke_test_responses.csv" in index
