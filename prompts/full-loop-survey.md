@@ -26,10 +26,10 @@ Do not call the live Qualtrics API unless I explicitly ask. Do not print or stor
 Canonical live-test version:
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-Use this only when you want a live Qualtrics test loop. Codex should verify credentials without printing them, use `check-auth` for the first API check, and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. The safer live path submits one synthetic response first, exports/checks it locally, then submits the remaining rows with `--resume`.
+Use this only when you want a live Qualtrics test loop. Codex should verify credentials without printing them, use `check-auth` for the first API check, and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. The safer live path saves the reusable link to ignored slide inputs with `get-link --write-slide-inputs`, submits one synthetic response first, exports/checks it locally, then submits the remaining rows with `--resume`.
 
 Local-only version:
 

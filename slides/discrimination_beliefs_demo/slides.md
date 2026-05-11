@@ -64,6 +64,12 @@ Only synthetic/demo outputs are public by default.
 
 ---
 
+## Survey Link
+
+{{ include inputs/survey_link.md }}
+
+---
+
 ## Public Boundary
 
 Publish the synthetic slides, tables, and figures. Keep survey specs, raw exports, processed real data, response IDs, reusable links, and metadata private unless explicitly promoted.

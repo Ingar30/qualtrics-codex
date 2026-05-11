@@ -3,6 +3,7 @@
 \usetheme{Boadilla}
 \usecolortheme{default}
 \usepackage{graphicx}
+\usepackage{url}
 
 \definecolor{DemoBlue}{RGB}{31,95,122}
 \definecolor{DemoGold}{RGB}{232,180,79}
@@ -86,6 +87,16 @@
 \chartframe{Persuasive Evidence}{persuasive_evidence}{Which evidence respondents would find most persuasive.}
 \chartframe{Policy Response}{policy_response}{Which policy response respondents would be most willing to consider.}
 \chartframe{Confidence}{confidence}{How confident respondents are in their answers.}
+
+\begin{frame}{Survey Link}
+  \begin{block}{Reusable test link}
+    \IfFileExists{inputs/survey_link.tex}{
+      \input{inputs/survey_link.tex}
+    }{
+      Run \texttt{get-link --write-slide-inputs} locally to include the private reusable link.
+    }
+  \end{block}
+\end{frame}
 
 \begin{frame}{Public Boundary}
   \begin{block}{Publish by default}

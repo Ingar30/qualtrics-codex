@@ -149,7 +149,7 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
   <section>
     <h2>Codex Loop</h2>
     <p>Ask Codex for a survey from exact questions or a broad idea. It should scaffold the survey, ask whether you want a synthetic local test, a live draft/test link, or a real response export, then clean data and build figures and slides.</p>
-    <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.</code></pre>
+    <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.</code></pre>
     <p>Because this prompt asks for work on Qualtrics, Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate the synthetic responses locally.</p>
     <p>For the full conversational workflow, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/intended-codex-loop.md">docs/intended-codex-loop.md</a>.</p>
     <p>For the discrimination-beliefs prompt, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/discrimination-beliefs-example.md">prompts/discrimination-beliefs-example.md</a>.</p>
@@ -173,7 +173,7 @@ python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
   </section>
   <section>
     <h2>Live Qualtrics Loop</h2>
-    <p>Store credentials outside the repository, start with <code>check-auth</code>, submit one synthetic response first, then resume after local inspection. See <a href="walkthrough.html">the walkthrough</a>.</p>
+    <p>Store credentials outside the repository, start with <code>check-auth</code>, save reusable links only to ignored local files, submit one synthetic response first, then resume after local inspection. See <a href="walkthrough.html">the walkthrough</a>.</p>
   </section>
 </main>
 <footer>
@@ -213,7 +213,8 @@ export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"</code></pre>
 python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id SV_... --format csv</code></pre>
 
   <h2>3. Live Synthetic Test</h2>
-  <pre><code>python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv --n 100
+  <pre><code>python scripts/qualtrics_workflow.py get-link --survey-key my_survey --write-slide-inputs
+python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv --n 100
 python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv --limit 1
 python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --format csv
 python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv --resume</code></pre>
@@ -229,7 +230,7 @@ python scripts/build_slides.py --survey-key my_survey</code></pre>
   <p>Qualtrics CSV exports may include metadata rows after the header. The example analysis filters them when <code>ResponseId</code> exists by keeping IDs that start with <code>R_</code>.</p>
 
   <h2>Public Boundary</h2>
-  <p>Publish synthetic/demo artifacts freely. Do not publish raw exports, processed real data, survey links, metadata, or secrets by default. Reusable links printed by <code>get-link</code> are local/private by default.</p>
+  <p>Publish synthetic/demo artifacts freely. Do not publish raw exports, processed real data, survey links, metadata, or secrets by default. Reusable links saved by <code>get-link</code> are local/private by default.</p>
   <p>Draft or inactive surveys may still accept API-created test responses. Treat API response submission as a live mutation.</p>
 </main>
 <footer><div class="inner"><a href="index.html">Back to demo artifacts</a></div></footer>

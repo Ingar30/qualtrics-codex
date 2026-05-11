@@ -33,10 +33,10 @@ Create a new Qualtrics research workflow using prompts/start-with-codex.md. Use 
 Canonical prompt:
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-This is a live API workflow. Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses.
+This is a live API workflow. Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. If slides should include the link, Codex should save it with `get-link --write-slide-inputs` rather than printing it.
 
 Prompt for the safer one-response live test:
 
@@ -53,7 +53,7 @@ Create a public opinion survey on beliefs about discrimination in hiring. Use su
 Prompt for a live test link:
 
 ```text
-Create the live Qualtrics survey as a draft and show me how to get the reusable test link. Verify QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing their values. Do not activate the survey unless I ask.
+Create the live Qualtrics survey as a draft and save the reusable test link to ignored slide inputs. Verify QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing their values. Do not activate the survey unless I ask.
 ```
 
 Prompt for real responses after data collection:

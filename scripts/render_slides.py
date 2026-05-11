@@ -117,6 +117,11 @@ def include_markdown(line: str, source_dir: Path) -> list[str] | None:
         return None
     include_path = local_asset_path(source_dir, match.group(1).strip())
     if include_path is None or not include_path.exists():
+        if match.group(1).strip().replace("\\", "/").endswith("survey_link.md"):
+            return [
+                "Reusable link is private by default.",
+                "Run `get-link --write-slide-inputs` locally to include it in slides.",
+            ]
         return [
             f"**Missing include:** `{match.group(1).strip()}`",
             "Run the analysis step to create this input.",
@@ -589,6 +594,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Render a survey Markdown deck to native HTML slides.")
     parser.add_argument("--survey-key", default="repo_smoke_test")
     parser.add_argument("--pdf", action="store_true", help="Also export slides.pdf using Chrome/Edge/Chromium.")
+    parser.add_argument("--pdf-output", type=Path, help="Optional PDF output path for --pdf.")
     parser.add_argument("--browser", help="Path to Chrome, Edge, or Chromium for --pdf.")
     return parser
 
@@ -598,7 +604,9 @@ def main(argv: list[str] | None = None) -> int:
     output_file = render_slides(args.survey_key)
     print(f"Rendered slides: {output_file}")
     if args.pdf:
-        pdf_file = output_file.with_suffix(".pdf")
+        pdf_file = args.pdf_output or output_file.with_suffix(".pdf")
+        if not pdf_file.is_absolute():
+            pdf_file = PROJECT_ROOT / pdf_file
         export_pdf(output_file, pdf_file, browser=args.browser)
         print(f"Rendered PDF: {pdf_file}")
     return 0

@@ -87,4 +87,4 @@ Do not assume a draft or inactive survey means no data can be added through the 
 
 ## Reusable Links And Metadata
 
-`get-link` writes the reusable Qualtrics link to ignored metadata under `data/<survey_key>/metadata/`. It does not print the link unless you pass `--show-private-link`. Do not commit, paste, or publish reusable links or metadata by default.
+`get-link` writes the reusable Qualtrics link to ignored metadata under `data/<survey_key>/metadata/`. It does not print the link unless you pass `--show-private-link`. If local slides should include the link, run `get-link --write-slide-inputs`; that writes ignored `slides/<survey_key>/inputs/survey_link.tex` and `slides/<survey_key>/inputs/survey_link.md` files without printing the link. Do not commit, paste, or publish reusable links or metadata by default.

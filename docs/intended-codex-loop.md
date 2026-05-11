@@ -35,10 +35,10 @@ A live draft survey and reusable test link require explicit user approval and lo
 ```bash
 python scripts/qualtrics_workflow.py check-auth
 python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --survey-name "<survey_name>" --spec-file code/<survey_key>/survey_spec.json
-python scripts/qualtrics_workflow.py get-link --survey-key <survey_key>
+python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --write-slide-inputs
 ```
 
-Do not activate a survey unless the user explicitly asks.
+`--write-slide-inputs` writes ignored local link inputs for Beamer/native slides without printing the link. Do not activate a survey or publish reusable links unless the user explicitly asks.
 
 ## Live Synthetic Response Mode
 
@@ -84,7 +84,7 @@ Draft or inactive surveys may still accept API-created test responses. Do not tr
 ## Canonical Prompt
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
 Codex should interpret that as a live Qualtrics test loop:
@@ -93,6 +93,7 @@ Codex should interpret that as a live Qualtrics test loop:
 - verify `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN` are set without printing values;
 - use `check-auth` for the first read-only API check instead of listing every survey;
 - ask before creating a live draft survey, submitting synthetic responses to Qualtrics, or exporting responses;
+- save the reusable link to ignored metadata and, if slides should include it, ignored slide inputs;
 - submit one synthetic response first, export/check locally, then continue with `--resume`;
 - download the generated response export into ignored raw data folders;
 - filter Qualtrics CSV metadata rows by keeping `ResponseId` values that start with `R_` when that column exists;

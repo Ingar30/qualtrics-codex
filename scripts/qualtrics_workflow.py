@@ -155,6 +155,16 @@ def save_metadata(survey_key: str, metadata: dict[str, Any]) -> Path:
     return path
 
 
+def write_survey_link_slide_inputs(survey_key: str, reusable_link: str) -> tuple[Path, Path]:
+    inputs_dir = PROJECT_ROOT / "slides" / safe_survey_key(survey_key) / "inputs"
+    inputs_dir.mkdir(parents=True, exist_ok=True)
+    tex_path = inputs_dir / "survey_link.tex"
+    md_path = inputs_dir / "survey_link.md"
+    tex_path.write_text(f"\\url{{{reusable_link}}}\n", encoding="utf-8")
+    md_path.write_text(f"Reusable test link: [{reusable_link}]({reusable_link})\n", encoding="utf-8")
+    return tex_path, md_path
+
+
 def load_survey_spec(spec_file: str | None) -> dict[str, Any]:
     if not spec_file:
         return DEFAULT_SURVEY_SPEC
@@ -646,6 +656,9 @@ def command_get_link(args: argparse.Namespace) -> int:
         }
     )
     info_path = save_metadata(survey_key, metadata)
+    if args.write_slide_inputs:
+        tex_path, md_path = write_survey_link_slide_inputs(survey_key, reusable_link)
+        print(f"Wrote private slide link inputs: {tex_path}, {md_path}")
     if args.show_private_link:
         print(f"Reusable link: {reusable_link}")
     else:
@@ -880,6 +893,11 @@ def build_parser() -> argparse.ArgumentParser:
     link_parser.add_argument("--survey-id")
     link_parser.add_argument("--public-host", help="Respondent-facing host, e.g. yourbrand.qualtrics.com.")
     link_parser.add_argument("--show-private-link", action="store_true", help="Print the reusable link in local terminal output.")
+    link_parser.add_argument(
+        "--write-slide-inputs",
+        action="store_true",
+        help="Write ignored local slide inputs so decks can include the reusable link without printing it.",
+    )
     link_parser.set_defaults(func=command_get_link)
 
     for command_name, help_text in [

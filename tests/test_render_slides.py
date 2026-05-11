@@ -55,3 +55,24 @@ def test_candidate_browser_paths_include_major_platform_defaults() -> None:
     assert "msedge" in render_slides.candidate_browser_paths("Windows")
     assert "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" in render_slides.candidate_browser_paths("Darwin")
     assert "chromium" in render_slides.candidate_browser_paths("Linux")
+
+
+def test_missing_survey_link_include_gets_private_placeholder(tmp_path: Path) -> None:
+    source_dir = tmp_path / "slides" / "demo"
+    source_dir.mkdir(parents=True)
+
+    lines = render_slides.include_markdown("{{ include inputs/survey_link.md }}", source_dir)
+
+    assert lines == [
+        "Reusable link is private by default.",
+        "Run `get-link --write-slide-inputs` locally to include it in slides.",
+    ]
+
+
+def test_parser_accepts_separate_pdf_output_path() -> None:
+    parser = render_slides.build_parser()
+
+    args = parser.parse_args(["--survey-key", "demo", "--pdf", "--pdf-output", "build/slides/demo/slides-native.pdf"])
+
+    assert args.pdf is True
+    assert args.pdf_output == Path("build/slides/demo/slides-native.pdf")

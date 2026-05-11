@@ -31,7 +31,7 @@ The main use case is conversational:
 A canonical full-loop prompt is:
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
 Because that prompt asks Codex to create a survey and generate responses on Qualtrics, Codex should treat it as a live API workflow: first verify local credentials without printing them, then ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate the synthetic responses locally instead.
@@ -149,6 +149,12 @@ python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtur
 python scripts/build_slides.py --survey-key repo_smoke_test --mode python
 ```
 
+When comparing Beamer and native PDF output in the same folder, write the native PDF to a separate file:
+
+```bash
+python scripts/render_slides.py --survey-key repo_smoke_test --pdf --pdf-output build/slides/repo_smoke_test/slides-native.pdf
+```
+
 The repository also keeps a committed synthetic fixture at `tests/fixtures/repo_smoke_test_responses.csv` for unit tests. For new local checks, prefer generating fresh synthetic responses into `build/fixtures/` so test data is clearly disposable.
 
 ## Live Qualtrics Test Loop
@@ -158,6 +164,7 @@ Live API actions are local/manual by default. Store credentials outside the repo
 ```bash
 python scripts/qualtrics_workflow.py check-auth
 python scripts/qualtrics_workflow.py create-survey --survey-key discrimination_beliefs_demo --survey-name "Discrimination Beliefs Demo" --spec-file code/discrimination_beliefs_demo/survey_spec.json
+python scripts/qualtrics_workflow.py get-link --survey-key discrimination_beliefs_demo --write-slide-inputs
 python scripts/generate_synthetic_responses.py --survey-key discrimination_beliefs_demo --output build/fixtures/discrimination_beliefs_demo_responses.csv --n 100
 python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key discrimination_beliefs_demo --input build/fixtures/discrimination_beliefs_demo_responses.csv --limit 1
 python scripts/qualtrics_workflow.py export-responses --survey-key discrimination_beliefs_demo --format csv
@@ -175,6 +182,8 @@ python scripts/build_slides.py --survey-key discrimination_beliefs_demo
 ```
 
 If you explicitly want one command for the synthetic response submission, use `--smoke-then-rest`. The scripts do not print survey IDs, response IDs, reusable links, tokens, or raw response contents by default.
+
+`get-link --write-slide-inputs` writes the reusable link into ignored local slide input files so local Beamer/native slides can include it without printing it in the terminal. Do not commit or publish those local link inputs by default.
 
 ## Analysis Workflow
 
@@ -370,10 +379,10 @@ python scripts/qualtrics_workflow.py create-survey --survey-key repo_smoke_test 
 Get the reusable anonymous link:
 
 ```bash
-python scripts/qualtrics_workflow.py get-link --survey-key repo_smoke_test
+python scripts/qualtrics_workflow.py get-link --survey-key repo_smoke_test --write-slide-inputs
 ```
 
-By default, the link is saved to ignored local metadata without printing it. Add `--show-private-link` only when you need to see it in your local terminal.
+By default, the link is saved to ignored local metadata without printing it. `--write-slide-inputs` also saves ignored local inputs for slide decks. Add `--show-private-link` only when you need to see it in your local terminal.
 
 Download responses as CSV:
 

@@ -5,7 +5,7 @@ Paste this into Codex after cloning the repository and installing requirements.
 ## Live Qualtrics Test Loop
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 
 Use survey_key: discrimination_beliefs_demo
 Use survey_name: Discrimination Beliefs Survey
@@ -24,8 +24,9 @@ Please:
 10. Download the generated Qualtrics responses into the ignored raw data folder.
 11. Clean the downloaded data in Stata if available, otherwise Python.
 12. Generate summary tables and figures.
-13. Compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
-14. Report the generated artifact paths and note any fallback used.
+13. Save the reusable survey link to ignored local slide inputs without printing it.
+14. Compile slides that summarize the workflow, survey design, synthetic response patterns, main figures, and survey link.
+15. Report the generated artifact paths and note any fallback used.
 
 Do not print secrets, survey IDs, response IDs, reusable links, raw data, or private metadata.
 ```

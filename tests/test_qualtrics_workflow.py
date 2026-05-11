@@ -116,10 +116,25 @@ def test_next_resume_offset_reads_private_import_metadata(tmp_path: Path, monkey
     assert qw.next_resume_offset("demo") == 10
 
 
+def test_write_survey_link_slide_inputs_uses_ignored_inputs_folder(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(qw, "PROJECT_ROOT", tmp_path)
+    link = "https://example.qualtrics.com/jfe/form/SV_fake"
+
+    tex_path, md_path = qw.write_survey_link_slide_inputs("demo", link)
+
+    assert tex_path == tmp_path / "slides" / "demo" / "inputs" / "survey_link.tex"
+    assert md_path == tmp_path / "slides" / "demo" / "inputs" / "survey_link.md"
+    assert tex_path.read_text(encoding="utf-8") == f"\\url{{{link}}}\n"
+    assert md_path.read_text(encoding="utf-8") == f"Reusable test link: [{link}]({link})\n"
+
+
 def test_parser_includes_live_workflow_commands() -> None:
     parser = qw.build_parser()
 
     auth_args = parser.parse_args(["check-auth"])
+    link_args = parser.parse_args(["get-link", "--survey-key", "demo", "--write-slide-inputs"])
     submit_args = parser.parse_args(
         [
             "submit-synthetic-responses",
@@ -132,5 +147,6 @@ def test_parser_includes_live_workflow_commands() -> None:
     )
 
     assert auth_args.func is qw.command_check_auth
+    assert link_args.write_slide_inputs is True
     assert submit_args.func is qw.command_submit_synthetic_responses
     assert submit_args.smoke_then_rest is True

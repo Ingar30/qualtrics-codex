@@ -24,6 +24,7 @@ The confirmed live path is:
 ```bash
 python scripts/qualtrics_workflow.py check-auth
 python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --survey-name "<survey_name>" --spec-file code/<survey_key>/survey_spec.json
+python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --write-slide-inputs
 python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100
 python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --limit 1
 python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
@@ -34,14 +35,14 @@ python scripts/run_analysis.py --survey-key <survey_key>
 python scripts/build_slides.py --survey-key <survey_key>
 ```
 
-Use `--smoke-then-rest` only when the user explicitly wants one submission command. The scripts hide survey IDs, response IDs, reusable links, tokens, and Qualtrics URLs from normal terminal output.
+Use `--smoke-then-rest` only when the user explicitly wants one submission command. The scripts hide survey IDs, response IDs, reusable links, tokens, and Qualtrics URLs from normal terminal output. `--write-slide-inputs` writes the reusable link only to ignored local slide input files.
 
 ## Conversational Loop
 
 The repository is meant to support a single user request such as:
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
 Codex should interpret that as a live Qualtrics test loop. It should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. For a no-credentials smoke test, ask Codex to generate synthetic responses locally instead.

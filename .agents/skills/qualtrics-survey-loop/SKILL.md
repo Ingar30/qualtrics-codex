@@ -32,6 +32,7 @@ The intended loop is:
 - Treat "download responses" or "export responses" as a live Qualtrics read/export action: verify credentials are present without printing values.
 - Treat API-created response submission as a live mutation even if the survey is draft or inactive.
 - Submit one synthetic response first when validating a new live survey, export/check locally, then continue with `--resume` or use `--smoke-then-rest` only when the user explicitly wants the one-command path.
+- When the user asks to include the reusable link in slides, save it to ignored slide inputs with `get-link --write-slide-inputs` instead of printing it.
 - When cleaning Qualtrics CSV exports, filter metadata rows by keeping `ResponseId` values that start with `R_` when that column exists.
 - Never print token values, survey metadata, reusable links, survey IDs, response IDs, raw real response contents, or local secret file contents.
 - Use the granular skills in this repo when a user asks for one part of the loop: `create-qualtrics-survey`, `generate-synthetic-responses`, `download-qualtrics-sav`, `clean-sav-file`, `stata-figures`, `beamer-slides`, `get-survey-link`, and `slide-review-panel`.
@@ -74,7 +75,7 @@ python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <su
 Get a reusable anonymous link only after explicit approval:
 
 ```bash
-python scripts/qualtrics_workflow.py get-link --survey-key <survey_key>
+python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --write-slide-inputs
 ```
 
 Export real responses only after explicit approval:
@@ -100,7 +101,7 @@ python scripts/build_slides.py --survey-key <survey_key>
 ## Typical User Prompt
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
 For that prompt, treat survey creation, synthetic response submission on Qualtrics, and export/download as live API actions. Verify credentials without printing them and ask before each live mutation/export. If the user wants a no-credentials smoke test, generate local synthetic responses instead.
