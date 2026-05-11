@@ -49,3 +49,22 @@ python scripts/build_slides.py --survey-key <survey_key> --mode python
 ```
 
 Forced modes are useful for debugging. The default `auto` mode is for collaborators who may not have the same local tools installed.
+
+## Public Site Contract
+
+The GitHub Pages site is built from synthetic fixture data only:
+
+```bash
+python scripts/build_site.py --output-dir site
+```
+
+The site may publish demo slides, demo tables, demo figures, and a walkthrough. It must not publish:
+
+- raw Qualtrics exports;
+- processed real response data;
+- survey IDs or reusable respondent links;
+- Qualtrics metadata;
+- local paths containing private project details;
+- API tokens or secret-loading files.
+
+Live Qualtrics validation is a local/manual loop unless a user explicitly opts into a separate secret-backed workflow.

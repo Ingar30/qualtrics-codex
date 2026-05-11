@@ -19,6 +19,7 @@ slides/*/inputs/*.tex
 slides/*/inputs/*.png
 slides/*/inputs/*.pdf
 build/
+site/*
 
 # OS/editor files
 .DS_Store
@@ -29,3 +30,4 @@ Thumbs.db
 # Keep placeholders
 !data/.gitkeep
 !slides/*/inputs/.gitkeep
+!site/.gitkeep
