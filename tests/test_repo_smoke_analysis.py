@@ -23,6 +23,9 @@ def test_repo_smoke_analysis_writes_outputs(tmp_path: Path) -> None:
 
     assert outputs["clean_csv"].exists()
     assert outputs["summary_md"].exists()
+    assert outputs["summary_tex"].exists()
     assert (outputs["inputs_dir"] / "role.png").exists()
+    assert (outputs["inputs_dir"] / "role.pdf").exists()
     assert (outputs["inputs_dir"] / "workflow_familiarity.png").exists()
+    assert (outputs["inputs_dir"] / "workflow_familiarity.pdf").exists()
     assert "Pipeline confidence" in outputs["summary_md"].read_text(encoding="utf-8")

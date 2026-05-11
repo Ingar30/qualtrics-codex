@@ -15,6 +15,7 @@ data/*/processed/
 data/*/metadata/*.json
 data/*/metadata/*.log
 slides/*/inputs/*.md
+slides/*/inputs/*.tex
 slides/*/inputs/*.png
 slides/*/inputs/*.pdf
 build/

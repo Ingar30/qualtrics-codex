@@ -1,0 +1,126 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\usepackage{graphicx}
+
+\definecolor{StarterBlue}{RGB}{31,95,122}
+\definecolor{StarterTeal}{RGB}{47,143,155}
+\definecolor{StarterGold}{RGB}{232,180,79}
+\definecolor{StarterInk}{RGB}{17,24,39}
+
+\setbeamercolor{normal text}{fg=StarterInk,bg=white}
+\setbeamercolor{structure}{fg=StarterBlue}
+\setbeamercolor{frametitle}{fg=white,bg=StarterBlue}
+\setbeamercolor{title}{fg=white,bg=StarterBlue}
+\setbeamercolor{block title}{fg=white,bg=StarterBlue}
+\setbeamercolor{block body}{fg=StarterInk,bg=StarterBlue!6}
+\setbeamertemplate{navigation symbols}{}
+
+\title{Repository Smoke Test Survey}
+\subtitle{Qualtrics, Python, and Beamer slides}
+\author{Qualtrics Research Workflow Starter}
+\date{}
+
+\newcommand{\chartframe}[3]{
+  \begin{frame}{#1}
+    \centering
+    \IfFileExists{inputs/#2.pdf}{
+      \includegraphics[width=0.92\linewidth,height=0.72\textheight,keepaspectratio]{inputs/#2.pdf}
+    }{
+      \IfFileExists{inputs/#2.png}{
+        \includegraphics[width=0.92\linewidth,height=0.72\textheight,keepaspectratio]{inputs/#2.png}
+      }{
+        \fbox{\parbox{0.78\linewidth}{\centering Run the analysis step to create \texttt{inputs/#2.pdf}.}}
+      }
+    }
+
+    \vspace{0.2cm}
+    {\small #3}
+  \end{frame}
+}
+
+\begin{document}
+
+{
+\setbeamercolor{background canvas}{bg=StarterBlue}
+\begin{frame}[plain]
+  \vfill
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\Huge Repository\\Smoke Test\\Survey\par}
+  \vspace{0.45cm}
+  {\Large\color{white} Qualtrics, Python, and Beamer slides\par}
+  \vspace{0.35cm}
+  {\large\color{white!82} Qualtrics Research Workflow Starter\par}
+  \vfill
+  {\small\color{StarterGold} JSON spec \quad Python analysis \quad reusable slide inputs}
+\end{frame}
+}
+
+\begin{frame}{Workflow}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\textwidth}
+      \begin{enumerate}
+        \item Write a survey specification in JSON.
+        \item Create or connect to a Qualtrics survey.
+        \item Export responses as CSV.
+        \item Clean and summarize responses with Stata or Python.
+        \item Build Beamer slides, with Python slides as fallback.
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Design principle}
+        Keep the base path easy to inspect. Extensions should reuse the same survey key, data folders, and slide inputs.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Analysis Outputs}
+  \begin{block}{Run the analysis first}
+\begin{verbatim}
+python scripts/run_analysis.py --survey-key repo_smoke_test \
+  --input tests/fixtures/repo_smoke_test_responses.csv
+\end{verbatim}
+  \end{block}
+
+  \vspace{0.25cm}
+  The analysis writes reusable tables, PNG figures, and vector PDF figures to:
+
+  \vspace{0.25cm}
+  \texttt{slides/repo\_smoke\_test/inputs/}
+\end{frame}
+
+\begin{frame}{Descriptive Summary}
+  \centering
+  \IfFileExists{inputs/summary.tex}{
+    \input{inputs/summary.tex}
+  }{
+    \fbox{\parbox{0.72\linewidth}{\centering Run the analysis step to create \texttt{inputs/summary.tex}.}}
+  }
+\end{frame}
+
+\chartframe{Role}{role}{Respondent roles in the smoke-test fixture.}
+\chartframe{Workflow Familiarity}{workflow_familiarity}{Familiarity with reproducible data workflows.}
+\chartframe{Preferred Output}{preferred_output}{Preferred output for a research workflow.}
+\chartframe{Pipeline Confidence}{confidence_running_pipeline}{Confidence running the pipeline end to end.}
+
+\begin{frame}{Teaching Point}
+  \begin{block}{Core idea}
+    A useful starter repo should make each survey easy to find, rerun, and explain.
+  \end{block}
+
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Keep together}
+        Survey-specific code, generated tables, and generated figures.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Keep isolated}
+        Raw exports and local secrets.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}

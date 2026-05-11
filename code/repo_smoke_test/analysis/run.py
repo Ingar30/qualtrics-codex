@@ -69,23 +69,33 @@ def read_responses(input_csv: Path) -> pd.DataFrame:
     return data
 
 
-def write_summary(data: pd.DataFrame, output_path: Path) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+def write_summary(data: pd.DataFrame, md_path: Path, tex_path: Path) -> None:
+    md_path.parent.mkdir(parents=True, exist_ok=True)
     lines = [
         "| Variable | Nonmissing | Unique values |",
         "| --- | ---: | ---: |",
     ]
+    tex_rows = [
+        r"\begin{tabular}{lrr}",
+        r"\hline",
+        r"Variable & Nonmissing & Unique values \\",
+        r"\hline",
+    ]
     for variable, display_name in DISPLAY_NAMES.items():
         if variable not in data.columns:
             lines.append(f"| {display_name} | missing | missing |")
+            tex_rows.append(f"{display_name} & missing & missing \\\\")
             continue
         series = data[variable].dropna()
         lines.append(f"| {display_name} | {len(series)} | {series.nunique()} |")
-    output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        tex_rows.append(f"{display_name} & {len(series)} & {series.nunique()} \\\\")
+    tex_rows.extend([r"\hline", r"\end{tabular}"])
+    md_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    tex_path.write_text("\n".join(tex_rows) + "\n", encoding="utf-8")
 
 
-def make_bar_chart(data: pd.DataFrame, variable: str, choices: list[str], output_path: Path) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+def make_bar_chart(data: pd.DataFrame, variable: str, choices: list[str], output_stem: Path) -> list[Path]:
+    output_stem.parent.mkdir(parents=True, exist_ok=True)
     if variable not in data.columns:
         raise SystemExit(f"Expected variable not found: {variable}")
 
@@ -106,8 +116,12 @@ def make_bar_chart(data: pd.DataFrame, variable: str, choices: list[str], output
     for index, value in enumerate(values):
         ax.text(value + 0.08, index, str(value), va="center", fontsize=11)
     fig.tight_layout()
-    fig.savefig(output_path, dpi=160)
+    pdf_path = output_stem.with_suffix(".pdf")
+    png_path = output_stem.with_suffix(".png")
+    fig.savefig(pdf_path)
+    fig.savefig(png_path, dpi=200)
     plt.close(fig)
+    return [pdf_path, png_path]
 
 
 def run_analysis(input_csv: Path | None = None, project_root: Path = PROJECT_ROOT) -> dict[str, Path]:
@@ -128,21 +142,22 @@ def run_analysis(input_csv: Path | None = None, project_root: Path = PROJECT_ROO
     clean_csv = processed_dir / "clean.csv"
     data.to_csv(clean_csv, index=False)
     summary_md = inputs_dir / "summary.md"
-    write_summary(data, summary_md)
+    summary_tex = inputs_dir / "summary.tex"
+    write_summary(data, summary_md, summary_tex)
 
     figures: list[Path] = []
     for variable, choices in VARIABLES.items():
-        output_path = inputs_dir / f"{variable}.png"
-        make_bar_chart(data, variable, choices, output_path)
-        figures.append(output_path)
+        output_stem = inputs_dir / variable
+        figures.extend(make_bar_chart(data, variable, choices, output_stem))
 
     print(f"Input CSV: {input_csv}")
     print(f"Clean data: {clean_csv}")
     print(f"Summary: {summary_md}")
+    print(f"Summary TeX: {summary_tex}")
     for figure in figures:
         print(f"Figure: {figure}")
 
-    return {"clean_csv": clean_csv, "summary_md": summary_md, "inputs_dir": inputs_dir}
+    return {"clean_csv": clean_csv, "summary_md": summary_md, "summary_tex": summary_tex, "inputs_dir": inputs_dir}
 
 
 def build_parser() -> argparse.ArgumentParser:

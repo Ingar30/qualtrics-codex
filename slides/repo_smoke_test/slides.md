@@ -1,12 +1,12 @@
 ---
 title: Repository Smoke Test Survey
-subtitle: Qualtrics, Python, and native HTML slides
+subtitle: Qualtrics, Python, Beamer, and native fallback slides
 author: Qualtrics Research Workflow Starter
 ---
 
 # Repository Smoke Test Survey
 
-Qualtrics, Python, and native HTML slides
+Qualtrics, Python, Beamer, and native fallback slides
 
 ---
 
@@ -16,7 +16,8 @@ Qualtrics, Python, and native HTML slides
 2. Create or connect to a Qualtrics survey.
 3. Export responses as CSV.
 4. Clean and summarize responses with Python.
-5. Render slides with the built-in HTML renderer.
+5. Build Beamer slides when LaTeX is available.
+6. Fall back to native Python slides when LaTeX is unavailable.
 
 ---
 
@@ -25,7 +26,7 @@ Qualtrics, Python, and native HTML slides
 Run the analysis first:
 
 ```bash
-python code/repo_smoke_test/analysis/run.py --input tests/fixtures/repo_smoke_test_responses.csv
+python scripts/run_analysis.py --survey-key repo_smoke_test --input tests/fixtures/repo_smoke_test_responses.csv
 ```
 
 The analysis writes tables and figures to `slides/repo_smoke_test/inputs/`.

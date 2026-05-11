@@ -1,16 +1,18 @@
 # Qualtrics Research Workflow Starter
 
-A small starter repository for researchers who want a reproducible path from a Qualtrics survey to cleaned data, figures, and HTML slides.
+A small starter repository for researchers who want a reproducible path from a Qualtrics survey to cleaned data, figures, and slides.
 
 The default workflow is deliberately low-friction:
 
 1. Write a simple JSON survey specification.
 2. Use Python to create or connect to a Qualtrics survey.
 3. Export responses as CSV.
-4. Analyze the CSV with Python.
-5. Render browser-based slides with the built-in Python slide renderer.
+4. Analyze the CSV with Stata when available.
+5. Fall back to Python analysis when Stata is missing or broken.
+6. Build Beamer slides when LaTeX is available.
+7. Fall back to the built-in Python slide renderer when LaTeX is missing or broken.
 
-Stata and LaTeX/Beamer are supported as optional extensions, not required for the first run.
+The default assumes many economists already use Stata and LaTeX/Beamer. The repository still keeps no-install fallbacks: Python analysis, Markdown slide content, a small Python renderer, custom CSS, and optional browser-based PDF export.
 
 ## Quick Start
 
@@ -47,23 +49,62 @@ python -m pip install -r requirements.txt
 This does not call the Qualtrics API.
 
 ```bash
-python code/repo_smoke_test/analysis/run.py --input tests/fixtures/repo_smoke_test_responses.csv
-python scripts/render_slides.py --survey-key repo_smoke_test
+python scripts/run_analysis.py --survey-key repo_smoke_test --input tests/fixtures/repo_smoke_test_responses.csv
+python scripts/build_slides.py --survey-key repo_smoke_test
 ```
 
-The rendered slide deck is written to:
+If Beamer compiles, the PDF is written to:
+
+```text
+build/slides/repo_smoke_test/slides.pdf
+```
+
+If LaTeX is missing or compilation fails, the script falls back to the native Python slide deck:
 
 ```text
 build/slides/repo_smoke_test/slides.html
 ```
 
-Optional PDF export uses an installed Chrome, Edge, or Chromium browser:
+The fallback also exports a PDF when Chrome, Edge, or Chromium is already installed. To force the Python path:
 
 ```bash
-python scripts/render_slides.py --survey-key repo_smoke_test --pdf
+python scripts/run_analysis.py --survey-key repo_smoke_test --input tests/fixtures/repo_smoke_test_responses.csv --mode python
+python scripts/build_slides.py --survey-key repo_smoke_test --mode python
 ```
 
-If the script cannot find a browser, open the HTML deck and use your browser's Print to PDF command.
+## Analysis Workflow
+
+The base repo optimizes for a Stata-first workflow with a Python fallback:
+
+- Write the preferred analysis in `code/<survey_key>/analysis/run.do`.
+- Keep a Python fallback in `code/<survey_key>/analysis/run.py`.
+- Run `scripts/run_analysis.py`.
+- Let Codex diagnose Stata locally when it can.
+- Fall back to Python analysis without installing Stata.
+
+Both analysis paths write the same reproducible outputs:
+
+```text
+data/<survey_key>/processed/clean.csv
+slides/<survey_key>/inputs/summary.md
+slides/<survey_key>/inputs/summary.tex
+slides/<survey_key>/inputs/*.pdf
+slides/<survey_key>/inputs/*.png
+```
+
+Figure PDFs are the preferred Beamer inputs because they keep charts sharp in the final slide PDF. PNGs are kept for the Python HTML fallback.
+
+## Slide Workflow
+
+The base repo optimizes for a Beamer-first workflow with a Python escape hatch:
+
+- Write the preferred deck in `slides/<survey_key>/main.tex`.
+- Write slides in `slides/<survey_key>/slides.md`.
+- Run `scripts/build_slides.py`.
+- Let Codex diagnose LaTeX locally when it can.
+- Fall back to Python slides without installing any slide software.
+
+Both slide paths read generated tables and figures from `slides/<survey_key>/inputs/`. The first run should still work without Stata, LaTeX, Quarto, R, Node, Jinja2, or YAML.
 
 ## Configure Qualtrics
 
@@ -129,8 +170,8 @@ python scripts/qualtrics_workflow.py export-responses --survey-key repo_smoke_te
 Then analyze the newest downloaded CSV:
 
 ```bash
-python code/repo_smoke_test/analysis/run.py
-python scripts/render_slides.py --survey-key repo_smoke_test
+python scripts/run_analysis.py --survey-key repo_smoke_test
+python scripts/build_slides.py --survey-key repo_smoke_test
 ```
 
 ## Scaffold A New Project With Codex
@@ -141,14 +182,15 @@ Use the prompt in:
 prompts/scaffold-workflow.md
 ```
 
-It asks Codex to create a new `code/<survey_key>/` folder, a Python analysis script, a Markdown slide deck, and safe ignored output folders.
+It asks Codex to create a new `code/<survey_key>/` folder, a Stata analysis script, a Python analysis fallback, a Beamer deck, a Python-native Markdown fallback deck, and safe ignored output folders.
 
-## Optional Extensions
+## Supporting Docs
 
 - Stata/SPSS workflow: `docs/stata-extension.md`
-- LaTeX/Beamer or PDF workflow: `docs/latex-extension.md`
+- Beamer/Python slide workflow: `docs/latex-extension.md`
+- Reproducibility notes: `docs/reproducibility.md`
 
-These are useful if you want the more traditional economist stack. The base repo should still run without Stata, LaTeX, Quarto, R, or Node.
+These document the traditional economist stack and the fallback contract. The base repo should still produce slides even when Stata, LaTeX, Quarto, R, Node, Jinja2, and YAML are unavailable.
 
 ## Safety Defaults
 
