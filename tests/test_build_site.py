@@ -22,6 +22,7 @@ def test_walkthrough_mentions_local_secret_file(tmp_path: Path) -> None:
 
     walkthrough = (tmp_path / "walkthrough.html").read_text(encoding="utf-8")
     assert "qualtrics.env.ps1" in walkthrough
+    assert "qualtrics.env" in walkthrough
     assert "QUALTRICS_API_TOKEN" in walkthrough
     assert "generate_synthetic_responses.py" in walkthrough
 

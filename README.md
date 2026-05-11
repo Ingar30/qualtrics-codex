@@ -70,6 +70,8 @@ prompts/start-with-codex.md
 
 That prompt tells Codex to inspect the repository, scaffold a new survey workflow, generate synthetic responses, run the local smoke test, and avoid live Qualtrics calls until you explicitly ask.
 
+You do not need Qualtrics API keys for the synthetic smoke test. Before asking Codex to create surveys, list surveys, or export real responses, store your keys outside the repository. See `docs/local-qualtrics-secrets.md`.
+
 ## Run The Local Smoke Test
 
 This does not call the Qualtrics API.
@@ -146,9 +148,15 @@ Both slide paths read generated tables and figures from `slides/<survey_key>/inp
 
 ## Configure Local Qualtrics Secrets
 
-Do not put Qualtrics credentials in this repository. Store them outside the repo.
+Do not put Qualtrics credentials in this repository. Store them outside the repo and load them only before live API calls. The synthetic smoke test, unit tests, and GitHub Pages demo do not need these keys.
 
-Recommended Windows PowerShell file:
+Detailed setup notes live in:
+
+```text
+docs/local-qualtrics-secrets.md
+```
+
+Recommended Windows PowerShell file location:
 
 ```text
 $HOME\.secrets\qualtrics.env.ps1
@@ -166,6 +174,26 @@ Load it before live API calls:
 
 ```powershell
 . $HOME\.secrets\qualtrics.env.ps1
+```
+
+Recommended macOS/Linux shell file location:
+
+```text
+$HOME/.secrets/qualtrics.env
+```
+
+Example contents:
+
+```bash
+export QUALTRICS_DATACENTER="your_datacenter"
+export QUALTRICS_API_TOKEN="your_token"
+export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"
+```
+
+Load it before live API calls:
+
+```bash
+source "$HOME/.secrets/qualtrics.env"
 ```
 
 Required environment variables:
@@ -275,6 +303,7 @@ prompts/final-validation-goal.md
 
 - Stata/SPSS workflow: `docs/stata-extension.md`
 - Beamer/Python slide workflow: `docs/latex-extension.md`
+- Local Qualtrics secrets: `docs/local-qualtrics-secrets.md`
 - Reproducibility notes: `docs/reproducibility.md`
 
 These document the traditional economist stack and the fallback contract. The base repo should still produce slides even when Stata, LaTeX, Quarto, R, Node, Jinja2, and YAML are unavailable.

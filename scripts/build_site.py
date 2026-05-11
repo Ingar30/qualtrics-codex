@@ -183,12 +183,19 @@ def build_walkthrough(output_dir: Path) -> None:
 </header>
 <main>
   <h2>1. Store Secrets Locally</h2>
-  <p>Create <code>$HOME\\.secrets\\qualtrics.env.ps1</code>:</p>
+  <p>Synthetic tests do not need Qualtrics credentials. For live API calls, store credentials outside the repository.</p>
+  <p>On Windows PowerShell, create <code>$HOME\\.secrets\\qualtrics.env.ps1</code>:</p>
   <pre><code>$env:QUALTRICS_DATACENTER = "your_datacenter"
 $env:QUALTRICS_API_TOKEN = "your_token"
 $env:QUALTRICS_PUBLIC_HOST = "yourbrand.qualtrics.com"</code></pre>
   <p>Load it before live API calls:</p>
   <pre><code>. $HOME\\.secrets\\qualtrics.env.ps1</code></pre>
+  <p>On macOS/Linux, create <code>$HOME/.secrets/qualtrics.env</code>:</p>
+  <pre><code>export QUALTRICS_DATACENTER="your_datacenter"
+export QUALTRICS_API_TOKEN="your_token"
+export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"</code></pre>
+  <p>Load it before live API calls:</p>
+  <pre><code>source "$HOME/.secrets/qualtrics.env"</code></pre>
 
   <h2>2. Export Responses</h2>
   <pre><code>python scripts/qualtrics_workflow.py list-surveys

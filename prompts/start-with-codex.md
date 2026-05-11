@@ -22,13 +22,15 @@ Please scaffold the workflow using the repository's existing patterns:
 6. Generate synthetic responses into build/fixtures/<survey_key>_responses.csv.
 7. Run analysis against the synthetic responses.
 8. Build slides.
-9. Report the exact commands I should run next for live Qualtrics export.
+9. Explain where I should store local Qualtrics API keys before any live API call.
+10. Report the exact commands I should run next for live Qualtrics export.
 
 Safety rules:
 - Do not call the live Qualtrics API unless I explicitly ask.
 - Do not create, activate, modify, or delete a live survey unless I explicitly ask.
 - Do not print or store API tokens.
 - Do not commit raw data, processed real data, survey metadata, or reusable survey links.
-- Keep secrets outside the repository, preferably in $HOME/.secrets/qualtrics.env.ps1 on Windows.
+- Keep secrets outside the repository, preferably in $HOME/.secrets/qualtrics.env.ps1 on Windows or $HOME/.secrets/qualtrics.env on macOS/Linux.
+- If checking secrets, verify only that QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set; never print their values.
 - Prefer Stata and Beamer when available, but fall back to Python and native HTML slides if they are missing.
 ```
