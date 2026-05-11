@@ -32,3 +32,4 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
     assert "generate_synthetic_responses.py" in index
     assert "build/fixtures/repo_smoke_test_responses.csv" in index
+    assert "prompts/start-with-codex.md" in index

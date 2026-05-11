@@ -151,9 +151,11 @@ cd qualtrics-codex
 python -m venv .venv
 .\\.venv\\Scripts\\Activate.ps1
 python -m pip install -r requirements.txt
+codex
 python scripts/generate_synthetic_responses.py --survey-key repo_smoke_test --output build/fixtures/repo_smoke_test_responses.csv
 python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
 python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
+    <p>After opening Codex, paste the starter prompt from <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/start-with-codex.md">prompts/start-with-codex.md</a>.</p>
   </section>
   <section class="warning">
     <strong>Private by default.</strong>

@@ -46,6 +46,30 @@ Install Python packages:
 python -m pip install -r requirements.txt
 ```
 
+## Use This Repo With Codex
+
+Clone the starter repo, enter the folder, and open it in Codex:
+
+```bash
+git clone https://github.com/Ingar30/qualtrics-codex.git
+cd qualtrics-codex
+codex
+```
+
+If you launch Codex from another folder, point it at the repo:
+
+```bash
+codex --cd path/to/qualtrics-codex
+```
+
+Then paste the starter prompt from:
+
+```text
+prompts/start-with-codex.md
+```
+
+That prompt tells Codex to inspect the repository, scaffold a new survey workflow, generate synthetic responses, run the local smoke test, and avoid live Qualtrics calls until you explicitly ask.
+
 ## Run The Local Smoke Test
 
 This does not call the Qualtrics API.
@@ -227,13 +251,25 @@ https://ingar30.github.io/qualtrics-codex/
 
 ## Scaffold A New Project With Codex
 
-Use the prompt in:
+Use the starter prompt in:
+
+```text
+prompts/start-with-codex.md
+```
+
+For a shorter scaffold-only version, use:
 
 ```text
 prompts/scaffold-workflow.md
 ```
 
 It asks Codex to create a new `code/<survey_key>/` folder, a Stata analysis script, a Python analysis fallback, a Beamer deck, a Python-native Markdown fallback deck, and safe ignored output folders.
+
+For a final repo validation pass before publishing or sharing, use:
+
+```text
+prompts/final-validation-goal.md
+```
 
 ## Supporting Docs
 
