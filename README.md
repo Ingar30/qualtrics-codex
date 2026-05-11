@@ -28,17 +28,13 @@ The main use case is conversational:
 6. Codex generates figures and tables.
 7. Codex compiles Beamer slides when available, otherwise native HTML slides.
 
-A typical prompt can be as simple as:
+A canonical full-loop prompt is:
 
 ```text
-Generate 100 synthetic responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and responses.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
 ```
 
-For example:
-
-```text
-Create a survey on beliefs about discrimination in hiring and wage setting. Use survey_key discrimination_beliefs. Design 6-8 clear questions for economics students or researchers, generate 100 synthetic responses locally, clean the generated data with Stata if available and Python otherwise, create summary figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API unless I explicitly ask.
-```
+Because that prompt asks Codex to create a survey and generate responses on Qualtrics, Codex should treat it as a live API workflow: first verify local credentials without printing them, then ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate the synthetic responses locally instead.
 
 See `docs/intended-codex-loop.md`, `prompts/full-loop-survey.md`, and `prompts/discrimination-beliefs-example.md`.
 

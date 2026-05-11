@@ -74,7 +74,7 @@ python scripts/build_slides.py --survey-key <survey_key>
 ## Typical User Prompt
 
 ```text
-Generate 100 synthetic responses for my survey, download or use the responses, clean them in Stata or Python depending on what is available, generate figures, and compile slides with a description of the survey and the responses.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
 ```
 
-For that prompt, run the synthetic path unless the user explicitly asks for live Qualtrics export.
+For that prompt, treat survey creation, synthetic response submission on Qualtrics, and export/download as live API actions. Verify credentials without printing them and ask before each live mutation/export. If the user wants a no-credentials smoke test, generate local synthetic responses instead.

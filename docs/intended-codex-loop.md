@@ -54,16 +54,22 @@ Qualtrics CSV exports often contain two metadata rows after the header. Cleaning
 
 Draft or inactive surveys may still accept API-created test responses. Do not treat inactive status as a protection against API mutations.
 
-## Typical Prompt
+## Canonical Prompt
 
 ```text
-Generate 100 synthetic responses, download the responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and the responses.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
 ```
 
-In this repository, Codex should interpret that as:
+Codex should interpret that as a live Qualtrics test loop:
 
-- generate local synthetic responses unless the user explicitly asks for live API submission or export;
-- use Stata if available, otherwise Python;
+- design a neutral 6-8 question public-opinion survey and save the spec under a folder-safe `survey_key`;
+- verify `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN` are set without printing values;
+- ask before creating a live draft survey, submitting synthetic responses to Qualtrics, or exporting responses;
+- download the generated response export into ignored raw data folders;
+- filter Qualtrics CSV metadata rows by keeping `ResponseId` values that start with `R_` when that column exists;
+- clean with Stata if available, otherwise Python;
 - generate both PDF and PNG figures;
 - compile Beamer slides if available, otherwise native HTML slides;
 - report the files created and any fallback used.
+
+For a no-credentials smoke test, ask Codex to generate the 100 synthetic responses locally rather than on Qualtrics.

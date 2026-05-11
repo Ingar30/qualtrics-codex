@@ -22,10 +22,10 @@ This local smoke test does not call Qualtrics and should not write to `data/<sur
 The repository is meant to support a single user request such as:
 
 ```text
-Generate 100 synthetic responses, clean them in Stata or Python, generate figures, and compile slides with a description of the survey and responses.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures.
 ```
 
-Codex should interpret that as the synthetic local path unless the user explicitly asks for live Qualtrics survey creation, a test link, or export/download of real responses.
+Codex should interpret that as a live Qualtrics test loop. It should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. For a no-credentials smoke test, ask Codex to generate synthetic responses locally instead.
 
 ## Analysis Contract
 
