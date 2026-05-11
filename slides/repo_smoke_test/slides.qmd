@@ -1,0 +1,51 @@
+---
+title: "Repository Smoke Test Survey"
+subtitle: "Qualtrics, Python, and Quarto"
+author: "Qualtrics Research Workflow Starter"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: false
+    preview-links: auto
+---
+
+## Workflow
+
+1. Write a survey specification in JSON.
+2. Create or connect to a Qualtrics survey.
+3. Export responses as CSV.
+4. Clean and summarize responses with Python.
+5. Render slides with Quarto.
+
+## Analysis Outputs
+
+Run the analysis first:
+
+```bash
+python code/repo_smoke_test/analysis/run.py --input tests/fixtures/repo_smoke_test_responses.csv
+```
+
+The analysis writes tables and figures to `slides/repo_smoke_test/inputs/`.
+
+## Role
+
+![](inputs/role.png){fig-alt="Bar chart of respondent roles."}
+
+## Workflow Familiarity
+
+![](inputs/workflow_familiarity.png){fig-alt="Bar chart of familiarity with reproducible data workflows."}
+
+## Preferred Output
+
+![](inputs/preferred_output.png){fig-alt="Bar chart of preferred workflow outputs."}
+
+## Pipeline Confidence
+
+![](inputs/confidence_running_pipeline.png){fig-alt="Bar chart of confidence running the workflow."}
+
+## Teaching Point
+
+A useful starter repo should make each survey easy to find, rerun, and explain.
+
+Keep survey-specific code and outputs together, and keep raw data isolated under the survey key.

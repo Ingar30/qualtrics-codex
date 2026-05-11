@@ -1,0 +1,11 @@
+role,workflow_familiarity,preferred_output,confidence_running_pipeline,open_feedback
+Student,Slightly familiar,Slides,Moderately confident,Clearer setup instructions
+Researcher,Moderately familiar,Figures,Very confident,Python examples
+Instructor,Very familiar,Full report,Very confident,Reusable prompts
+Student,Not familiar,Clean dataset,Slightly confident,More screenshots
+Researcher,Moderately familiar,Figures,Moderately confident,Document secrets setup
+Administrator,Slightly familiar,Slides,Slightly confident,Simple install steps
+Student,Moderately familiar,Slides,Moderately confident,Example data
+Instructor,Very familiar,Full report,Extremely confident,Stata extension notes
+Other,Slightly familiar,Other,Moderately confident,More output options
+Researcher,Extremely familiar,Figures,Very confident,GitHub template button

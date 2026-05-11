@@ -1,0 +1,29 @@
+# Secrets
+.env
+*.env
+.secrets/
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Qualtrics data and generated outputs
+data/*/raw/
+data/*/processed/
+data/*/metadata/*.json
+data/*/metadata/*.log
+slides/*/inputs/*.md
+slides/*/inputs/*.png
+slides/*/inputs/*.pdf
+build/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Keep placeholders
+!data/.gitkeep
+!slides/*/inputs/.gitkeep

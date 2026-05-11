@@ -1,0 +1,57 @@
+{
+  "questions": [
+    {
+      "tag": "role",
+      "type": "mc",
+      "text": "Which role best describes you?",
+      "choices": [
+        "Student",
+        "Instructor",
+        "Researcher",
+        "Administrator",
+        "Other"
+      ]
+    },
+    {
+      "tag": "workflow_familiarity",
+      "type": "mc",
+      "text": "How familiar are you with reproducible data workflows?",
+      "choices": [
+        "Not familiar",
+        "Slightly familiar",
+        "Moderately familiar",
+        "Very familiar",
+        "Extremely familiar"
+      ]
+    },
+    {
+      "tag": "preferred_output",
+      "type": "mc",
+      "text": "Which output would be most useful for this workflow?",
+      "choices": [
+        "Clean dataset",
+        "Figures",
+        "Slides",
+        "Full report",
+        "Other"
+      ]
+    },
+    {
+      "tag": "confidence_running_pipeline",
+      "type": "mc",
+      "text": "How confident are you that you could run this workflow yourself?",
+      "choices": [
+        "Not confident",
+        "Slightly confident",
+        "Moderately confident",
+        "Very confident",
+        "Extremely confident"
+      ]
+    },
+    {
+      "tag": "open_feedback",
+      "type": "text",
+      "text": "What would make this repository easier to reuse?"
+    }
+  ]
+}

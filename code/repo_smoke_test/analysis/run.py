@@ -1,0 +1,157 @@
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+SURVEY_KEY = "repo_smoke_test"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+VARIABLES = {
+    "role": ["Student", "Instructor", "Researcher", "Administrator", "Other"],
+    "workflow_familiarity": [
+        "Not familiar",
+        "Slightly familiar",
+        "Moderately familiar",
+        "Very familiar",
+        "Extremely familiar",
+    ],
+    "preferred_output": ["Clean dataset", "Figures", "Slides", "Full report", "Other"],
+    "confidence_running_pipeline": [
+        "Not confident",
+        "Slightly confident",
+        "Moderately confident",
+        "Very confident",
+        "Extremely confident",
+    ],
+}
+
+DISPLAY_NAMES = {
+    "role": "Role",
+    "workflow_familiarity": "Workflow familiarity",
+    "preferred_output": "Preferred output",
+    "confidence_running_pipeline": "Pipeline confidence",
+}
+
+
+def normalize_column(name: str) -> str:
+    value = name.strip().lower()
+    value = re.sub(r"[^a-z0-9]+", "_", value)
+    value = re.sub(r"_+", "_", value).strip("_")
+    return value
+
+
+def find_newest_csv(project_root: Path) -> Path:
+    raw_root = project_root / "data" / SURVEY_KEY / "raw"
+    candidates = sorted(raw_root.rglob("*.csv"), key=lambda path: path.stat().st_mtime, reverse=True)
+    if not candidates:
+        raise SystemExit(
+            "No CSV export found. Pass --input tests/fixtures/repo_smoke_test_responses.csv "
+            "for the local smoke test, or run export-responses first."
+        )
+    return candidates[0]
+
+
+def read_responses(input_csv: Path) -> pd.DataFrame:
+    data = pd.read_csv(input_csv)
+    data = data.rename(columns={column: normalize_column(str(column)) for column in data.columns})
+    data = data.dropna(how="all")
+    return data
+
+
+def write_summary(data: pd.DataFrame, output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    lines = [
+        "| Variable | Nonmissing | Unique values |",
+        "| --- | ---: | ---: |",
+    ]
+    for variable, display_name in DISPLAY_NAMES.items():
+        if variable not in data.columns:
+            lines.append(f"| {display_name} | missing | missing |")
+            continue
+        series = data[variable].dropna()
+        lines.append(f"| {display_name} | {len(series)} | {series.nunique()} |")
+    output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def make_bar_chart(data: pd.DataFrame, variable: str, choices: list[str], output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    if variable not in data.columns:
+        raise SystemExit(f"Expected variable not found: {variable}")
+
+    counts = data[variable].dropna().astype(str).value_counts()
+    values = [int(counts.get(choice, 0)) for choice in choices]
+
+    height = max(3.0, 0.45 * len(choices) + 1.2)
+    fig, ax = plt.subplots(figsize=(8, height))
+    ax.barh(choices, values, color="#2f6f8f")
+    ax.invert_yaxis()
+    ax.set_xlabel("Responses")
+    ax.set_title(DISPLAY_NAMES[variable])
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    for index, value in enumerate(values):
+        ax.text(value + 0.05, index, str(value), va="center")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=160)
+    plt.close(fig)
+
+
+def run_analysis(input_csv: Path | None = None, project_root: Path = PROJECT_ROOT) -> dict[str, Path]:
+    if input_csv is None:
+        input_csv = find_newest_csv(project_root)
+    input_csv = Path(input_csv)
+    if not input_csv.is_absolute():
+        input_csv = project_root / input_csv
+    if not input_csv.exists():
+        raise SystemExit(f"Input CSV not found: {input_csv}")
+
+    data = read_responses(input_csv)
+    processed_dir = project_root / "data" / SURVEY_KEY / "processed"
+    inputs_dir = project_root / "slides" / SURVEY_KEY / "inputs"
+    processed_dir.mkdir(parents=True, exist_ok=True)
+    inputs_dir.mkdir(parents=True, exist_ok=True)
+
+    clean_csv = processed_dir / "clean.csv"
+    data.to_csv(clean_csv, index=False)
+    summary_md = inputs_dir / "summary.md"
+    write_summary(data, summary_md)
+
+    figures: list[Path] = []
+    for variable, choices in VARIABLES.items():
+        output_path = inputs_dir / f"{variable}.png"
+        make_bar_chart(data, variable, choices, output_path)
+        figures.append(output_path)
+
+    print(f"Input CSV: {input_csv}")
+    print(f"Clean data: {clean_csv}")
+    print(f"Summary: {summary_md}")
+    for figure in figures:
+        print(f"Figure: {figure}")
+
+    return {"clean_csv": clean_csv, "summary_md": summary_md, "inputs_dir": inputs_dir}
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Analyze the repository smoke-test survey.")
+    parser.add_argument("--input", help="CSV response export. Defaults to newest data/repo_smoke_test/raw/*.csv.")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    run_analysis(Path(args.input) if args.input else None)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
