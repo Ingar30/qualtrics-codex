@@ -33,4 +33,6 @@ Safety rules:
 - Keep secrets outside the repository, preferably in $HOME/.secrets/qualtrics.env.ps1 on Windows or $HOME/.secrets/qualtrics.env on macOS/Linux.
 - If checking secrets, verify only that QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set; never print their values.
 - Prefer Stata and Beamer when available, but fall back to Python and native HTML slides if they are missing.
+
+Also show me prompt alternatives from docs/codex-prompt-alternatives.md for any command I am likely to run next.
 ```

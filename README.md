@@ -72,6 +72,12 @@ That prompt tells Codex to inspect the repository, scaffold a new survey workflo
 
 You do not need Qualtrics API keys for the synthetic smoke test. Before asking Codex to create surveys, list surveys, or export real responses, store your keys outside the repository. See `docs/local-qualtrics-secrets.md`.
 
+If you prefer to ask Codex in plain language instead of running commands yourself, see:
+
+```text
+docs/codex-prompt-alternatives.md
+```
+
 ## Run The Local Smoke Test
 
 This does not call the Qualtrics API.
@@ -154,6 +160,12 @@ Detailed setup notes live in:
 
 ```text
 docs/local-qualtrics-secrets.md
+```
+
+Qualtrics' API overview explains that API tokens live under Account Settings, in the Qualtrics IDs area:
+
+```text
+https://www.qualtrics.com/support/integrations/api-integration/overview/
 ```
 
 Recommended Windows PowerShell file location:
@@ -304,6 +316,7 @@ prompts/final-validation-goal.md
 - Stata/SPSS workflow: `docs/stata-extension.md`
 - Beamer/Python slide workflow: `docs/latex-extension.md`
 - Local Qualtrics secrets: `docs/local-qualtrics-secrets.md`
+- Codex prompt alternatives: `docs/codex-prompt-alternatives.md`
 - Reproducibility notes: `docs/reproducibility.md`
 
 These document the traditional economist stack and the fallback contract. The base repo should still produce slides even when Stata, LaTeX, Quarto, R, Node, Jinja2, and YAML are unavailable.

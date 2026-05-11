@@ -156,6 +156,7 @@ python scripts/generate_synthetic_responses.py --survey-key repo_smoke_test --ou
 python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
 python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
     <p>After opening Codex, paste the starter prompt from <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/start-with-codex.md">prompts/start-with-codex.md</a>.</p>
+    <p>For plain-language Codex prompts that mirror the commands, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/codex-prompt-alternatives.md">docs/codex-prompt-alternatives.md</a>.</p>
   </section>
   <section class="warning">
     <strong>Private by default.</strong>
@@ -184,6 +185,7 @@ def build_walkthrough(output_dir: Path) -> None:
 <main>
   <h2>1. Store Secrets Locally</h2>
   <p>Synthetic tests do not need Qualtrics credentials. For live API calls, store credentials outside the repository.</p>
+  <p>Qualtrics documents API tokens under Account Settings, in the Qualtrics IDs area: <a href="https://www.qualtrics.com/support/integrations/api-integration/overview/">Qualtrics API overview</a>.</p>
   <p>On Windows PowerShell, create <code>$HOME\\.secrets\\qualtrics.env.ps1</code>:</p>
   <pre><code>$env:QUALTRICS_DATACENTER = "your_datacenter"
 $env:QUALTRICS_API_TOKEN = "your_token"

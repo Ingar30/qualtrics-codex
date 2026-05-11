@@ -24,6 +24,7 @@ def test_walkthrough_mentions_local_secret_file(tmp_path: Path) -> None:
     assert "qualtrics.env.ps1" in walkthrough
     assert "qualtrics.env" in walkthrough
     assert "QUALTRICS_API_TOKEN" in walkthrough
+    assert "qualtrics.com/support/integrations/api-integration/overview" in walkthrough
     assert "generate_synthetic_responses.py" in walkthrough
 
 
@@ -34,3 +35,4 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     assert "generate_synthetic_responses.py" in index
     assert "build/fixtures/repo_smoke_test_responses.csv" in index
     assert "prompts/start-with-codex.md" in index
+    assert "docs/codex-prompt-alternatives.md" in index

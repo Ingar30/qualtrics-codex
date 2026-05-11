@@ -21,6 +21,36 @@ QUALTRICS_PUBLIC_HOST
 
 `QUALTRICS_DATACENTER` is the datacenter part used for your Qualtrics API host. `QUALTRICS_PUBLIC_HOST` is useful when your reusable survey links use a branded host.
 
+## Find Your Qualtrics API Details
+
+Qualtrics' official API overview is here:
+
+```text
+https://www.qualtrics.com/support/integrations/api-integration/overview/
+```
+
+To find or generate an API token, Qualtrics directs users to:
+
+```text
+User settings icon -> Account Settings -> Qualtrics IDs -> API -> Generate Token
+```
+
+Your account must have the `Access API` permission enabled. If you already have a token, do not generate a new one casually: replacing a token can break tools that use the old token.
+
+For `QUALTRICS_DATACENTER`, use the datacenter part of the API base URL. If the API host is:
+
+```text
+https://yourdatacenterid.qualtrics.com/API/v3
+```
+
+then set:
+
+```text
+QUALTRICS_DATACENTER=yourdatacenterid
+```
+
+Do not include `https://`, `.qualtrics.com`, or `/API/v3` in `QUALTRICS_DATACENTER`.
+
 ## Windows PowerShell
 
 Create a secrets folder outside the repository:
