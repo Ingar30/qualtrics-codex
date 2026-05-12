@@ -43,9 +43,23 @@ Do not include `https://`, `.qualtrics.com`, or `/API/v3` in `QUALTRICS_DATACENT
 
 ## 2. Save Secrets Locally
 
-Do not put API tokens in this repository and do not paste them into Codex.
+Create a local secrets file outside this repository, or set the variables directly in your shell/session before opening Codex. The only requirement is that live Codex commands can see these environment variables:
 
-On Windows PowerShell, create a secrets file outside the repo:
+```text
+QUALTRICS_DATACENTER
+QUALTRICS_API_TOKEN
+QUALTRICS_PUBLIC_HOST optional
+```
+
+Do not put API tokens in this repository, commit local secret files, or paste token values into Codex.
+
+`QUALTRICS_PUBLIC_HOST` is optional. Use it when your respondent-facing survey links use a branded host that differs from the API datacenter host.
+
+You can create the local file yourself, or use one of these command examples.
+
+### Windows PowerShell example
+
+Create a secrets file outside the repo:
 
 ```powershell
 New-Item -ItemType Directory -Force $HOME\.secrets
@@ -60,15 +74,36 @@ $env:QUALTRICS_API_TOKEN = "your_token"
 $env:QUALTRICS_PUBLIC_HOST = "yourbrand.qualtrics.com"
 ```
 
-`QUALTRICS_PUBLIC_HOST` is optional. Use it when your respondent-facing survey links use a branded host that differs from the API datacenter host.
-
-Load the file before opening Codex for a live demo:
+Load it before opening Codex for a live demo:
 
 ```powershell
 . $HOME\.secrets\qualtrics.env.ps1
 ```
 
-macOS/Linux examples are in `docs/local-qualtrics-secrets.md`.
+### macOS/Linux example
+
+Create a secrets file outside the repo:
+
+```bash
+mkdir -p "$HOME/.secrets"
+nano "$HOME/.secrets/qualtrics.env"
+```
+
+Put this in `$HOME/.secrets/qualtrics.env`:
+
+```bash
+export QUALTRICS_DATACENTER="your_datacenter"
+export QUALTRICS_API_TOKEN="your_token"
+export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"
+```
+
+Load it before opening Codex for a live demo:
+
+```bash
+source "$HOME/.secrets/qualtrics.env"
+```
+
+More details are in `docs/local-qualtrics-secrets.md`.
 
 ## 3. Clone And Install
 

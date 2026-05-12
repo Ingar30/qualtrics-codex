@@ -6,7 +6,9 @@ Never commit API tokens, `.env` files, `.secrets/` folders, raw response exports
 
 ## Required Values
 
-The live Qualtrics scripts read these environment variables:
+The live Qualtrics scripts read environment variables from your current shell/session. Create a local secrets file outside this repository, or set the values yourself before opening Codex.
+
+Required:
 
 ```text
 QUALTRICS_DATACENTER
@@ -51,9 +53,9 @@ QUALTRICS_DATACENTER=yourdatacenterid
 
 Do not include `https://`, `.qualtrics.com`, or `/API/v3` in `QUALTRICS_DATACENTER`.
 
-## Windows PowerShell
+## Windows PowerShell Example
 
-Create a secrets folder outside the repository:
+You can create the file yourself, or use these commands to create a secrets folder outside the repository:
 
 ```powershell
 New-Item -ItemType Directory -Force $HOME\.secrets
@@ -80,9 +82,9 @@ Check that the required variables are present without printing their values:
 if ($env:QUALTRICS_DATACENTER -and $env:QUALTRICS_API_TOKEN) { "Qualtrics env vars are set" }
 ```
 
-## macOS/Linux
+## macOS/Linux Example
 
-Create a secrets folder outside the repository:
+You can create the file yourself, or use these commands to create a secrets folder outside the repository:
 
 ```bash
 mkdir -p "$HOME/.secrets"
