@@ -1,5 +1,7 @@
 # Live Validation
 
+The README is the public entry point. This file documents the guarded validation sequence behind that workflow.
+
 Public validation stays offline. CI and GitHub Pages never call Qualtrics, never submit responses, and never publish live survey links.
 
 ## What Was Validated Locally

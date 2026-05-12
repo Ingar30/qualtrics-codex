@@ -1,5 +1,7 @@
 # Reproducibility Notes
 
+The README is the public entry point. This file records the reproducibility contract for the workflow described there.
+
 The reproducible unit is one survey folder plus one slide folder:
 
 ```text

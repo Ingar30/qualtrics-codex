@@ -66,6 +66,6 @@ Use offline checks only as internal validation or staging for Qualtrics submissi
 - draft/test link: create or use a live draft survey and retrieve the reusable link;
 - synthetic responses: use local fake responses only for offline checks or staging, and submit fake responses to a live Qualtrics test survey for the main live demo loop;
 - live synthetic test: submit generated synthetic rows for the default teaching demo, then export once, analyze once, and build slides;
-- real responses: export/download from Qualtrics only after explicit user request, keep raw files ignored, clean with Stata or Python, then build figures and slides.
+- real-response exports: treat them as an explicitly requested later step, not the main teaching demo; keep raw files ignored, clean with Stata or Python, then build figures and slides.
 
 Ad hoc `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default. Promote only public-safe demos by editing `.gitignore` intentionally.

@@ -1,5 +1,7 @@
 # Codex Prompt Alternatives
 
+The README is the public entry point and canonical setup sequence. This file only gives prompt variants after the repository is set up.
+
 These are plain-language prompts for the main teaching workflow. Prefer asking Codex what you want; let Codex choose the scripts after it inspects the repository.
 
 Do not paste Qualtrics API tokens into Codex. Store them locally, then ask Codex to verify that the expected environment variables are present without printing values.

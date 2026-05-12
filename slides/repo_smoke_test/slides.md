@@ -1,10 +1,10 @@
 ---
-title: Repository Smoke Test Survey
+title: Repository Offline Check Survey
 subtitle: Qualtrics, Python, Beamer, and native fallback slides
 author: Qualtrics Research Workflow Starter
 ---
 
-# Repository Smoke Test Survey
+# Repository Offline Check Survey
 
 Qualtrics, Python, Beamer, and native fallback slides
 
@@ -14,7 +14,7 @@ Qualtrics, Python, Beamer, and native fallback slides
 
 1. Ask Codex for local workflow preferences.
 2. Scaffold a survey specification and analysis files.
-3. Use disposable local rows only for smoke tests.
+3. Use disposable local rows only for offline checks.
 4. Submit synthetic rows through Qualtrics for live demos.
 5. Build Beamer slides when LaTeX is available.
 6. Fall back to native slides when LaTeX is unavailable.
@@ -23,7 +23,7 @@ Qualtrics, Python, Beamer, and native fallback slides
 
 ## Analysis Outputs
 
-Codex should run the local smoke test only to confirm that cleaning, figures, tables, and slides build.
+Codex should run the local offline check only to confirm that cleaning, figures, tables, and slides build.
 
 The analysis writes tables and figures to `slides/repo_smoke_test/inputs/`.
 
