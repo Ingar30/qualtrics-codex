@@ -5,7 +5,7 @@ Paste this into Codex after cloning the repository and installing requirements.
 ## Live Qualtrics Test Loop
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics to test the survey before it is launched to human subjects, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 
 Use survey_key: discrimination_beliefs_demo
 Use survey_name: Discrimination Beliefs Survey

@@ -13,7 +13,7 @@ The intended user experience is intentionally narrow:
 ## Main Prompt
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics to test the survey before it is launched to human subjects, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
 Codex should interpret that as a live Qualtrics test loop:

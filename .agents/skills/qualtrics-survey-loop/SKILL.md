@@ -15,7 +15,7 @@ The intended loop is:
 2. Create or update `code/<survey_key>/survey_spec.json`, analysis scripts, and slide files.
 3. Verify Qualtrics credentials are present without printing values.
 4. Ask before each live API action: create survey, get link, submit synthetic responses, or export responses.
-5. Generate synthetic rows as a staging file, submit them through Qualtrics, export once, analyze once, and build slides.
+5. Generate synthetic rows as a staging file, submit them through Qualtrics to test the survey before human-subject launch, export once, analyze once, and build slides.
 6. Report artifact paths and the public/private boundary.
 
 ## Decision Rules
@@ -49,5 +49,5 @@ Use `--format spss` for the Stata/SAV path.
 ## Typical User Prompt
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
+Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics to test the survey before it is launched to human subjects, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```

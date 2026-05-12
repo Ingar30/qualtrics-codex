@@ -148,7 +148,7 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
     <h2>Codex Loop</h2>
     <p>Start by asking Codex to inspect local readiness and ask the needed preference questions before it builds anything. Then run the main live teaching demo.</p>
     <pre><code>Open prompts/configure-local-preferences.md and follow it as instructions for this Codex session. Do not summarize it. First inspect Python, dependencies, Stata, LaTeX/Beamer, and whether QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing values. If Stata, LaTeX, or Qualtrics secrets are missing, tell me where to configure them or which fallback to use. Then ask the needed follow-up questions and save my answers in ignored AGENTS.override.md without secrets.</code></pre>
-    <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.</code></pre>
+    <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics to test the survey before it is launched to human subjects, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.</code></pre>
     <p>Because this prompt asks for work on Qualtrics, Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses, or exporting responses.</p>
     <p>The reusable preference prompt is <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a>. Stata workflows use SPSS/SAV exports; Python workflows use CSV exports.</p>
     <p>For the full conversational workflow, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/intended-codex-loop.md">docs/intended-codex-loop.md</a>.</p>
@@ -190,7 +190,7 @@ def build_walkthrough(output_dir: Path) -> None:
 <header>
   <div class="inner">
     <h1>Main Live Demo</h1>
-    <p>Use Codex to create a Qualtrics test survey, submit generated synthetic responses through Qualtrics, export once, analyze once, and build slides.</p>
+    <p>Use Codex to create a Qualtrics test survey, submit generated synthetic responses through Qualtrics before human-subject launch, export once, analyze once, and build slides.</p>
   </div>
 </header>
 <main>
