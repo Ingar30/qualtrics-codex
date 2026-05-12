@@ -15,12 +15,6 @@ Use this when the user chooses Stata or explicitly asks for a Qualtrics SPSS/SAV
 python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format spss
 ```
 
-Compatibility alias:
-
-```bash
-python scripts/qualtrics_workflow.py export-spss --survey-key <survey_key>
-```
-
 Prefer saved local metadata or an explicit `--survey-id` when exporting. Use survey-name lookup only when needed.
 
 ## Expected Outputs

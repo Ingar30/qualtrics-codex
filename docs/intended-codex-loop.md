@@ -4,19 +4,19 @@ This repository is designed for a conversational workflow, not only for manual c
 
 The intended user experience is:
 
-1. A researcher asks Codex for a survey. The request can be detailed or broad.
-2. Codex turns the idea into a `survey_spec.json`, analysis scripts, and slide files.
-3. Codex decides whether it has enough information to proceed. It asks only when the answer changes live API use, privacy, or core survey design.
-4. Codex asks or infers the run mode:
+1. A researcher starts with local preferences, either by using `prompts/configure-local-preferences.md` or by asking Codex to ask about Stata/Python, export, slide, and live-API preferences.
+2. The researcher asks Codex for a survey. The request can be detailed or broad.
+3. Codex turns the idea into a `survey_spec.json`, analysis scripts, and slide files.
+4. Codex decides whether it has enough information to proceed. It asks only when the answer changes live API use, privacy, or core survey design.
+5. Codex asks or infers the run mode:
    - quick local smoke test;
    - live Qualtrics test survey with synthetic response submission;
    - export/download existing real responses.
-   - live synthetic response submission for a test survey.
-5. Codex generates or downloads responses.
-6. Codex cleans the data with lab-style Stata cleaning/figures when available and Python otherwise.
-7. Codex generates figures and tables.
-8. Codex compiles Beamer slides when available and native HTML slides otherwise.
-9. Codex reports the outputs and keeps private artifacts private.
+6. Codex generates or downloads responses.
+7. Codex cleans the data with lab-style Stata cleaning/figures when available and Python otherwise.
+8. Codex generates figures and tables.
+9. Codex compiles Beamer slides when available and native HTML slides otherwise.
+10. Codex reports the outputs and keeps private artifacts private.
 
 On first use, Codex can ask the optional preference questions in `prompts/configure-local-preferences.md` and write the answers to ignored `AGENTS.override.md`. If the user does not answer, Codex should proceed with the defaults: Stata-first when available, Python fallback, Beamer-first with native fallback, local synthetic smoke tests only when needed, Qualtrics-submitted synthetic responses for live demos, public Pages synthetic-only.
 
@@ -56,7 +56,7 @@ python scripts/run_analysis.py --survey-key <survey_key>
 python scripts/build_slides.py --survey-key <survey_key>
 ```
 
-For a cautious first live check, use `--limit 1`, export/analyze that row, then continue later with `--resume`. Response IDs are saved only in ignored local metadata.
+Response IDs are saved only in ignored local metadata and are not printed.
 
 ## Real Response Mode
 
@@ -103,7 +103,7 @@ Codex should interpret that as a live Qualtrics test loop:
 - use `check-auth` for the first read-only API check instead of listing every survey;
 - ask before creating a live draft survey, submitting synthetic responses to Qualtrics, or exporting responses;
 - save the reusable link to ignored metadata and, if slides should include it, ignored slide inputs;
-- submit generated synthetic rows to the test survey, or use `--limit 1`/`--resume` only when the user wants the cautious first-row check;
+- submit generated synthetic rows to the test survey in one step;
 - download the generated response export into ignored raw data folders;
 - filter Qualtrics CSV metadata rows by keeping `ResponseId` values that start with `R_` when that column exists;
 - clean with Stata if available, otherwise Python;

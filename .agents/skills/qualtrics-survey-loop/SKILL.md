@@ -33,7 +33,7 @@ The intended loop is:
 - Treat "test link" as a live Qualtrics action: it requires local `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN`, and the user must explicitly ask for it.
 - Treat "download responses" or "export responses" as a live Qualtrics read/export action: verify credentials are present without printing values.
 - Treat API-created response submission as a live mutation even if the survey is draft or inactive.
-- Submit generated synthetic rows in one step for the default teaching demo, then export once, analyze once, and build slides. Mention `--limit 1` plus `--resume` only as an optional cautious first-row check.
+- Submit generated synthetic rows in one step for the default teaching demo, then export once, analyze once, and build slides.
 - When the user asks to include the reusable link in slides, save it to ignored slide inputs with `get-link --write-slide-inputs` instead of printing it.
 - Preserve `slides/<survey_key>/inputs/survey_link.tex` and `survey_link.md` when analysis regenerates slide inputs.
 - When cleaning Qualtrics CSV exports, filter metadata rows by keeping `ResponseId` values that start with `R_` when that column exists.

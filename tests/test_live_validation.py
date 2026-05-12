@@ -59,13 +59,6 @@ def test_dry_run_includes_live_validation_sequence() -> None:
     assert "--mode auto" in output
 
 
-def test_helper_accepts_compatibility_acknowledgement_flag() -> None:
-    result = run_helper("--dry-run", "--i-understand-this-calls-qualtrics")
-
-    assert result.returncode == 0, result.stderr
-    assert "Dry run only" in result.stdout
-
-
 def test_command_sequence_contains_expected_lean_steps() -> None:
     args = argparse.Namespace(
         survey_key="validation_test",
@@ -76,7 +69,6 @@ def test_command_sequence_contains_expected_lean_steps() -> None:
         export_format="csv",
         public_host=None,
         dry_run=True,
-        i_understand_this_calls_qualtrics=False,
     )
 
     commands = [run_live_validation.command_text(step.display_argv) for step in run_live_validation.build_steps(args)]
@@ -102,7 +94,6 @@ def test_stata_validation_export_format_uses_spss() -> None:
         export_format="spss",
         public_host=None,
         dry_run=True,
-        i_understand_this_calls_qualtrics=False,
     )
 
     commands = [run_live_validation.command_text(step.display_argv) for step in run_live_validation.build_steps(args)]

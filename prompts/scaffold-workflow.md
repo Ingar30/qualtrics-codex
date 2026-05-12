@@ -22,14 +22,14 @@ Please:
 6. Create slides/<survey_key>/slides.md as the no-install Python fallback deck for scripts/render_slides.py. Use `---` slide separators and the same generated PNG figures from slides/<survey_key>/inputs/.
 7. Add slides/<survey_key>/inputs/.gitkeep.
 8. Ask or infer whether I want a quick local smoke test, a live Qualtrics test survey with synthetic response submission, or export/download of existing real responses.
-9. Unless I explicitly ask for a live Qualtrics action, generate a local synthetic response CSV with `python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100` only to smoke-test analysis and slides.
+9. Unless I explicitly ask for a live Qualtrics action, run a disposable local smoke test only if it helps verify analysis and slides.
 10. Do not create or call a live Qualtrics survey unless I explicitly ask.
 11. Do not write any API token or secret into the repository.
 12. Keep raw data under data/<survey_key>/raw/ and processed data under data/<survey_key>/processed/.
 13. Do not add Quarto, R, Node, Jinja2, YAML, or new slide dependencies unless I explicitly ask for that extension.
 14. If I ask to include a reusable Qualtrics link in slides, make the decks read ignored `inputs/survey_link.tex` and `inputs/survey_link.md` files.
 15. If the analysis path is Stata, use SPSS/SAV exports and Stata `import spss`; if the analysis path is Python, use CSV exports and Python analysis.
-16. After scaffolding, tell me the commands to smoke-test analysis with local disposable responses, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, run `check-auth`, create a live draft/test link with `get-link --write-slide-inputs` when needed, submit synthetic responses to the Qualtrics test survey, and export CSV or SPSS responses according to the chosen analysis path.
+16. After scaffolding, summarize the next Codex prompts I can use for a local smoke test, live draft/test link, Qualtrics synthetic-response demo, and CSV or SPSS export according to the chosen analysis path.
 ```
 
 Recommended follow-up after reviewing the scaffold:

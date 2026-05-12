@@ -148,10 +148,11 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
   </section>
   <section>
     <h2>Codex Loop</h2>
-    <p>Ask Codex for a survey from exact questions or a broad idea. It should scaffold the survey, ask whether you want a quick local smoke test, a live Qualtrics test survey with synthetic response submission, or a real response export, then clean data and build figures and slides.</p>
+    <p>Start by asking Codex about local preferences: Stata or Python, SPSS/SAV or CSV exports, Beamer or native HTML slides, and live Qualtrics safety. Then ask for a smoke test, a live Qualtrics synthetic-response demo, or a real response export.</p>
+    <pre><code>Ask me about my local preferences for this Qualtrics workflow before we build anything. Cover Stata vs Python, SPSS/SAV vs CSV exports, Beamer vs native HTML slides, live Qualtrics safety, and what to do if Stata or LaTeX is missing. Save the answers in ignored AGENTS.override.md and do not store secrets.</code></pre>
     <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.</code></pre>
     <p>Because this prompt asks for work on Qualtrics, Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate disposable local responses only to check analysis and slides.</p>
-    <p>For local preferences, start with <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a>. Stata workflows use SPSS/SAV exports; Python workflows use CSV exports.</p>
+    <p>The reusable preference prompt is <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a>. Stata workflows use SPSS/SAV exports; Python workflows use CSV exports.</p>
     <p>For the full conversational workflow, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/intended-codex-loop.md">docs/intended-codex-loop.md</a>.</p>
     <p>For the discrimination-beliefs prompt, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/discrimination-beliefs-example.md">prompts/discrimination-beliefs-example.md</a>.</p>
   </section>
@@ -160,11 +161,8 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
     <pre><code>git clone https://github.com/Ingar30/qualtrics-codex.git
 cd qualtrics-codex
 .\\scripts\\setup.ps1
-codex
-python scripts/generate_synthetic_responses.py --survey-key repo_smoke_test --output build/fixtures/repo_smoke_test_responses.csv
-python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
-python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
-    <p>After opening Codex, paste the starter prompt from <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/start-with-codex.md">prompts/start-with-codex.md</a>.</p>
+codex</code></pre>
+    <p>After opening Codex, start with <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a> or the plain-language preference prompt above. Then use <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/start-with-codex.md">prompts/start-with-codex.md</a> for the workflow.</p>
     <p>For plain-language Codex prompts that mirror the commands, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/codex-prompt-alternatives.md">docs/codex-prompt-alternatives.md</a>.</p>
     <p>If virtual environment setup fails or Stata is not found, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/setup-troubleshooting.md">docs/setup-troubleshooting.md</a>.</p>
   </section>
@@ -227,8 +225,6 @@ python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_
 python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --format csv
 python scripts/run_analysis.py --survey-key my_survey
 python scripts/build_slides.py --survey-key my_survey</code></pre>
-  <p>For a cautious first live check, add <code>--limit 1</code>, export and inspect that row, then continue later with <code>--resume</code>.</p>
-
   <h2>4. Smoke Test With Local Synthetic Responses</h2>
   <pre><code>python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv
 python scripts/run_analysis.py --survey-key my_survey --input build/fixtures/my_survey_responses.csv

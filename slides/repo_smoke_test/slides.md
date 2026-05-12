@@ -12,22 +12,18 @@ Qualtrics, Python, Beamer, and native fallback slides
 
 ## Workflow
 
-1. Write a survey specification in JSON.
-2. Create or connect to a Qualtrics survey.
-3. Export responses as CSV.
-4. Clean and summarize responses with Python.
+1. Ask Codex for local workflow preferences.
+2. Scaffold a survey specification and analysis files.
+3. Use disposable local rows only for smoke tests.
+4. Submit synthetic rows through Qualtrics for live demos.
 5. Build Beamer slides when LaTeX is available.
-6. Fall back to native Python slides when LaTeX is unavailable.
+6. Fall back to native slides when LaTeX is unavailable.
 
 ---
 
 ## Analysis Outputs
 
-Run the analysis first:
-
-```bash
-python scripts/run_analysis.py --survey-key repo_smoke_test --input tests/fixtures/repo_smoke_test_responses.csv
-```
+Codex should run the local smoke test only to confirm that cleaning, figures, tables, and slides build.
 
 The analysis writes tables and figures to `slides/repo_smoke_test/inputs/`.
 

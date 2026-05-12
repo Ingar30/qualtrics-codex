@@ -13,7 +13,7 @@ Synthetic Qualtrics workflow demo
 ## Workflow
 
 1. Design a neutral public opinion survey.
-2. Generate synthetic responses locally or submit them to Qualtrics after approval.
+2. Submit synthetic responses through Qualtrics for the live demo.
 3. Export responses from Qualtrics into an ignored raw folder.
 4. Clean the data with Stata when available, otherwise Python.
 5. Build figures and slides from reproducible local outputs.

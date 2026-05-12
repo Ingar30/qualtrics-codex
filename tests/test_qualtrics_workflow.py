@@ -107,15 +107,6 @@ def test_redact_sensitive_text_hides_qualtrics_ids_links_and_tokens() -> None:
     assert "[QUALTRICS_LINK]" in redacted
 
 
-def test_next_resume_offset_reads_private_import_metadata(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(qw, "DATA_DIR", tmp_path / "data")
-    path = qw.synthetic_import_path("demo")
-    path.parent.mkdir(parents=True)
-    path.write_text(json.dumps({"offset": 1, "submitted_count": 9}), encoding="utf-8")
-
-    assert qw.next_resume_offset("demo") == 10
-
-
 def test_write_survey_link_slide_inputs_uses_ignored_inputs_folder(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -142,11 +133,9 @@ def test_parser_includes_live_workflow_commands() -> None:
             "demo",
             "--input",
             "build/fixtures/demo.csv",
-            "--smoke-then-rest",
         ]
     )
 
     assert auth_args.func is qw.command_check_auth
     assert link_args.write_slide_inputs is True
     assert submit_args.func is qw.command_submit_synthetic_responses
-    assert submit_args.smoke_then_rest is True

@@ -28,17 +28,14 @@ def test_walkthrough_mentions_local_secret_file(tmp_path: Path) -> None:
     assert "generate_synthetic_responses.py" in walkthrough
     assert "check-auth" in walkthrough
     assert "submit-synthetic-responses" in walkthrough
-    assert "--limit 1" in walkthrough
-    assert "--resume" in walkthrough
-    assert "cautious first live check" in walkthrough
 
 
-def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
+def test_index_starts_with_codex_preferences(tmp_path: Path) -> None:
     build_site.build_index(tmp_path, ["slides.pdf"])
 
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
-    assert "generate_synthetic_responses.py" in index
-    assert "build/fixtures/repo_smoke_test_responses.csv" in index
+    assert "Ask me about my local preferences" in index
+    assert "Stata vs Python" in index
     assert "prompts/start-with-codex.md" in index
     assert "docs/codex-prompt-alternatives.md" in index
     assert "docs/intended-codex-loop.md" in index
@@ -49,7 +46,6 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     assert "Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics" in index
     assert "generate disposable local responses only to check analysis and slides" in index
     assert "prompts/discrimination-beliefs-example.md" in index
-    assert "check-auth" in index
 
 
 def test_walkthrough_mentions_qualtrics_metadata_and_link_privacy(tmp_path: Path) -> None:

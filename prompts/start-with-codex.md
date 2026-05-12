@@ -37,7 +37,7 @@ Safety rules:
 - If checking secrets, verify only that QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set; never print their values.
 - Prefer Stata and Beamer when available, but fall back to Python and native HTML slides if they are missing.
 - If I choose Stata, export/download Qualtrics responses as SPSS/SAV and import with Stata. If I choose Python, export/download responses as CSV and analyze with Python.
-- For live synthetic response submission, use the lean path by default: create the survey in Qualtrics, prepare synthetic rows, submit them to the Qualtrics test survey, export once, analyze once, and build slides. Mention `--limit 1` plus `--resume` only as an optional cautious first-row check.
+- For live synthetic response submission, use the lean path by default: create the survey in Qualtrics, prepare synthetic rows, submit them to the Qualtrics test survey, export once, analyze once, and build slides.
 - If analyzing a Qualtrics CSV export, filter out metadata rows by keeping rows where ResponseId starts with R_ when that column exists.
 
 Also show me prompt alternatives from docs/codex-prompt-alternatives.md for any command I am likely to run next.

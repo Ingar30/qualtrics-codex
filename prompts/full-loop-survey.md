@@ -30,7 +30,7 @@ Canonical live-test version:
 Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-Use this only when you want a live Qualtrics test loop. Codex should verify credentials without printing them, use `check-auth` for the first API check, and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. The lean live path saves the reusable link to ignored slide inputs with `get-link --write-slide-inputs`, prepares synthetic rows, submits them to the Qualtrics test survey, exports once, analyzes once, and builds slides. Mention `--limit 1` plus `--resume` only as an optional cautious first-row check.
+Use this only when you want a live Qualtrics test loop. Codex should verify credentials without printing them, use `check-auth` for the first API check, and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. The lean live path saves the reusable link to ignored slide inputs with `get-link --write-slide-inputs`, prepares synthetic rows, submits them to the Qualtrics test survey, exports once, analyzes once, and builds slides.
 For Stata workflows, export SPSS/SAV and import with Stata. For Python workflows, export CSV and analyze with Python.
 
 Local-only version:

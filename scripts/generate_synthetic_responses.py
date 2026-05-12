@@ -35,34 +35,10 @@ def load_spec(spec_file: Path) -> dict[str, Any]:
     return qualtrics_workflow.load_survey_spec(str(spec_file))
 
 
-def synthetic_weights(question: dict[str, Any], choices: list[str]) -> list[float] | None:
-    weights = question.get("synthetic_weights")
-    if weights is None:
-        return None
-
-    if isinstance(weights, dict):
-        values = [float(weights.get(choice, 0)) for choice in choices]
-    elif isinstance(weights, list):
-        if len(weights) != len(choices):
-            raise SystemExit(
-                f"synthetic_weights for {question['tag']} must match the number of choices."
-            )
-        values = [float(value) for value in weights]
-    else:
-        raise SystemExit(f"synthetic_weights for {question['tag']} must be a list or object.")
-
-    if any(value < 0 for value in values) or sum(values) <= 0:
-        raise SystemExit(f"synthetic_weights for {question['tag']} must be nonnegative and sum above zero.")
-    return values
-
-
 def answer_for_question(question: dict[str, Any], row_index: int, rng: random.Random) -> str:
     question_type = question["type"]
     if question_type == "mc":
         choices = [str(choice) for choice in question["choices"]]
-        weights = synthetic_weights(question, choices)
-        if weights is not None:
-            return rng.choices(choices, weights=weights, k=1)[0]
         return choices[(row_index + rng.randrange(len(choices))) % len(choices)]
     if question_type == "text":
         return TEXT_SNIPPETS[(row_index + rng.randrange(len(TEXT_SNIPPETS))) % len(TEXT_SNIPPETS)]

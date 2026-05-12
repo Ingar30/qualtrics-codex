@@ -37,6 +37,6 @@ For a Stata validation path, export with `--format spss` after submission. For a
 
 - Use local synthetic rows only when checking that analysis and slides work without credentials.
 - Local synthetic CSVs are not the object of interest; they are either smoke-test fixtures or staging files for Qualtrics submission.
-- Submit generated rows in one step for the default teaching demo. Use `--limit 1`, export/analyze, then `--resume` only for an optional cautious first-row check.
+- Submit generated rows in one step for the default teaching demo.
 - Do not use production surveys for synthetic API-created responses.
 - Never print tokens, response IDs, raw rows, or reusable links.

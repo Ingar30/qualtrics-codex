@@ -7,7 +7,7 @@ Instructions for Codex and other automation agents working in this starter repo.
 - Keep the default workflow easy to adopt: Stata/Beamer first when available, Python/native HTML fallback when not.
 - Keep live Qualtrics work local by default. The public Pages site uses synthetic fixture data only.
 - Prefer small, readable changes over framework-heavy abstractions.
-- Support the intended user loop: a researcher asks Codex for a survey from either detailed instructions or a broad idea; Codex scaffolds the survey, asks or infers whether the user wants synthetic responses, a live draft/test link, or an export of existing responses, then cleans data and builds figures/slides.
+- Support the intended user loop: a researcher sets local preferences, asks Codex for a survey from detailed instructions or a broad idea, then chooses a no-credentials smoke test, a live Qualtrics synthetic-response demo, or an export of existing real responses.
 
 ## Safety
 
@@ -61,11 +61,11 @@ If the user does not answer, continue with the default setup: Stata-first when a
 
 When the user asks for a survey workflow, use the repo-local skill in `.agents/skills/qualtrics-survey-loop/` if available.
 
-Default to a synthetic local smoke test first. Before live Qualtrics actions, distinguish among:
+Use local smoke tests only when they help check analysis and slides without credentials. Before live Qualtrics actions, distinguish among:
 
 - draft/test link: create or use a live draft survey and retrieve the reusable link;
 - synthetic responses: use local fake responses only for smoke tests, or submit fake responses to a live Qualtrics test survey when the user explicitly asks for the live demo loop;
-- live synthetic test: submit generated synthetic rows for the default teaching demo, then export once, analyze once, and build slides; use `--limit 1` plus `--resume` only for an explicitly cautious first-row check;
+- live synthetic test: submit generated synthetic rows for the default teaching demo, then export once, analyze once, and build slides;
 - real responses: export/download from Qualtrics, keep raw files ignored, clean with Stata or Python, then build figures and slides.
 
 Ad hoc `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default. Promote only public-safe demos by editing `.gitignore` intentionally.

@@ -20,18 +20,26 @@ Prompt alternative:
 Clone https://github.com/Ingar30/qualtrics-codex into this folder, inspect the README, and validate the synthetic demo workflow without calling Qualtrics.
 ```
 
+## Local Preferences First
+
+Reusable prompt:
+
+```text
+Use prompts/configure-local-preferences.md to ask how I want Codex to operate in this folder. If I choose Stata, use SPSS/SAV exports and Stata import. If I choose Python, use CSV exports and Python analysis. Save the answers in ignored AGENTS.override.md and do not store secrets there.
+```
+
+Plain-language version:
+
+```text
+Ask me about my local preferences for this Qualtrics workflow before we build anything. Cover Stata vs Python, SPSS/SAV vs CSV exports, Beamer vs native HTML slides, live Qualtrics safety, and what to do if Stata or LaTeX is missing. Save the answers in ignored AGENTS.override.md and do not store secrets.
+```
+
 ## Scaffold A New Workflow
 
 Prompt:
 
 ```text
-Create a new Qualtrics research workflow using prompts/start-with-codex.md. Use survey_key <survey_key>, survey_name <survey_name>, topic <topic>, and audience <audience>. Generate disposable local responses only for the first smoke test. Do not call the live Qualtrics API.
-```
-
-Optional first-run preference prompt:
-
-```text
-Use prompts/configure-local-preferences.md to ask how I want Codex to operate in this folder. If I choose Stata, use SPSS/SAV exports and Stata import. If I choose Python, use CSV exports and Python analysis. Save the answers in ignored AGENTS.override.md and do not store secrets there.
+Create a new Qualtrics research workflow using prompts/start-with-codex.md. Use survey_key <survey_key>, survey_name <survey_name>, topic <topic>, and audience <audience>. Use disposable local responses only if they help smoke-test analysis and slides. Do not call the live Qualtrics API.
 ```
 
 ## Full Survey-To-Slides Loop

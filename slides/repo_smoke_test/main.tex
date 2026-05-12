@@ -60,11 +60,11 @@
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.52\textwidth}
       \begin{enumerate}
-        \item Write a survey specification in JSON.
-        \item Create or connect to a Qualtrics survey.
-        \item Export responses as CSV.
-        \item Clean and summarize responses with Stata or Python.
-        \item Build Beamer slides, with Python slides as fallback.
+        \item Ask Codex for local workflow preferences.
+        \item Scaffold a survey specification and analysis files.
+        \item Use disposable local rows only for smoke tests.
+        \item Submit synthetic rows through Qualtrics for live demos.
+        \item Build Beamer slides, with native slides as fallback.
       \end{enumerate}
     \end{column}
     \begin{column}{0.42\textwidth}
@@ -75,13 +75,8 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Analysis Outputs}
-  \begin{block}{Run the analysis first}
-\begin{verbatim}
-python scripts/run_analysis.py --survey-key repo_smoke_test \
-  --input tests/fixtures/repo_smoke_test_responses.csv
-\end{verbatim}
-  \end{block}
+\begin{frame}{Analysis Outputs}
+  Codex should run the local smoke test only to confirm that cleaning, figures, tables, and slides build.
 
   \vspace{0.25cm}
   The analysis writes reusable tables, PNG figures, and vector PDF figures to:

@@ -32,7 +32,7 @@ python scripts/run_analysis.py --survey-key <survey_key>
 python scripts/build_slides.py --survey-key <survey_key>
 ```
 
-For a cautious first live check, use `--limit 1`, export/analyze that row, then continue later with `--resume`. The scripts hide survey IDs, response IDs, reusable links, tokens, and Qualtrics URLs from normal terminal output. `--write-slide-inputs` writes the reusable link only to ignored local slide input files.
+The scripts hide survey IDs, response IDs, reusable links, tokens, and Qualtrics URLs from normal terminal output. `--write-slide-inputs` writes the reusable link only to ignored local slide input files.
 
 ## Conversational Loop
 

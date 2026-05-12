@@ -195,11 +195,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--export-format", choices=["csv", "spss"], default="csv", help="Use csv for Python-first validation or spss for Stata/SAV validation.")
     parser.add_argument("--public-host", help="Respondent-facing Qualtrics host for reusable links.")
     parser.add_argument("--dry-run", action="store_true", help="Print the command sequence without running it.")
-    parser.add_argument(
-        "--i-understand-this-calls-qualtrics",
-        action="store_true",
-        help="Accepted for compatibility; live API intent is implied by running this helper without --dry-run.",
-    )
     return parser
 
 

@@ -10,14 +10,7 @@
         "Faculty or instructor",
         "Researcher",
         "Other"
-      ],
-      "synthetic_weights": {
-        "Undergraduate student": 0.35,
-        "Graduate student": 0.25,
-        "Faculty or instructor": 0.15,
-        "Researcher": 0.15,
-        "Other": 0.1
-      }
+      ]
     },
     {
       "tag": "prevalence_discrimination",
@@ -29,8 +22,7 @@
         "Neither common nor uncommon",
         "Somewhat common",
         "Very common"
-      ],
-      "synthetic_weights": [0.05, 0.12, 0.18, 0.42, 0.23]
+      ]
     },
     {
       "tag": "main_mechanism",
@@ -42,8 +34,7 @@
         "Statistical discrimination",
         "Network-based recruiting",
         "Unequal access to credentials"
-      ],
-      "synthetic_weights": [0.12, 0.32, 0.26, 0.16, 0.14]
+      ]
     },
     {
       "tag": "persuasive_evidence",
@@ -55,8 +46,7 @@
         "Interviews with applicants",
         "Employer surveys",
         "Labor market outcome gaps"
-      ],
-      "synthetic_weights": [0.38, 0.24, 0.12, 0.08, 0.18]
+      ]
     },
     {
       "tag": "policy_response",
@@ -68,8 +58,7 @@
         "Pay transparency",
         "Public reporting of hiring data",
         "No additional policy"
-      ],
-      "synthetic_weights": [0.24, 0.3, 0.2, 0.16, 0.1]
+      ]
     },
     {
       "tag": "confidence",
@@ -81,8 +70,7 @@
         "Moderately confident",
         "Very confident",
         "Extremely confident"
-      ],
-      "synthetic_weights": [0.06, 0.18, 0.42, 0.26, 0.08]
+      ]
     },
     {
       "tag": "open_reasoning",

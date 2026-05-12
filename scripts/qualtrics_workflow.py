@@ -521,14 +521,6 @@ def synthetic_import_path(survey_key: str) -> Path:
     return DATA_DIR / safe_survey_key(survey_key) / "metadata" / "synthetic_response_import.json"
 
 
-def next_resume_offset(survey_key: str) -> int:
-    path = synthetic_import_path(survey_key)
-    if not path.exists():
-        return 0
-    metadata = read_json(path)
-    return int(metadata.get("offset", 0)) + int(metadata.get("submitted_count", 0))
-
-
 def public_host_from_args(args: argparse.Namespace) -> str:
     load_project_env()
     public_host = (args.public_host or os.environ.get("QUALTRICS_PUBLIC_HOST") or "").strip()
@@ -674,17 +666,12 @@ def submit_response_batch(
     survey_spec: dict[str, Any],
     qids_by_tag: dict[str, str],
     rows: list[dict[str, str]],
-    offset: int,
-    limit: int | None,
 ) -> tuple[list[str], int]:
-    selected_rows = rows[offset:]
-    if limit is not None:
-        selected_rows = selected_rows[:limit]
-    if not selected_rows:
+    if not rows:
         raise SystemExit("No response rows selected for submission.")
 
     response_ids: list[str] = []
-    for local_index, row in enumerate(selected_rows, start=offset + 1):
+    for local_index, row in enumerate(rows, start=1):
         values = response_values_from_row(row, survey_spec, qids_by_tag, local_index)
         response = client.create_response(
             survey_id_value,
@@ -695,7 +682,7 @@ def submit_response_batch(
         if response_id:
             response_ids.append(response_id)
         print(f"Submitted response row {local_index}.")
-    return response_ids, len(selected_rows)
+    return response_ids, len(rows)
 
 
 def command_submit_synthetic_responses(args: argparse.Namespace) -> int:
@@ -724,61 +711,19 @@ def command_submit_synthetic_responses(args: argparse.Namespace) -> int:
 
     rows = read_response_rows(input_csv)
 
-    offset = args.offset
-    if args.resume:
-        if args.offset:
-            raise SystemExit("Use either --resume or --offset, not both.")
-        offset = next_resume_offset(survey_key)
-
-    if args.smoke_then_rest and (args.limit is not None or offset != 0 or args.resume):
-        raise SystemExit("--smoke-then-rest cannot be combined with --limit, --offset, or --resume.")
-
-    response_ids: list[str] = []
-    if args.smoke_then_rest:
-        print("Submitting first synthetic response as the smoke row.")
-        first_response_ids, first_count = submit_response_batch(
-            client,
-            selected_survey_id,
-            survey_spec,
-            qids_by_tag,
-            rows,
-            offset=0,
-            limit=1,
-        )
-        response_ids.extend(first_response_ids)
-        submitted_count = first_count
-        if len(rows) > 1:
-            print("Submitting remaining synthetic responses starting at offset 1.")
-            remaining_response_ids, remaining_count = submit_response_batch(
-                client,
-                selected_survey_id,
-                survey_spec,
-                qids_by_tag,
-                rows,
-                offset=1,
-                limit=None,
-            )
-            response_ids.extend(remaining_response_ids)
-            submitted_count += remaining_count
-        submitted_offset = 0
-    else:
-        response_ids, submitted_count = submit_response_batch(
-            client,
-            selected_survey_id,
-            survey_spec,
-            qids_by_tag,
-            rows,
-            offset=offset,
-            limit=args.limit,
-        )
-        submitted_offset = offset
+    response_ids, submitted_count = submit_response_batch(
+        client,
+        selected_survey_id,
+        survey_spec,
+        qids_by_tag,
+        rows,
+    )
 
     import_path = synthetic_import_path(survey_key)
     import_metadata = {
         "survey_key": survey_key,
         "survey_id": selected_survey_id,
         "input_csv": str(input_csv),
-        "offset": submitted_offset,
         "submitted_count": submitted_count,
         "submitted_at": datetime.now().isoformat(timespec="seconds"),
         "response_ids": response_ids,
@@ -863,11 +808,6 @@ def command_export_responses(args: argparse.Namespace) -> int:
     return 0
 
 
-def command_export_spss(args: argparse.Namespace) -> int:
-    args.format = "spss"
-    return command_export_responses(args)
-
-
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Qualtrics workflow helper.")
     subparsers = parser.add_subparsers(dest="command")
@@ -900,21 +840,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     link_parser.set_defaults(func=command_get_link)
 
-    for command_name, help_text in [
-        ("submit-synthetic-responses", "Submit local synthetic CSV rows as Qualtrics survey responses."),
-        ("submit-responses", "Compatibility alias for submit-synthetic-responses."),
-    ]:
-        submit_parser = subparsers.add_parser(command_name, help=help_text)
-        submit_parser.add_argument("--survey-key", required=True)
-        submit_parser.add_argument("--input", type=Path, required=True)
-        submit_parser.add_argument("--survey-name")
-        submit_parser.add_argument("--survey-id")
-        submit_parser.add_argument("--spec-file", type=Path)
-        submit_parser.add_argument("--offset", type=int, default=0, help="Zero-based number of rows to skip.")
-        submit_parser.add_argument("--limit", type=int, help="Maximum number of rows to submit.")
-        submit_parser.add_argument("--resume", action="store_true", help="Continue after the last saved synthetic import offset.")
-        submit_parser.add_argument("--smoke-then-rest", action="store_true", help="Submit row 1, then submit all remaining rows without duplicating row 1.")
-        submit_parser.set_defaults(func=command_submit_synthetic_responses)
+    submit_parser = subparsers.add_parser(
+        "submit-synthetic-responses",
+        help="Submit local synthetic CSV rows as Qualtrics survey responses.",
+    )
+    submit_parser.add_argument("--survey-key", required=True)
+    submit_parser.add_argument("--input", type=Path, required=True)
+    submit_parser.add_argument("--survey-name")
+    submit_parser.add_argument("--survey-id")
+    submit_parser.add_argument("--spec-file", type=Path)
+    submit_parser.set_defaults(func=command_submit_synthetic_responses)
 
     export_parser = subparsers.add_parser("export-responses", help="Export survey responses.")
     export_parser.add_argument("--survey-key", required=True)
@@ -922,15 +857,6 @@ def build_parser() -> argparse.ArgumentParser:
     export_parser.add_argument("--survey-id")
     export_parser.add_argument("--format", choices=["csv", "spss"], default="csv")
     export_parser.set_defaults(func=command_export_responses)
-
-    export_spss_parser = subparsers.add_parser(
-        "export-spss",
-        help="Compatibility alias for: export-responses --format spss.",
-    )
-    export_spss_parser.add_argument("--survey-key", required=True)
-    export_spss_parser.add_argument("--survey-name")
-    export_spss_parser.add_argument("--survey-id")
-    export_spss_parser.set_defaults(func=command_export_spss)
 
     return parser
 
