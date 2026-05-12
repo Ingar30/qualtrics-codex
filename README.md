@@ -36,23 +36,33 @@ If you open Codex somewhere else, point it at this repo:
 codex --cd path/to/qualtrics-codex
 ```
 
-Then paste the starter prompt from:
+First, let Codex learn your local preferences. You can paste the reusable prompt:
 
 ```text
-prompts/start-with-codex.md
+prompts/configure-local-preferences.md
 ```
 
-That prompt tells Codex to inspect the repo, scaffold a survey workflow, use local smoke tests only when useful, and avoid live Qualtrics calls until you explicitly ask.
+Or ask in plain language:
 
-On first use, Codex should also offer the preference prompt in `prompts/configure-local-preferences.md`. That prompt asks whether you want Stata-first or Python-only analysis, SPSS/SAV or CSV exports, Beamer or native HTML slides, and how cautious Codex should be about live Qualtrics calls. If you do not answer, the repo defaults to Stata and Beamer when available, with Python and native slides as fallbacks.
+```text
+Ask me about my local preferences for this Qualtrics workflow before we build anything. Cover Stata vs Python, SPSS/SAV vs CSV exports, Beamer vs native HTML slides, live Qualtrics safety, and what to do if Stata or LaTeX is missing. Save the answers in ignored AGENTS.override.md and do not store secrets.
+```
 
-If Stata is installed but Codex cannot find it, point the session at the executable with `STATA_EXE`. On Windows that usually looks like:
+If you skip this step, the repo defaults to Stata and Beamer when available, with Python and native slides as fallbacks. If Stata is installed but Codex cannot find it, point the session at the executable with `STATA_EXE`. On Windows that usually looks like:
 
 ```powershell
 $env:STATA_EXE = "C:\Program Files\Stata19\StataMP-64.exe"
 ```
 
 See `docs/setup-troubleshooting.md` and `docs/stata-extension.md` for the Stata lookup and fallback details.
+
+Then paste the starter workflow prompt from:
+
+```text
+prompts/start-with-codex.md
+```
+
+That prompt tells Codex to inspect the repo, scaffold a survey workflow, use local smoke tests only when useful, and avoid live Qualtrics calls until you explicitly ask.
 
 ## Ask For One Of Three Workflows
 
