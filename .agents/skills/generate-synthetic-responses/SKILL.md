@@ -1,13 +1,13 @@
 ---
 name: generate-synthetic-responses
-description: Prepare synthetic rows for the main Qualtrics teaching demo and submit them to a live Qualtrics test survey after explicit approval.
+description: Prepare synthetic rows for the main Qualtrics workflow and submit them to a live Qualtrics test survey after explicit approval.
 metadata:
   short-description: Generate synthetic responses
 ---
 
 # Generate Synthetic Responses
 
-Local CSVs are supporting files. For the normal live teaching demo, create the survey in Qualtrics, prepare synthetic rows, submit them to that Qualtrics test survey, export the responses, then analyze and build slides. Treat submission to Qualtrics as a live mutation.
+Local CSVs are supporting files. For the normal live Qualtrics workflow, create the survey in Qualtrics, prepare synthetic rows, submit them to that Qualtrics test survey, export the responses, then analyze and build slides. Treat submission to Qualtrics as a live mutation.
 
 ## Prepare Staging Rows
 
@@ -36,6 +36,6 @@ For a Stata validation path, export with `--format spss` after submission. For a
 ## Safety
 
 - Local synthetic CSVs are not the object of interest; they are staging files for Qualtrics submission or explicit offline checks.
-- Submit generated rows in one step for the default teaching demo.
+- Submit generated rows in one step for the default workflow.
 - Do not use production surveys for synthetic API-created responses.
 - Never print tokens, response IDs, raw rows, or reusable links.

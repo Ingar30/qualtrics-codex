@@ -7,7 +7,7 @@ Instructions for Codex and other automation agents working in this starter repo.
 - Keep the default workflow easy to adopt: Stata/Beamer first when available, Python/native HTML fallback when not.
 - Keep live Qualtrics work local by default. The public Pages site uses synthetic fixture data only.
 - Prefer small, readable changes over framework-heavy abstractions.
-- Support the intended user loop: a researcher sets local preferences, asks Codex for the main live teaching demo, then explicitly approves each live Qualtrics step.
+- Support the intended user loop: a researcher sets local preferences, asks Codex for the main live Qualtrics workflow, then explicitly approves each live Qualtrics step.
 
 ## Safety
 
@@ -55,7 +55,7 @@ On first use, or when workflow preferences are unclear, offer the user `prompts/
 Before asking those preference questions, inspect local tool availability for Python dependencies, Stata, LaTeX/Beamer, and Qualtrics environment variables.
 Report only presence or absence for secrets; never print values and never ask users to paste API tokens into Codex.
 If the user answers, summarize their choices in ignored `AGENTS.override.md`; never store secrets there.
-If the user does not answer, continue with the default setup: Stata-first when available, Python fallback, Beamer-first with native fallback, CSV for Python, SAV for Stata, offline checks only when needed, Qualtrics-submitted synthetic responses for live demos, and public Pages synthetic-only.
+If the user does not answer, continue with the default setup: Stata-first when available, Python fallback, Beamer-first with native fallback, CSV for Python, SAV for Stata, offline checks only when needed, Qualtrics-submitted synthetic responses for live workflows, and public Pages synthetic-only.
 
 ## Expected Agent Loop
 
@@ -64,8 +64,8 @@ When the user asks for a survey workflow, use the repo-local skill in `.agents/s
 Use offline checks only as internal validation or staging for Qualtrics submission. Before live Qualtrics actions, distinguish among:
 
 - draft/test link: create or use a live draft survey and retrieve the reusable link;
-- synthetic responses: use local fake responses only for offline checks or staging, and submit fake responses to a live Qualtrics test survey for the main live demo loop;
-- live synthetic test: submit generated synthetic rows for the default teaching demo, then export once, analyze once, and build slides;
-- real-response exports: treat them as an explicitly requested later step, not the main teaching demo; keep raw files ignored, clean with Stata or Python, then build figures and slides.
+- synthetic responses: use local fake responses only for offline checks or staging, and submit fake responses to a live Qualtrics test survey for the main workflow;
+- live synthetic test: submit generated synthetic rows for the default workflow, then export once, analyze once, and build slides;
+- real-response exports: treat them as an explicitly requested later step, not the main workflow; keep raw files ignored, clean with Stata or Python, then build figures and slides.
 
-Ad hoc `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default. Promote only public-safe demos by editing `.gitignore` intentionally.
+Ad hoc `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default. Promote only public-safe examples by editing `.gitignore` intentionally.

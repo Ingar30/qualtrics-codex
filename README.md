@@ -12,7 +12,7 @@ Qualtrics' official API overview is here:
 
 https://www.qualtrics.com/support/integrations/api-integration/overview/
 
-To use the live teaching demo, your Qualtrics account needs API access. In Qualtrics, go to:
+To use the live Qualtrics workflow, your Qualtrics account needs API access. In Qualtrics, go to:
 
 ```text
 User settings icon -> Account Settings -> Qualtrics IDs -> API -> Generate Token
@@ -74,7 +74,7 @@ $env:QUALTRICS_API_TOKEN = "your_token"
 $env:QUALTRICS_PUBLIC_HOST = "yourbrand.qualtrics.com"
 ```
 
-Load it before opening Codex for a live demo:
+Load it before opening Codex for a live workflow:
 
 ```powershell
 . $HOME\.secrets\qualtrics.env.ps1
@@ -97,7 +97,7 @@ export QUALTRICS_API_TOKEN="your_token"
 export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"
 ```
 
-Load it before opening Codex for a live demo:
+Load it before opening Codex for a live workflow:
 
 ```bash
 source "$HOME/.secrets/qualtrics.env"
@@ -136,7 +136,7 @@ If Stata is not found, ask me whether I have Stata installed and where the execu
 
 If Qualtrics secrets are not found, tell me where to create or load the local secrets file: docs/local-qualtrics-secrets.md, $HOME\.secrets\qualtrics.env.ps1 on Windows, or $HOME/.secrets/qualtrics.env on macOS/Linux. Do not ask me to paste token values into Codex.
 
-Then ask only the follow-up questions needed to set my local workflow preferences: Stata-first vs Python-only, SPSS/SAV vs CSV exports, Beamer vs native HTML slides, live Qualtrics behavior for the main demo, and the public/private boundary. Save my answers in ignored AGENTS.override.md without secrets, survey IDs, response IDs, or reusable links.
+Then ask only the follow-up questions needed to set my local workflow preferences: Stata-first vs Python-only, SPSS/SAV vs CSV exports, Beamer vs native HTML slides, live Qualtrics behavior for the main workflow, and the public/private boundary. Save my answers in ignored AGENTS.override.md without secrets, survey IDs, response IDs, or reusable links.
 ```
 
 If Stata is installed but Codex cannot find it, point the session at the executable with `STATA_EXE`:
@@ -145,7 +145,7 @@ If Stata is installed but Codex cannot find it, point the session at the executa
 $env:STATA_EXE = "C:\Program Files\Stata19\StataMP-64.exe"
 ```
 
-## 5. Main Live Teaching Demo
+## 5. Main Qualtrics Workflow
 
 After local preferences are set, paste the canonical prompt:
 
@@ -193,4 +193,4 @@ The safe defaults are:
 - Public validation boundary: `docs/live-validation.md`
 - Reproducibility contract: `docs/reproducibility.md`
 
-For final local validation before sharing changes, ask Codex to use `prompts/final-validation-goal.md`. For GitHub Pages, the workflow rebuilds the public demo site on pushes to `main` without Qualtrics secrets or live API calls.
+For final local validation before sharing changes, ask Codex to use `prompts/final-validation-goal.md`. For GitHub Pages, the workflow rebuilds the public site on pushes to `main` without Qualtrics secrets or live API calls.

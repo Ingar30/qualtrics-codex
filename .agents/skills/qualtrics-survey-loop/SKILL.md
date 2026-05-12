@@ -1,13 +1,13 @@
 ---
 name: qualtrics-survey-loop
-description: Use when the user asks Codex to run the main live Qualtrics teaching loop: create a survey, submit synthetic responses through Qualtrics, export, analyze, and build slides.
+description: Use when the user asks Codex to run the main live Qualtrics workflow: create a survey, submit synthetic responses through Qualtrics, export, analyze, and build slides.
 metadata:
-  short-description: Run Qualtrics teaching loop
+  short-description: Run Qualtrics workflow
 ---
 
 # Qualtrics Survey Loop
 
-Use this skill for the main live teaching demo.
+Use this skill for the main live Qualtrics workflow.
 
 The intended loop is:
 
@@ -22,7 +22,7 @@ The intended loop is:
 
 - If the user gives a broad survey idea, infer a simple 4-8 question survey and state the assumptions.
 - Ask a short clarification only when the answer changes live API use, privacy, or core survey design.
-- Bias toward creating the survey in Qualtrics and submitting Codex-generated synthetic responses there for the teaching demo.
+- Bias toward creating the survey in Qualtrics and submitting Codex-generated synthetic responses there for the workflow.
 - Use local synthetic rows only as staging files or for an explicitly requested offline check.
 - If the user chooses Stata, export/download Qualtrics responses as SPSS/SAV and import with Stata. If the user chooses Python, export/download responses as CSV and analyze with Python.
 - Use `check-auth` for the first read-only API check.
