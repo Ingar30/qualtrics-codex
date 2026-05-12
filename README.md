@@ -55,7 +55,7 @@ Do not put API tokens in this repository, commit local secret files, or paste to
 
 `QUALTRICS_PUBLIC_HOST` is optional. Use it when your respondent-facing survey links use a branded host that differs from the API datacenter host.
 
-You can create the local file yourself, or use one of these command examples.
+This README uses Windows PowerShell commands for the local setup path. macOS/Linux notes, including shell syntax for secrets, are in `docs/local-qualtrics-secrets.md`.
 
 ### Windows PowerShell example
 
@@ -80,34 +80,11 @@ Load it before opening Codex for a live workflow:
 . $HOME\.secrets\qualtrics.env.ps1
 ```
 
-### macOS/Linux example
-
-Create a secrets file outside the repo:
-
-```bash
-mkdir -p "$HOME/.secrets"
-nano "$HOME/.secrets/qualtrics.env"
-```
-
-Put this in `$HOME/.secrets/qualtrics.env`:
-
-```bash
-export QUALTRICS_DATACENTER="your_datacenter"
-export QUALTRICS_API_TOKEN="your_token"
-export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"
-```
-
-Load it before opening Codex for a live workflow:
-
-```bash
-source "$HOME/.secrets/qualtrics.env"
-```
-
 More details are in `docs/local-qualtrics-secrets.md`.
 
 ## 3. Clone And Install
 
-Clone the repo, install the Python requirements, and open Codex in the project folder:
+Clone the repo, install the Python requirements, and open Codex in the project folder. These commands assume Windows PowerShell:
 
 ```powershell
 git clone https://github.com/Ingar30/qualtrics-codex.git
@@ -119,8 +96,8 @@ codex
 
 If you open Codex somewhere else, point it at this repo:
 
-```bash
-codex --cd path/to/qualtrics-codex
+```powershell
+codex --cd C:\path\to\qualtrics-codex
 ```
 
 ## 4. First Codex Prompt
@@ -134,7 +111,7 @@ First inspect this repository and the local environment without changing files o
 
 If Stata is not found, ask me whether I have Stata installed and where the executable is. On Windows it often looks like C:\Program Files\Stata19\StataMP-64.exe, and the path can be supplied with STATA_EXE. If LaTeX/Beamer is not found, ask whether to continue with native HTML slides or help configure LaTeX.
 
-If Qualtrics secrets are not found, tell me where to create or load the local secrets file: docs/local-qualtrics-secrets.md, $HOME\.secrets\qualtrics.env.ps1 on Windows, or $HOME/.secrets/qualtrics.env on macOS/Linux. Do not ask me to paste token values into Codex.
+If Qualtrics secrets are not found, tell me where to create or load the local secrets file: docs/local-qualtrics-secrets.md or $HOME\.secrets\qualtrics.env.ps1. Do not ask me to paste token values into Codex.
 
 Then ask only the follow-up questions needed to set my local workflow preferences: Stata-first vs Python-only, SPSS/SAV vs CSV exports, Beamer vs native HTML slides, live Qualtrics behavior for the main workflow, and the public/private boundary. Save my answers in ignored AGENTS.override.md without secrets, survey IDs, response IDs, or reusable links.
 ```
