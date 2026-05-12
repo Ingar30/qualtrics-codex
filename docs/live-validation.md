@@ -1,28 +1,20 @@
-﻿# Live Validation
+# Live Validation
 
-This repository keeps public validation offline by default. CI and GitHub Pages never call Qualtrics, never submit responses, and never publish live survey links.
+Public validation stays offline. CI and GitHub Pages never call Qualtrics, never submit responses, and never publish live survey links.
 
 ## What Was Validated Locally
 
-A local live run validated the repository command loop directly:
+A local live run validated the main teaching loop:
 
-- A Qualtrics test survey was created from a JSON spec.
-- The reusable anonymous link was saved only in private local metadata and ignored slide inputs.
-- 100 synthetic response rows were prepared and submitted through Qualtrics.
-- Responses were exported, cleaned to 100 rows, and charted.
-- Slide output was built from generated inputs, using Beamer when available and the native fallback when needed.
+- create a Qualtrics test survey from a JSON spec;
+- save the reusable anonymous link only in private local metadata and ignored slide inputs;
+- prepare 100 synthetic response rows and submit them through Qualtrics;
+- export responses once;
+- clean to 100 rows, generate figures, and build slides.
 
-That test validated the repository commands and scripts. It did not validate a second autonomous Codex process operating with live credentials.
+Only this sanitized validation shape belongs in the public repository. Do not publish survey IDs, response IDs, reusable links, raw rows, live export paths, or metadata contents.
 
-On May 12, 2026, the same command loop was also exercised with this public-opinion prompt:
-
-```text
-Create a public opinion survey on labor market concerns and support for immigration in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
-```
-
-The local run completed with 100 synthetic Qualtrics submissions, a response export cleaned to 100 rows, generated figures, slide output, and private survey-link slide inputs. The public repository should record only this sanitized result; do not publish survey IDs, response IDs, reusable links, raw rows, live export paths, or metadata contents.
-
-For analysis preferences, use SPSS/SAV exports for Stata workflows and CSV exports for Python workflows. This keeps the Stata path close to the standard Qualtrics-to-Stata teaching workflow while keeping the Python path simple and cross-platform.
+For analysis preferences, use SPSS/SAV exports for Stata workflows and CSV exports for Python workflows.
 
 ## Lean Helper
 

@@ -56,4 +56,4 @@ def test_response_rows_rejects_nonpositive_n() -> None:
 
 def test_default_paths_use_survey_key(tmp_path: Path) -> None:
     assert gen.default_spec_path("demo", project_root=tmp_path) == tmp_path / "code" / "demo" / "survey_spec.json"
-    assert gen.default_output_path("demo", project_root=tmp_path) == tmp_path / "tests" / "fixtures" / "demo_responses.csv"
+    assert gen.default_output_path("demo", project_root=tmp_path) == tmp_path / "build" / "fixtures" / "demo_responses.csv"

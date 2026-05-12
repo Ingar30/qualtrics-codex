@@ -44,8 +44,10 @@ def test_index_starts_with_codex_preferences(tmp_path: Path) -> None:
     assert "prompts/configure-local-preferences.md" in index
     assert "SPSS/SAV exports" in index
     assert "CSV exports" in index
+    assert "discrimination-beliefs teaching demo" in index
     assert "Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics" in index
     assert "prompts/discrimination-beliefs-example.md" in index
+    assert "repo_smoke_test" not in index
 
 
 def test_walkthrough_mentions_qualtrics_metadata_and_link_privacy(tmp_path: Path) -> None:

@@ -72,4 +72,4 @@ Only synthetic/demo outputs are public by default.
 
 ## Public Boundary
 
-Publish the synthetic slides, tables, and figures. Keep survey specs, raw exports, processed real data, response IDs, reusable links, and metadata private unless explicitly promoted.
+Publish the synthetic slides, tables, figures, and promoted demo spec. Keep raw exports, processed real data, response IDs, reusable links, metadata, and unpromoted survey folders private unless explicitly promoted.

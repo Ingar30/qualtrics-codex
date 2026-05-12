@@ -1,6 +1,6 @@
 ---
 name: generate-synthetic-responses
-description: Prepare disposable local smoke-test rows, or submit synthetic rows to a live Qualtrics test survey when the user asks for the full Qualtrics demo loop.
+description: Prepare synthetic rows for the main Qualtrics teaching demo and submit them to a live Qualtrics test survey after explicit approval.
 metadata:
   short-description: Generate synthetic responses
 ---
@@ -9,13 +9,13 @@ metadata:
 
 Local CSVs are supporting files. For the normal live teaching demo, create the survey in Qualtrics, prepare synthetic rows, submit them to that Qualtrics test survey, export the responses, then analyze and build slides. Treat submission to Qualtrics as a live mutation.
 
-## Local Smoke-Test Rows
+## Prepare Staging Rows
 
 ```bash
 python scripts/generate_synthetic_responses.py --survey-key <survey_key> --spec-file code/<survey_key>/survey_spec.json --output build/fixtures/<survey_key>_responses.csv --n 100
 ```
 
-Use these rows only for a no-credentials smoke test of analysis and slides:
+Use these rows for Qualtrics submission. Use them for offline analysis checks only when the user explicitly asks to avoid live Qualtrics calls:
 
 ```bash
 python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv
@@ -35,8 +35,7 @@ For a Stata validation path, export with `--format spss` after submission. For a
 
 ## Safety
 
-- Use local synthetic rows only when checking that analysis and slides work without credentials.
-- Local synthetic CSVs are not the object of interest; they are either smoke-test fixtures or staging files for Qualtrics submission.
+- Local synthetic CSVs are not the object of interest; they are staging files for Qualtrics submission or explicit offline checks.
 - Submit generated rows in one step for the default teaching demo.
 - Do not use production surveys for synthetic API-created responses.
 - Never print tokens, response IDs, raw rows, or reusable links.

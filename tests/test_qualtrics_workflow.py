@@ -47,6 +47,11 @@ def test_load_survey_spec_validates_tags(tmp_path: Path) -> None:
     assert loaded["questions"][0]["tag"] == "belief"
 
 
+def test_load_survey_spec_requires_explicit_file() -> None:
+    with pytest.raises(SystemExit):
+        qw.load_survey_spec(None)
+
+
 def test_export_payload_defaults_to_compressed_csv() -> None:
     payload = qw.export_payload("csv")
     assert payload["format"] == "csv"

@@ -26,7 +26,7 @@ def default_spec_path(survey_key: str, project_root: Path = PROJECT_ROOT) -> Pat
 
 
 def default_output_path(survey_key: str, project_root: Path = PROJECT_ROOT) -> Path:
-    return project_root / "tests" / "fixtures" / f"{qualtrics_workflow.safe_survey_key(survey_key)}_responses.csv"
+    return project_root / "build" / "fixtures" / f"{qualtrics_workflow.safe_survey_key(survey_key)}_responses.csv"
 
 
 def load_spec(spec_file: Path) -> dict[str, Any]:
@@ -99,7 +99,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate local synthetic CSV responses from a survey spec.")
     parser.add_argument("--survey-key", default="repo_smoke_test")
     parser.add_argument("--spec-file", type=Path, help="Defaults to code/<survey_key>/survey_spec.json.")
-    parser.add_argument("--output", type=Path, help="Defaults to tests/fixtures/<survey_key>_responses.csv.")
+    parser.add_argument("--output", type=Path, help="Defaults to build/fixtures/<survey_key>_responses.csv.")
     parser.add_argument("--n", type=int, default=50, help="Number of synthetic responses to generate.")
     parser.add_argument("--seed", type=int, default=20260511, help="Random seed for deterministic output.")
     return parser

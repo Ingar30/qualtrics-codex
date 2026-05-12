@@ -18,30 +18,6 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
 
 
-DEFAULT_SURVEY_SPEC = {
-    "questions": [
-        {
-            "tag": "role",
-            "type": "mc",
-            "text": "Which role best describes you?",
-            "choices": ["Student", "Instructor", "Researcher", "Administrator", "Other"],
-        },
-        {
-            "tag": "workflow_familiarity",
-            "type": "mc",
-            "text": "How familiar are you with reproducible data workflows?",
-            "choices": [
-                "Not familiar",
-                "Slightly familiar",
-                "Moderately familiar",
-                "Very familiar",
-                "Extremely familiar",
-            ],
-        },
-    ]
-}
-
-
 class QualtricsApiError(RuntimeError):
     def __init__(self, method: str, path: str, message: str) -> None:
         super().__init__(redact_sensitive_text(f"{method} {path}: {message}"))
@@ -167,7 +143,7 @@ def write_survey_link_slide_inputs(survey_key: str, reusable_link: str) -> tuple
 
 def load_survey_spec(spec_file: str | None) -> dict[str, Any]:
     if not spec_file:
-        return DEFAULT_SURVEY_SPEC
+        raise SystemExit("Survey spec is required. Use --spec-file code/<survey_key>/survey_spec.json.")
 
     path = Path(spec_file)
     if not path.is_absolute():
@@ -822,7 +798,7 @@ def build_parser() -> argparse.ArgumentParser:
     create_parser = subparsers.add_parser("create-survey", help="Create a Qualtrics survey.")
     create_parser.add_argument("--survey-name", required=True)
     create_parser.add_argument("--survey-key", required=True)
-    create_parser.add_argument("--spec-file")
+    create_parser.add_argument("--spec-file", required=True)
     create_parser.add_argument("--activate", action="store_true", help="Publish and activate after creation.")
     create_parser.add_argument("--show-private-ids", action="store_true", help="Print survey IDs in local terminal output.")
     create_parser.set_defaults(func=command_create_survey)

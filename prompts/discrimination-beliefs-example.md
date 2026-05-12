@@ -30,16 +30,4 @@ Please:
 Do not print secrets, survey IDs, response IDs, reusable links, raw data, or private metadata.
 ```
 
-## Local-Only Smoke Test
-
-Use this version when you do not want Codex to call Qualtrics:
-
-```text
-Create a public opinion survey on beliefs about discrimination in hiring. Use survey_key discrimination_beliefs_demo. Generate 100 disposable local smoke-test responses, clean the generated data with Stata if available and Python otherwise, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API.
-```
-
-After collecting real responses, you can ask for the local export and rebuild:
-
-```text
-Export the real Qualtrics responses for discrimination_beliefs_demo, clean the newest local export in Stata if available and Python otherwise, regenerate figures, and rebuild the slides. Keep raw data, processed real data, metadata, IDs, and reusable links private by default.
-```
+If credentials are missing, Codex should stop at local setup guidance and point to `docs/local-qualtrics-secrets.md` rather than silently switching the demo into a local-only workflow.

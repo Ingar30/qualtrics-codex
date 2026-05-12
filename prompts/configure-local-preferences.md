@@ -34,7 +34,7 @@ Then ask short questions covering only what is needed:
    - Native Markdown/HTML only.
 
 4. Live API behavior:
-   - Local smoke tests only when needed to check analysis and slides without credentials.
+   - Offline checks only when needed to check analysis and slides without credentials.
    - For the main live teaching demo, create the survey in Qualtrics and submit Codex-generated synthetic responses to Qualtrics only after explicit confirmation.
 
 5. Public/private boundary:
@@ -43,7 +43,7 @@ Then ask short questions covering only what is needed:
 
 After I answer, update AGENTS.override.md with my local preferences. Do not store secrets, API tokens, survey IDs, response IDs, or reusable links there.
 
-If Stata or LaTeX is missing, ask whether to continue with Python/native fallbacks or help configure the local executable path. If I do not answer, proceed with the simplest default setup: Stata-first if available, Python fallback, CSV for Python workflows, SAV for Stata workflows, Beamer-first with native fallback, local synthetic smoke tests only when useful, Qualtrics-submitted synthetic responses for live demos, and public GitHub Pages synthetic-only.
+If Stata or LaTeX is missing, ask whether to continue with Python/native fallbacks or help configure the local executable path. If I do not answer, proceed with the simplest default setup: Stata-first if available, Python fallback, CSV for Python workflows, SAV for Stata workflows, Beamer-first with native fallback, offline checks only when useful, Qualtrics-submitted synthetic responses for live demos, and public GitHub Pages synthetic-only.
 ```
 
 Suggested `AGENTS.override.md` shape:
@@ -54,6 +54,6 @@ Suggested `AGENTS.override.md` shape:
 - Analysis: Stata-first with Python fallback.
 - Qualtrics export: SAV/SPSS for Stata workflows; CSV for Python workflows.
 - Slides: Beamer-first with native Markdown/HTML fallback.
-- Live API: local smoke tests only when needed; ask before every live Qualtrics mutation/export, including synthetic response submission.
+- Live API: offline checks only when needed; ask before every live Qualtrics mutation/export, including synthetic response submission.
 - Public/private: keep ad hoc survey folders and all live artifacts ignored unless explicitly promoted.
 ```

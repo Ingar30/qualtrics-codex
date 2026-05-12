@@ -1,6 +1,6 @@
 # Local Qualtrics Secrets
 
-You do not need Qualtrics credentials for the synthetic smoke test, unit tests, or GitHub Pages demo. Add credentials only when you are ready to make live Qualtrics API calls from your own machine.
+You do not need Qualtrics credentials for offline checks, unit tests, or GitHub Pages. Add credentials only when you are ready to make live Qualtrics API calls from your own machine.
 
 Never commit API tokens, `.env` files, `.secrets/` folders, raw response exports, survey metadata, or reusable survey links.
 

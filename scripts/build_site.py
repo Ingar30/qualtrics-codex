@@ -10,8 +10,6 @@ from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SURVEY_KEY = "repo_smoke_test"
-SYNTHETIC_FIXTURE = Path("build/fixtures/repo_smoke_test_responses.csv")
 DEMO_SURVEY_KEY = "discrimination_beliefs_demo"
 DEMO_SYNTHETIC_FIXTURE = Path("build/fixtures/discrimination_beliefs_demo_responses.csv")
 
@@ -135,26 +133,26 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
 <header>
   <div class="inner">
     <h1>qualtrics-codex</h1>
-    <p>A public starter workflow for economists using Qualtrics, Stata or Python, and Beamer or native HTML slides.</p>
+    <p>A public starter workflow for teaching one live Qualtrics-to-analysis-to-slides demo with Codex.</p>
   </div>
 </header>
 <main>
   <section>
     <h2>Demo Artifacts</h2>
-    <p>These downloads are built from synthetic fixture data only. They do not contain real Qualtrics responses or private survey metadata.</p>
+    <p>These downloads show the discrimination-beliefs teaching demo using synthetic fixture data only. They do not contain real Qualtrics responses or private survey metadata.</p>
     <div class="grid">
       {cards}
     </div>
   </section>
   <section>
     <h2>Codex Loop</h2>
-    <p>Start by asking Codex to inspect local readiness and ask the needed preference questions before it builds anything.</p>
+    <p>Start by asking Codex to inspect local readiness and ask the needed preference questions before it builds anything. Then run the main live teaching demo.</p>
     <pre><code>Open prompts/configure-local-preferences.md and follow it as instructions for this Codex session. Do not summarize it. First inspect Python, dependencies, Stata, LaTeX/Beamer, and whether QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing values. If Stata, LaTeX, or Qualtrics secrets are missing, tell me where to configure them or which fallback to use. Then ask the needed follow-up questions and save my answers in ignored AGENTS.override.md without secrets.</code></pre>
     <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.</code></pre>
     <p>Because this prompt asks for work on Qualtrics, Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses, or exporting responses.</p>
     <p>The reusable preference prompt is <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a>. Stata workflows use SPSS/SAV exports; Python workflows use CSV exports.</p>
     <p>For the full conversational workflow, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/intended-codex-loop.md">docs/intended-codex-loop.md</a>.</p>
-    <p>For the discrimination-beliefs prompt, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/discrimination-beliefs-example.md">prompts/discrimination-beliefs-example.md</a>.</p>
+    <p>For the worked prompt, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/discrimination-beliefs-example.md">prompts/discrimination-beliefs-example.md</a>.</p>
   </section>
   <section>
     <h2>Run Locally</h2>
@@ -163,7 +161,7 @@ cd qualtrics-codex
 .\\scripts\\setup.ps1
 codex</code></pre>
     <p>After opening Codex, paste the opening prompt above so Codex follows <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a> instead of summarizing it.</p>
-    <p>For plain-language Codex prompts that mirror the commands, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/codex-prompt-alternatives.md">docs/codex-prompt-alternatives.md</a>.</p>
+    <p>For shorter plain-language variants, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/codex-prompt-alternatives.md">docs/codex-prompt-alternatives.md</a>.</p>
     <p>If virtual environment setup fails or Stata is not found, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/setup-troubleshooting.md">docs/setup-troubleshooting.md</a>.</p>
   </section>
   <section class="warning">
@@ -191,13 +189,13 @@ def build_walkthrough(output_dir: Path) -> None:
     body = """
 <header>
   <div class="inner">
-    <h1>Local Workflow</h1>
-    <p>Use the public repo as a local research scaffold. Keep Qualtrics credentials and real response data off GitHub.</p>
+    <h1>Main Live Demo</h1>
+    <p>Use Codex to create a Qualtrics test survey, submit generated synthetic responses through Qualtrics, export once, analyze once, and build slides.</p>
   </div>
 </header>
 <main>
   <h2>1. Store Secrets Locally</h2>
-  <p>Synthetic tests do not need Qualtrics credentials. For live API calls, store credentials outside the repository.</p>
+  <p>Live API calls need credentials outside the repository.</p>
   <p>Qualtrics documents API tokens under Account Settings, in the Qualtrics IDs area: <a href="https://www.qualtrics.com/support/integrations/api-integration/overview/">Qualtrics API overview</a>.</p>
   <p>On Windows PowerShell, create <code>$HOME\\.secrets\\qualtrics.env.ps1</code>:</p>
   <pre><code>$env:QUALTRICS_DATACENTER = "your_datacenter"
@@ -212,27 +210,17 @@ export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"</code></pre>
   <p>Load it before live API calls:</p>
   <pre><code>source "$HOME/.secrets/qualtrics.env"</code></pre>
 
-  <h2>2. Export Responses</h2>
-  <p>Use CSV for Python analysis and SPSS/SAV for Stata analysis.</p>
+  <h2>2. Run The Live Teaching Loop</h2>
+  <p>Codex should ask before each live API action. The command shape is:</p>
   <pre><code>python scripts/qualtrics_workflow.py check-auth
-python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id &lt;survey_id&gt; --format csv
-python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id &lt;survey_id&gt; --format spss</code></pre>
-
-  <h2>3. Live Synthetic Test</h2>
-  <pre><code>python scripts/qualtrics_workflow.py get-link --survey-key my_survey --write-slide-inputs
+python scripts/qualtrics_workflow.py create-survey --survey-key my_survey --survey-name "My Survey" --spec-file code/my_survey/survey_spec.json
+python scripts/qualtrics_workflow.py get-link --survey-key my_survey --write-slide-inputs
 python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv --n 100
 python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv
 python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --format csv
 python scripts/run_analysis.py --survey-key my_survey
 python scripts/build_slides.py --survey-key my_survey</code></pre>
-  <h2>4. Smoke Test With Local Synthetic Responses</h2>
-  <pre><code>python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv
-python scripts/run_analysis.py --survey-key my_survey --input build/fixtures/my_survey_responses.csv
-python scripts/build_slides.py --survey-key my_survey</code></pre>
-
-  <h2>5. Analyze And Build Real Local Exports</h2>
-  <pre><code>python scripts/run_analysis.py --survey-key my_survey
-python scripts/build_slides.py --survey-key my_survey</code></pre>
+  <p>Use CSV for Python analysis. Use SPSS/SAV with <code>--format spss</code> when the local preference is Stata.</p>
   <p>Qualtrics CSV exports may include metadata rows after the header. The example analysis filters them when <code>ResponseId</code> exists by keeping IDs that start with <code>R_</code>.</p>
 
   <h2>Public Boundary</h2>
@@ -257,7 +245,7 @@ def build_validation(output_dir: Path) -> None:
   <section>
     <h2>What Was Validated</h2>
     <p>A local live run validated the repository command loop directly: create a Qualtrics test survey, save the reusable link only to ignored local files, prepare and submit 100 synthetic responses through Qualtrics, export responses once, clean to 100 rows, generate figures, and build slides.</p>
-    <p>On May 12, 2026, the labor-market and immigration prompt completed through the same local loop with 100 synthetic Qualtrics submissions. This page records only the sanitized validation result.</p>
+    <p>This page records only the sanitized validation shape. Live identifiers, response IDs, reusable links, raw rows, export paths, and metadata contents stay local.</p>
   </section>
   <section>
     <h2>Public Boundary</h2>
@@ -287,48 +275,11 @@ def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None
             sys.executable,
             "scripts/generate_synthetic_responses.py",
             "--survey-key",
-            SURVEY_KEY,
-            "--output",
-            str(SYNTHETIC_FIXTURE),
-        ],
-        project_root,
-    )
-    run_command(
-        [
-            sys.executable,
-            "scripts/generate_synthetic_responses.py",
-            "--survey-key",
             DEMO_SURVEY_KEY,
             "--output",
             str(DEMO_SYNTHETIC_FIXTURE),
             "--n",
             "100",
-        ],
-        project_root,
-    )
-    run_command(
-        [
-            sys.executable,
-            "scripts/run_analysis.py",
-            "--survey-key",
-            SURVEY_KEY,
-            "--input",
-            str(SYNTHETIC_FIXTURE),
-            "--mode",
-            "python",
-        ],
-        project_root,
-    )
-    run_command([sys.executable, "scripts/build_slides.py", "--survey-key", SURVEY_KEY, "--mode", "auto"], project_root)
-    run_command(
-        [
-            sys.executable,
-            "scripts/build_slides.py",
-            "--survey-key",
-            SURVEY_KEY,
-            "--mode",
-            "python",
-            "--no-python-pdf",
         ],
         project_root,
     )
@@ -362,7 +313,7 @@ def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None
     artifacts_dir = output_dir / "artifacts"
     copied: list[str] = []
 
-    for key, prefix in [(SURVEY_KEY, "smoke"), (DEMO_SURVEY_KEY, "discrimination-beliefs-demo")]:
+    for key, prefix in [(DEMO_SURVEY_KEY, "discrimination-beliefs-demo")]:
         slide_build_dir = project_root / "build" / "slides" / key
         inputs_dir = project_root / "slides" / key / "inputs"
         for source, name in [

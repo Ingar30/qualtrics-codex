@@ -50,7 +50,6 @@ The analysis wrapper tries Stata first and falls back to Python. If Stata is ins
 
 ```powershell
 $env:STATA_EXE = "C:\Program Files\Stata19\StataMP-64.exe"
-python scripts/run_analysis.py --survey-key repo_smoke_test --input build/fixtures/repo_smoke_test_responses.csv
 ```
 
 To persist this for the repo, put the `STATA_EXE` line in `$HOME\.secrets\qualtrics.env.ps1` or your PowerShell profile.
@@ -59,7 +58,7 @@ The Python fallback is expected to work without Stata.
 
 ## Qualtrics Credentials Not Loaded
 
-Synthetic tests do not need Qualtrics credentials. Live commands such as `check-auth`, `create-survey`, `get-link`, `submit-synthetic-responses`, and `export-responses` need local environment variables:
+Offline checks do not need Qualtrics credentials. Live commands such as `check-auth`, `create-survey`, `get-link`, `submit-synthetic-responses`, and `export-responses` need local environment variables:
 
 ```powershell
 . $HOME\.secrets\qualtrics.env.ps1

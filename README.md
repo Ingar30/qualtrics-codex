@@ -2,7 +2,7 @@
 
 A public starter repository for teaching a reproducible Qualtrics-to-analysis-to-slides workflow with Codex as the assistant.
 
-The core idea is simple: a researcher describes a survey or research topic in Codex, and Codex helps build the workflow around it. The workflow can create a Qualtrics test survey, submit synthetic responses to that survey for a live demo, export the responses, clean the data, make figures and tables, and compile a short PDF/HTML slide deck.
+The core idea is simple: a researcher opens the repo in Codex, sets local preferences, and asks for one live teaching demo. Codex creates a Qualtrics test survey, submits synthetic responses to that survey, exports the generated responses, cleans the data, makes figures and tables, and compiles a short PDF/HTML slide deck.
 
 ## What This Repo Teaches
 
@@ -74,7 +74,7 @@ Create a public opinion survey on beliefs about discrimination in hiring in Qual
 
 Codex should interpret that as a live API workflow. It should verify credentials without printing them, ask before creating the draft survey, ask before submitting synthetic responses to Qualtrics, ask before exporting responses, and keep private identifiers and reusable links out of the public repo.
 
-More prompt variants live in `docs/codex-prompt-alternatives.md`, and the full conversational loop is documented in `docs/intended-codex-loop.md`.
+The worked prompt lives in `prompts/discrimination-beliefs-example.md`. Short prompt variants live in `docs/codex-prompt-alternatives.md`.
 
 ## What Codex Builds
 
@@ -111,12 +111,10 @@ The safe defaults are:
 
 ## Where Details Live
 
-- Start prompt: `prompts/start-with-codex.md`
-- Full live-loop prompt: `prompts/full-loop-survey.md`
 - Worked example prompt: `prompts/discrimination-beliefs-example.md`
 - Local preference prompt: `prompts/configure-local-preferences.md`
-- Prompt cookbook: `docs/codex-prompt-alternatives.md`
-- Intended Codex loop and command reference: `docs/intended-codex-loop.md`
+- Prompt alternatives: `docs/codex-prompt-alternatives.md`
+- Main Codex loop: `docs/intended-codex-loop.md`
 - Local Qualtrics secrets: `docs/local-qualtrics-secrets.md`
 - Setup troubleshooting: `docs/setup-troubleshooting.md`
 - Stata/SPSS notes: `docs/stata-extension.md`
