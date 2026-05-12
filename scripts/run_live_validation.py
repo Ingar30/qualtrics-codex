@@ -94,7 +94,7 @@ def build_steps(args: argparse.Namespace) -> list[ValidationStep]:
         ["--survey-key", survey_key, "--spec-file", spec_display, "--output", fixture_display, "--n", str(args.n)],
     )
     add(
-        "submit-first-synthetic-response",
+        "submit-synthetic-responses",
         qwf,
         [
             "submit-synthetic-responses",
@@ -106,42 +106,15 @@ def build_steps(args: argparse.Namespace) -> list[ValidationStep]:
             spec_display,
             "--input",
             fixture_display,
-            "--limit",
-            "1",
         ],
     )
     add(
-        "export-after-first-response",
+        "export-responses",
         qwf,
         ["export-responses", "--survey-key", survey_key, "--survey-name", args.survey_name, "--format", args.export_format],
     )
-    add("analyze-after-first-response", analysis, ["--survey-key", survey_key])
-    add("build-slides-after-first-response", slides, ["--survey-key", survey_key, "--mode", "auto"])
-
-    add(
-        "submit-remaining-synthetic-responses",
-        qwf,
-        [
-            "submit-synthetic-responses",
-            "--survey-key",
-            survey_key,
-            "--survey-name",
-            args.survey_name,
-            "--spec-file",
-            spec_display,
-            "--input",
-            fixture_display,
-            "--resume",
-        ],
-    )
-    add(
-        "export-after-full-response-set",
-        qwf,
-        ["export-responses", "--survey-key", survey_key, "--survey-name", args.survey_name, "--format", args.export_format],
-    )
-    add("analyze-after-full-response-set", analysis, ["--survey-key", survey_key])
+    add("analyze-responses", analysis, ["--survey-key", survey_key])
     add("build-beamer-or-fallback-slides", slides, ["--survey-key", survey_key, "--mode", "auto"])
-    add("build-native-html-pdf-slides", slides, ["--survey-key", survey_key, "--mode", "python"])
 
     return steps
 
@@ -158,7 +131,7 @@ def summary_payload(args: argparse.Namespace, steps: list[dict[str, Any]], statu
         "recorded_at": datetime.now().isoformat(timespec="seconds"),
         "steps": steps,
         "notes": [
-            "Command output is intentionally omitted.",
+            "Command output is streamed to the local terminal for teaching but is not stored here.",
             "Survey IDs, response IDs, reusable links, tokens, Qualtrics URLs, raw rows, and metadata contents are not stored here.",
         ],
     }
@@ -175,7 +148,7 @@ def write_summary(args: argparse.Namespace, steps: list[dict[str, Any]], status:
 
 def run_step(step: ValidationStep) -> dict[str, Any]:
     started = time.monotonic()
-    completed = subprocess.run(step.argv, cwd=PROJECT_ROOT, text=True, capture_output=True, check=False)
+    completed = subprocess.run(step.argv, cwd=PROJECT_ROOT, text=True, check=False)
     elapsed = round(time.monotonic() - started, 3)
     return {
         "name": step.name,
@@ -202,7 +175,7 @@ def command_run(args: argparse.Namespace, steps: list[ValidationStep]) -> int:
         if result["status"] != "ok":
             summary_path = write_summary(args, executed_steps, "failed")
             print(f"Step failed: {step.name}")
-            print("Captured command output was not printed because it may contain live Qualtrics identifiers.")
+            print("Review the command output above, then rerun the failed step after fixing the issue.")
             print(f"Wrote sanitized validation summary: {summary_path}")
             return int(result["exit_code"]) or 1
 
@@ -213,7 +186,7 @@ def command_run(args: argparse.Namespace, steps: list[ValidationStep]) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the guarded local live Qualtrics validation loop.")
+    parser = argparse.ArgumentParser(description="Run the lean local live Qualtrics demo loop.")
     parser.add_argument("--survey-key", required=True)
     parser.add_argument("--survey-name", required=True)
     parser.add_argument("--spec-file", required=True)
@@ -225,7 +198,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--i-understand-this-calls-qualtrics",
         action="store_true",
-        help="Required acknowledgement for the live Qualtrics validation helper.",
+        help="Accepted for compatibility; live API intent is implied by running this helper without --dry-run.",
     )
     return parser
 
@@ -235,8 +208,6 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.n < 1:
         parser.error("--n must be at least 1.")
-    if not args.i_understand_this_calls_qualtrics:
-        parser.error("live validation requires --i-understand-this-calls-qualtrics.")
 
     steps = build_steps(args)
     if args.dry_run:

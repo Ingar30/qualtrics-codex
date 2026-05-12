@@ -45,10 +45,10 @@ Create a public opinion survey on beliefs about discrimination in hiring in Qual
 This is a live API workflow. Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. If slides should include the link, Codex should save it with `get-link --write-slide-inputs` rather than printing it.
 For Stata workflows, export SPSS/SAV. For Python workflows, export CSV.
 
-Prompt for the safer one-response live test:
+Prompt for the lean live test:
 
 ```text
-Create the Qualtrics draft survey, generate 100 synthetic responses locally, submit only the first synthetic response to Qualtrics, export it, clean it, and build slides. If that works, ask me before submitting the remaining 99 with the resume option.
+Create the Qualtrics draft survey, generate 100 synthetic responses locally, submit those synthetic rows to the test survey, export the responses once, clean them, and build slides. Keep credentials, metadata, response IDs, and reusable links private.
 ```
 
 Local-only prompt:
@@ -211,18 +211,18 @@ Analyze the newest local Qualtrics export for my_survey, then build the slides. 
 ```
 
 
-## Guarded Live Validation
+## Lean Live Validation
 
 Command:
 
 ```bash
-python scripts/run_live_validation.py --survey-key <survey_key> --survey-name "<survey name>" --spec-file code/<survey_key>/survey_spec.json --n 100 --dry-run --i-understand-this-calls-qualtrics
+python scripts/run_live_validation.py --survey-key <survey_key> --survey-name "<survey name>" --spec-file code/<survey_key>/survey_spec.json --n 100 --dry-run
 ```
 
 Prompt alternative:
 
 ```text
-Dry-run the guarded live validation helper for this survey. Do not call Qualtrics. Confirm the sequence creates a draft survey, saves the private link locally, submits one synthetic row first, exports/analyzes/builds, resumes the remaining rows, exports/analyzes/builds again, and builds native slides.
+Dry-run the live validation helper for this survey. Do not call Qualtrics. Confirm the sequence creates a draft survey, saves the private link locally, generates local synthetic rows, submits them to the test survey, exports once, analyzes once, and builds slides.
 ```
 
 Use `--export-format spss` for a Stata/SAV validation and the default CSV export for Python-first validation.

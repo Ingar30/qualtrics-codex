@@ -29,7 +29,7 @@ Please:
 13. Do not add Quarto, R, Node, Jinja2, YAML, or new slide dependencies unless I explicitly ask for that extension.
 14. If I ask to include a reusable Qualtrics link in slides, make the decks read ignored `inputs/survey_link.tex` and `inputs/survey_link.md` files.
 15. If the analysis path is Stata, use SPSS/SAV exports and Stata `import spss`; if the analysis path is Python, use CSV exports and Python analysis.
-16. After scaffolding, tell me the commands to generate synthetic responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv`, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, run `check-auth`, create a live draft/test link with `get-link --write-slide-inputs` when needed, submit one synthetic response, resume the remaining synthetic responses, and export CSV or SPSS responses according to the chosen analysis path.
+16. After scaffolding, tell me the commands to generate synthetic responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv`, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, run `check-auth`, create a live draft/test link with `get-link --write-slide-inputs` when needed, submit synthetic responses to the test survey, and export CSV or SPSS responses according to the chosen analysis path.
 ```
 
 Recommended follow-up after reviewing the scaffold:

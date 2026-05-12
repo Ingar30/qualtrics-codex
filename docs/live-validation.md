@@ -10,7 +10,7 @@ A local live run validated the repository command loop directly:
 - The reusable anonymous link was saved only in private local metadata and ignored slide inputs.
 - 100 synthetic responses were generated locally and submitted to Qualtrics.
 - Responses were exported, cleaned to 100 rows, and charted.
-- Beamer output and native HTML/PDF slide output were built from generated inputs.
+- Slide output was built from generated inputs, using Beamer when available and the native fallback when needed.
 
 That test validated the repository commands and scripts. It did not validate a second autonomous Codex process operating with live credentials.
 
@@ -20,11 +20,11 @@ On May 12, 2026, the same command loop was also exercised with this public-opini
 Create a public opinion survey on labor market concerns and support for immigration in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-The local run completed with 100 synthetic Qualtrics submissions, a response export cleaned to 100 rows, generated figures, a Beamer PDF, native slide output, and private survey-link slide inputs. The public repository should record only this sanitized result; do not publish survey IDs, response IDs, reusable links, raw rows, live export paths, or metadata contents.
+The local run completed with 100 synthetic Qualtrics submissions, a response export cleaned to 100 rows, generated figures, slide output, and private survey-link slide inputs. The public repository should record only this sanitized result; do not publish survey IDs, response IDs, reusable links, raw rows, live export paths, or metadata contents.
 
 For analysis preferences, use SPSS/SAV exports for Stata workflows and CSV exports for Python workflows. This keeps the Stata path close to the standard Qualtrics-to-Stata teaching workflow while keeping the Python path simple and cross-platform.
 
-## Guarded Helper
+## Lean Helper
 
 Use the helper when you explicitly want a local run that calls Qualtrics:
 
@@ -33,8 +33,7 @@ python scripts/run_live_validation.py `
   --survey-key "<survey_key>" `
   --survey-name "<survey name>" `
   --spec-file "code/<survey_key>/survey_spec.json" `
-  --n 100 `
-  --i-understand-this-calls-qualtrics
+  --n 100
 ```
 
 Inspect the command sequence without calling Qualtrics:
@@ -45,11 +44,10 @@ python scripts/run_live_validation.py `
   --survey-name "<survey name>" `
   --spec-file "code/<survey_key>/survey_spec.json" `
   --n 100 `
-  --dry-run `
-  --i-understand-this-calls-qualtrics
+  --dry-run
 ```
 
-The helper captures command output and does not print survey IDs, response IDs, reusable links, raw rows, tokens, Qualtrics URLs, or metadata contents. It writes only a sanitized summary under `data/<survey_key>/metadata/`, which is ignored by git.
+The helper streams command output to the local terminal so students can see progress. It does not store survey IDs, response IDs, reusable links, raw rows, tokens, Qualtrics URLs, or metadata contents in its summary. The sanitized summary is written under `data/<survey_key>/metadata/`, which is ignored by git.
 
 Use `--export-format spss` when validating the Stata/SAV path. Use the default `--export-format csv` for Python-first validation.
 

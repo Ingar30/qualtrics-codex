@@ -19,14 +19,13 @@ Please:
 5. Verify QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing their values, using check-auth for the first API check.
 6. Ask me before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses.
 7. Generate 100 local synthetic rows with realistic synthetic_weights where useful.
-8. Submit only the first synthetic response to Qualtrics, export it, clean it, and build slides.
-9. Ask me before submitting the remaining 99; then use the resume option so row 1 is not duplicated.
-10. Download the generated Qualtrics responses into the ignored raw data folder.
-11. Clean the downloaded data in Stata if available, otherwise Python.
-12. Generate summary tables and figures.
-13. Save the reusable survey link to ignored local slide inputs without printing it.
-14. Compile slides that summarize the workflow, survey design, synthetic response patterns, main figures, and survey link.
-15. Report the generated artifact paths and note any fallback used.
+8. Submit the generated synthetic responses to the Qualtrics test survey.
+9. Export the generated Qualtrics responses into the ignored raw data folder.
+10. Clean the downloaded data in Stata if available, otherwise Python.
+11. Generate summary tables and figures.
+12. Save the reusable survey link to ignored local slide inputs without printing it.
+13. Compile slides that summarize the workflow, survey design, synthetic response patterns, main figures, and survey link.
+14. Report the generated artifact paths and note any fallback used.
 
 Do not print secrets, survey IDs, response IDs, reusable links, raw data, or private metadata.
 ```

@@ -27,13 +27,13 @@ The intended loop is:
 
 - If the user gives a broad survey idea, infer a simple 4-8 question survey and state the assumptions.
 - Ask a short clarification only when the answer changes a live API action, privacy boundary, or core research design.
-- Default to local synthetic responses before live Qualtrics calls. Use `scripts/run_live_validation.py --dry-run` when packaging or explaining the full guarded live loop.
+- Default to local synthetic responses before live Qualtrics calls. Use `scripts/run_live_validation.py --dry-run` when packaging or explaining the lean live demo loop.
 - If the user chooses Stata, export/download Qualtrics responses as SPSS/SAV and import with Stata. If the user chooses Python, export/download responses as CSV and analyze with Python.
 - For live credentials, use `check-auth` rather than `list-surveys`; full listing is only for explicit survey browsing.
 - Treat "test link" as a live Qualtrics action: it requires local `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN`, and the user must explicitly ask for it.
 - Treat "download responses" or "export responses" as a live Qualtrics read/export action: verify credentials are present without printing values.
 - Treat API-created response submission as a live mutation even if the survey is draft or inactive.
-- Submit one synthetic response first when validating a new live survey, export/check locally, then continue with `--resume` or use `--smoke-then-rest` only when the user explicitly wants the one-command path.
+- Submit generated synthetic rows in one step for the default teaching demo, then export once, analyze once, and build slides. Mention `--limit 1` plus `--resume` only as an optional cautious first-row check.
 - When the user asks to include the reusable link in slides, save it to ignored slide inputs with `get-link --write-slide-inputs` instead of printing it.
 - Preserve `slides/<survey_key>/inputs/survey_link.tex` and `survey_link.md` when analysis regenerates slide inputs.
 - When cleaning Qualtrics CSV exports, filter metadata rows by keeping `ResponseId` values that start with `R_` when that column exists.
@@ -70,9 +70,10 @@ python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --s
 Submit synthetic responses to Qualtrics only after explicit approval:
 
 ```bash
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --limit 1
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv
 python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --resume
+python scripts/run_analysis.py --survey-key <survey_key>
+python scripts/build_slides.py --survey-key <survey_key>
 ```
 
 Get a reusable anonymous link only after explicit approval:
@@ -101,10 +102,10 @@ python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> 
 python scripts/run_analysis.py --survey-key <survey_key> --mode python
 ```
 
-Run the guarded live validation helper only after explicit approval:
+Run the lean live validation helper only after explicit approval:
 
 ```bash
-python scripts/run_live_validation.py --survey-key <survey_key> --survey-name "<survey_name>" --spec-file code/<survey_key>/survey_spec.json --n 100 --i-understand-this-calls-qualtrics
+python scripts/run_live_validation.py --survey-key <survey_key> --survey-name "<survey_name>" --spec-file code/<survey_key>/survey_spec.json --n 100
 ```
 
 Analyze newest real local export:

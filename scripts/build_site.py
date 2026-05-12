@@ -174,12 +174,12 @@ python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
   </section>
   <section>
     <h2>Live Qualtrics Loop</h2>
-    <p>Store credentials outside the repository, start with <code>check-auth</code>, save reusable links only to ignored local files, submit one synthetic response first, then resume after local inspection. See <a href="walkthrough.html">the walkthrough</a> and <a href="validation.html">the validation notes</a>.</p>
+    <p>Store credentials outside the repository, start with <code>check-auth</code>, save reusable links only to ignored local files, submit generated synthetic rows to the test survey, export once, analyze once, and build slides. See <a href="walkthrough.html">the walkthrough</a> and <a href="validation.html">the validation notes</a>.</p>
   </section>
   <section>
     <h2>Validated Full Loop</h2>
-    <p>A local live run validated the full command loop with 100 synthetic Qualtrics submissions, export, analysis, Beamer output, and native slide output. Public Pages artifacts remain synthetic-only; live validation runs locally with user secrets.</p>
-    <pre><code>python scripts/run_live_validation.py --survey-key &lt;survey_key&gt; --survey-name "&lt;survey name&gt;" --spec-file code/&lt;survey_key&gt;/survey_spec.json --n 100 --dry-run --i-understand-this-calls-qualtrics</code></pre>
+    <p>A local live run validated the lean command loop with 100 synthetic Qualtrics submissions, one export, one analysis pass, and slide output. Public Pages artifacts remain synthetic-only; live validation runs locally with user secrets.</p>
+    <pre><code>python scripts/run_live_validation.py --survey-key &lt;survey_key&gt; --survey-name "&lt;survey name&gt;" --spec-file code/&lt;survey_key&gt;/survey_spec.json --n 100 --dry-run</code></pre>
   </section>
 </main>
 <footer>
@@ -223,9 +223,11 @@ python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --s
   <h2>3. Live Synthetic Test</h2>
   <pre><code>python scripts/qualtrics_workflow.py get-link --survey-key my_survey --write-slide-inputs
 python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv --n 100
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv --limit 1
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv
 python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --format csv
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key my_survey --input build/fixtures/my_survey_responses.csv --resume</code></pre>
+python scripts/run_analysis.py --survey-key my_survey
+python scripts/build_slides.py --survey-key my_survey</code></pre>
+  <p>For a cautious first live check, add <code>--limit 1</code>, export and inspect that row, then continue later with <code>--resume</code>.</p>
 
   <h2>4. Smoke Test With Local Synthetic Responses</h2>
   <pre><code>python scripts/generate_synthetic_responses.py --survey-key my_survey --output build/fixtures/my_survey_responses.csv
@@ -252,13 +254,13 @@ def build_validation(output_dir: Path) -> None:
 <header>
   <div class="inner">
     <h1>Validated Full Loop</h1>
-    <p>Public artifacts are synthetic-only. Live Qualtrics validation is local, guarded, and credential-dependent.</p>
+    <p>Public artifacts are synthetic-only. Live Qualtrics validation is local, lean, and credential-dependent.</p>
   </div>
 </header>
 <main>
   <section>
     <h2>What Was Validated</h2>
-    <p>A local live run validated the repository command loop directly: create a Qualtrics test survey, save the reusable link only to ignored local files, submit 100 synthetic responses, export responses, clean to 100 rows, generate figures, build Beamer output, and build native HTML/PDF slide output.</p>
+    <p>A local live run validated the repository command loop directly: create a Qualtrics test survey, save the reusable link only to ignored local files, submit 100 synthetic responses, export responses once, clean to 100 rows, generate figures, and build slides.</p>
     <p>On May 12, 2026, the labor-market and immigration prompt completed through the same local loop with 100 synthetic Qualtrics submissions. This page records only the sanitized validation result.</p>
   </section>
   <section>
@@ -266,8 +268,8 @@ def build_validation(output_dir: Path) -> None:
     <p>CI and GitHub Pages never call Qualtrics. They do not publish survey IDs, response IDs, reusable links, raw rows, metadata, tokens, or Qualtrics URLs. Public downloads are built from synthetic fixture data only.</p>
   </section>
   <section>
-    <h2>Guarded Helper</h2>
-    <pre><code>python scripts/run_live_validation.py --survey-key &lt;survey_key&gt; --survey-name "&lt;survey name&gt;" --spec-file code/&lt;survey_key&gt;/survey_spec.json --n 100 --dry-run --i-understand-this-calls-qualtrics</code></pre>
+    <h2>Lean Helper</h2>
+    <pre><code>python scripts/run_live_validation.py --survey-key &lt;survey_key&gt; --survey-name "&lt;survey name&gt;" --spec-file code/&lt;survey_key&gt;/survey_spec.json --n 100 --dry-run</code></pre>
     <p>Remove <code>--dry-run</code> only when you explicitly want local live Qualtrics calls with your own secrets.</p>
     <p>Add <code>--export-format spss</code> for the Stata/SAV validation path. Use the default CSV export for Python-first validation.</p>
   </section>

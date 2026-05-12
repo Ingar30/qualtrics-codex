@@ -65,7 +65,7 @@ Default to a synthetic local smoke test first. Before live Qualtrics actions, di
 
 - draft/test link: create or use a live draft survey and retrieve the reusable link;
 - synthetic responses: generate local fake responses for testing, or submit fake responses only if the user explicitly asks for live API submission;
-- live synthetic test: submit one row first, export/check locally, then use `--resume` or `--smoke-then-rest` only after explicit approval;
+- live synthetic test: submit generated synthetic rows for the default teaching demo, then export once, analyze once, and build slides; use `--limit 1` plus `--resume` only for an explicitly cautious first-row check;
 - real responses: export/download from Qualtrics, keep raw files ignored, clean with Stata or Python, then build figures and slides.
 
 Ad hoc `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default. Promote only public-safe demos by editing `.gitignore` intentionally.

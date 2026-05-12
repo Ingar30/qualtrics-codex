@@ -46,20 +46,17 @@ python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --write-
 
 ## Live Synthetic Response Mode
 
-For a new live survey, submit one synthetic response first, export and inspect it locally, then submit the rest without duplicating row 1:
+For a new live test survey, keep the default path lean: submit the generated synthetic rows, export once, analyze once, then build slides.
 
 ```bash
 python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --limit 1
-python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
-python scripts/run_analysis.py --survey-key <survey_key>
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv --resume
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv
 python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
 python scripts/run_analysis.py --survey-key <survey_key>
 python scripts/build_slides.py --survey-key <survey_key>
 ```
 
-Use `--smoke-then-rest` only when the user explicitly wants to submit all synthetic rows in one command. Response IDs are saved only in ignored local metadata.
+For a cautious first live check, use `--limit 1`, export/analyze that row, then continue later with `--resume`. Response IDs are saved only in ignored local metadata.
 
 ## Real Response Mode
 
@@ -106,7 +103,7 @@ Codex should interpret that as a live Qualtrics test loop:
 - use `check-auth` for the first read-only API check instead of listing every survey;
 - ask before creating a live draft survey, submitting synthetic responses to Qualtrics, or exporting responses;
 - save the reusable link to ignored metadata and, if slides should include it, ignored slide inputs;
-- submit one synthetic response first, export/check locally, then continue with `--resume`;
+- submit generated synthetic rows to the test survey, or use `--limit 1`/`--resume` only when the user wants the cautious first-row check;
 - download the generated response export into ignored raw data folders;
 - filter Qualtrics CSV metadata rows by keeping `ResponseId` values that start with `R_` when that column exists;
 - clean with Stata if available, otherwise Python;
@@ -124,4 +121,4 @@ On May 12, 2026, the repository command loop was validated locally with the labo
 Create a public opinion survey on labor market concerns and support for immigration in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-The run created a live test survey, submitted 100 synthetic responses, exported and analyzed the responses, generated figures, and built Beamer/native slides. Only this sanitized fact should be public; live identifiers, response IDs, reusable links, raw rows, export paths, and metadata contents stay local.
+The run created a live test survey, submitted 100 synthetic responses, exported and analyzed the responses, generated figures, and built slides. Only this sanitized fact should be public; live identifiers, response IDs, reusable links, raw rows, export paths, and metadata contents stay local.

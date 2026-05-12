@@ -174,22 +174,15 @@ python scripts/qualtrics_workflow.py check-auth
 python scripts/qualtrics_workflow.py create-survey --survey-key discrimination_beliefs_demo --survey-name "Discrimination Beliefs Demo" --spec-file code/discrimination_beliefs_demo/survey_spec.json
 python scripts/qualtrics_workflow.py get-link --survey-key discrimination_beliefs_demo --write-slide-inputs
 python scripts/generate_synthetic_responses.py --survey-key discrimination_beliefs_demo --output build/fixtures/discrimination_beliefs_demo_responses.csv --n 100
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key discrimination_beliefs_demo --input build/fixtures/discrimination_beliefs_demo_responses.csv --limit 1
+python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key discrimination_beliefs_demo --input build/fixtures/discrimination_beliefs_demo_responses.csv
 python scripts/qualtrics_workflow.py export-responses --survey-key discrimination_beliefs_demo --format csv
 python scripts/run_analysis.py --survey-key discrimination_beliefs_demo
 python scripts/build_slides.py --survey-key discrimination_beliefs_demo
 ```
 
-After inspecting the one-response export locally, submit the remaining rows without duplicating the first row:
+If you want the extra cautious path, submit one row first with `--limit 1`, export/analyze it, then submit the rest with `--resume`. The default teaching path above is faster and easier to follow.
 
-```bash
-python scripts/qualtrics_workflow.py submit-synthetic-responses --survey-key discrimination_beliefs_demo --input build/fixtures/discrimination_beliefs_demo_responses.csv --resume
-python scripts/qualtrics_workflow.py export-responses --survey-key discrimination_beliefs_demo --format csv
-python scripts/run_analysis.py --survey-key discrimination_beliefs_demo
-python scripts/build_slides.py --survey-key discrimination_beliefs_demo
-```
-
-If you explicitly want one command for the synthetic response submission, use `--smoke-then-rest`. The scripts do not print survey IDs, response IDs, reusable links, tokens, or raw response contents by default.
+The scripts do not print survey IDs, response IDs, reusable links, tokens, or raw response contents by default.
 
 `get-link --write-slide-inputs` writes the reusable link into ignored local slide input files so local Beamer/native slides can include it without printing it in the terminal. Do not commit or publish those local link inputs by default.
 
@@ -510,8 +503,8 @@ These document the traditional economist stack and the fallback contract. The ba
 - New `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default unless explicitly allowlisted as public demos.
 
 
-For guarded local live validation, see `docs/live-validation.md` or dry-run the sequence first:
+For local live validation, see `docs/live-validation.md` or dry-run the sequence first:
 
 ```powershell
-python scripts/run_live_validation.py --survey-key "<survey_key>" --survey-name "<survey name>" --spec-file "code/<survey_key>/survey_spec.json" --n 100 --dry-run --i-understand-this-calls-qualtrics
+python scripts/run_live_validation.py --survey-key "<survey_key>" --survey-name "<survey name>" --spec-file "code/<survey_key>/survey_spec.json" --n 100 --dry-run
 ```

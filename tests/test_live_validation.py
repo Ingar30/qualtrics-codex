@@ -41,7 +41,7 @@ def run_helper(*extra: str) -> subprocess.CompletedProcess[str]:
 
 
 def test_dry_run_includes_live_validation_sequence() -> None:
-    result = run_helper("--dry-run", "--i-understand-this-calls-qualtrics")
+    result = run_helper("--dry-run")
 
     assert result.returncode == 0, result.stderr
     output = result.stdout
@@ -51,22 +51,22 @@ def test_dry_run_includes_live_validation_sequence() -> None:
     assert "--write-slide-inputs" in output
     assert "generate_synthetic_responses.py" in output
     assert "submit-synthetic-responses" in output
-    assert "--limit 1" in output
-    assert "--resume" in output
+    assert "--limit 1" not in output
+    assert "--resume" not in output
     assert "export-responses" in output
     assert "run_analysis.py" in output
     assert "build_slides.py" in output
-    assert "--mode python" in output
+    assert "--mode auto" in output
 
 
-def test_helper_refuses_without_live_acknowledgement() -> None:
-    result = run_helper("--dry-run")
+def test_helper_accepts_compatibility_acknowledgement_flag() -> None:
+    result = run_helper("--dry-run", "--i-understand-this-calls-qualtrics")
 
-    assert result.returncode != 0
-    assert "--i-understand-this-calls-qualtrics" in result.stderr
+    assert result.returncode == 0, result.stderr
+    assert "Dry run only" in result.stdout
 
 
-def test_command_sequence_contains_expected_guarded_steps() -> None:
+def test_command_sequence_contains_expected_lean_steps() -> None:
     args = argparse.Namespace(
         survey_key="validation_test",
         survey_name="Validation Test Survey",
@@ -76,19 +76,20 @@ def test_command_sequence_contains_expected_guarded_steps() -> None:
         export_format="csv",
         public_host=None,
         dry_run=True,
-        i_understand_this_calls_qualtrics=True,
+        i_understand_this_calls_qualtrics=False,
     )
 
     commands = [run_live_validation.command_text(step.display_argv) for step in run_live_validation.build_steps(args)]
     joined = "\n".join(commands)
 
     assert any("get-link" in command and "--write-slide-inputs" in command for command in commands)
-    assert any("submit-synthetic-responses" in command and "--limit 1" in command for command in commands)
-    assert any("submit-synthetic-responses" in command and "--resume" in command for command in commands)
+    assert any("submit-synthetic-responses" in command for command in commands)
+    assert all("--limit 1" not in command for command in commands)
+    assert all("--resume" not in command for command in commands)
     assert any("run_analysis.py" in command for command in commands)
     assert any("build_slides.py" in command and "--mode auto" in command for command in commands)
-    assert any("build_slides.py" in command and "--mode python" in command for command in commands)
-    assert joined.count("export-responses") == 2
+    assert all("--mode python" not in command for command in commands)
+    assert joined.count("export-responses") == 1
 
 
 def test_stata_validation_export_format_uses_spss() -> None:
@@ -101,7 +102,7 @@ def test_stata_validation_export_format_uses_spss() -> None:
         export_format="spss",
         public_host=None,
         dry_run=True,
-        i_understand_this_calls_qualtrics=True,
+        i_understand_this_calls_qualtrics=False,
     )
 
     commands = [run_live_validation.command_text(step.display_argv) for step in run_live_validation.build_steps(args)]

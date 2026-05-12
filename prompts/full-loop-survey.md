@@ -19,7 +19,7 @@ Please:
 6. Generate tables and figures.
 7. Compile slides with a short description of the survey and the response patterns.
 8. If I choose Stata, plan for SPSS/SAV export and Stata import. If I choose Python, plan for CSV export and Python analysis.
-9. Tell me what command I would run later to check auth, create a live draft survey, submit one synthetic response, resume the remaining synthetic responses, get a test link, and export real responses.
+9. Tell me what command I would run later to check auth, create a live draft survey, submit synthetic responses to a test survey, get a test link, and export real responses.
 
 Do not call the live Qualtrics API unless I explicitly ask. Do not print or store secrets. Keep raw real data, processed real data, survey metadata, and reusable survey links private by default.
 ```
@@ -30,7 +30,7 @@ Canonical live-test version:
 Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-Use this only when you want a live Qualtrics test loop. Codex should verify credentials without printing them, use `check-auth` for the first API check, and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. The safer live path saves the reusable link to ignored slide inputs with `get-link --write-slide-inputs`, submits one synthetic response first, exports/checks it locally, then submits the remaining rows with `--resume`.
+Use this only when you want a live Qualtrics test loop. Codex should verify credentials without printing them, use `check-auth` for the first API check, and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. The lean live path saves the reusable link to ignored slide inputs with `get-link --write-slide-inputs`, submits generated synthetic rows, exports once, analyzes once, and builds slides. Mention `--limit 1` plus `--resume` only as an optional cautious first-row check.
 For Stata workflows, export SPSS/SAV and import with Stata. For Python workflows, export CSV and analyze with Python.
 
 Local-only version:
