@@ -47,7 +47,7 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     assert "SPSS/SAV exports" in index
     assert "CSV exports" in index
     assert "Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics" in index
-    assert "generate the synthetic responses locally" in index
+    assert "generate disposable local responses only to check analysis and slides" in index
     assert "prompts/discrimination-beliefs-example.md" in index
     assert "check-auth" in index
 

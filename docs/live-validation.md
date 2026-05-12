@@ -8,7 +8,7 @@ A local live run validated the repository command loop directly:
 
 - A Qualtrics test survey was created from a JSON spec.
 - The reusable anonymous link was saved only in private local metadata and ignored slide inputs.
-- 100 synthetic responses were generated locally and submitted to Qualtrics.
+- 100 synthetic response rows were prepared and submitted through Qualtrics.
 - Responses were exported, cleaned to 100 rows, and charted.
 - Slide output was built from generated inputs, using Beamer when available and the native fallback when needed.
 

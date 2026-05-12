@@ -21,9 +21,9 @@ Please scaffold the workflow using the repository's existing patterns:
 4. Create the Python fallback in code/<survey_key>/analysis/run.py.
 5. Create Beamer slides in slides/<survey_key>/main.tex.
 6. Create native Python/HTML fallback slides in slides/<survey_key>/slides.md.
-7. Ask or infer whether I want a synthetic-only local test, a live draft/test link, or export/download of existing real responses.
-8. Unless I explicitly ask for a live Qualtrics action, generate synthetic responses into build/fixtures/<survey_key>_responses.csv.
-9. Run analysis against the synthetic responses.
+7. Ask or infer whether I want a quick local smoke test, a live Qualtrics test survey with synthetic response submission, or export/download of existing real responses.
+8. Unless I explicitly ask for a live Qualtrics action, generate disposable smoke-test responses into build/fixtures/<survey_key>_responses.csv only to check analysis and slides.
+9. Run analysis against the smoke-test responses.
 10. Build slides.
 11. Explain where I should store local Qualtrics API keys before any live API call.
 12. Report the exact commands I should run next for check-auth, live draft creation, live synthetic response submission, live export, analysis, and slides.
@@ -37,7 +37,7 @@ Safety rules:
 - If checking secrets, verify only that QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set; never print their values.
 - Prefer Stata and Beamer when available, but fall back to Python and native HTML slides if they are missing.
 - If I choose Stata, export/download Qualtrics responses as SPSS/SAV and import with Stata. If I choose Python, export/download responses as CSV and analyze with Python.
-- For live synthetic response submission, use the lean path by default: submit generated synthetic rows, export once, analyze once, and build slides. Mention `--limit 1` plus `--resume` only as an optional cautious first-row check.
+- For live synthetic response submission, use the lean path by default: create the survey in Qualtrics, prepare synthetic rows, submit them to the Qualtrics test survey, export once, analyze once, and build slides. Mention `--limit 1` plus `--resume` only as an optional cautious first-row check.
 - If analyzing a Qualtrics CSV export, filter out metadata rows by keeping rows where ResponseId starts with R_ when that column exists.
 
 Also show me prompt alternatives from docs/codex-prompt-alternatives.md for any command I am likely to run next.

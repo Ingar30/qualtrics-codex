@@ -24,7 +24,7 @@ elseif ($RequireQualtrics) {
     throw "Qualtrics secrets file not found: $SecretsFile"
 }
 else {
-    Write-Warning "Qualtrics secrets file not found. This is fine for local synthetic tests."
+    Write-Warning "Qualtrics secrets file not found. This is fine for local smoke tests."
 }
 
 if ($RequireQualtrics) {

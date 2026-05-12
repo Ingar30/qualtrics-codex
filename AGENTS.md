@@ -55,7 +55,7 @@ On first use, or when workflow preferences are unclear, offer the user `prompts/
 Before asking those preference questions, inspect local tool availability for Python dependencies, Stata, LaTeX/Beamer, and Qualtrics environment variables.
 Report only presence or absence for secrets; never print values and never ask users to paste API tokens into Codex.
 If the user answers, summarize their choices in ignored `AGENTS.override.md`; never store secrets there.
-If the user does not answer, continue with the default setup: Stata-first when available, Python fallback, Beamer-first with native fallback, CSV for Python, SAV for Stata, local synthetic smoke tests before live Qualtrics calls, and public Pages synthetic-only.
+If the user does not answer, continue with the default setup: Stata-first when available, Python fallback, Beamer-first with native fallback, CSV for Python, SAV for Stata, local synthetic smoke tests only when needed, Qualtrics-submitted synthetic responses for live demos, and public Pages synthetic-only.
 
 ## Expected Agent Loop
 
@@ -64,7 +64,7 @@ When the user asks for a survey workflow, use the repo-local skill in `.agents/s
 Default to a synthetic local smoke test first. Before live Qualtrics actions, distinguish among:
 
 - draft/test link: create or use a live draft survey and retrieve the reusable link;
-- synthetic responses: generate local fake responses for testing, or submit fake responses only if the user explicitly asks for live API submission;
+- synthetic responses: use local fake responses only for smoke tests, or submit fake responses to a live Qualtrics test survey when the user explicitly asks for the live demo loop;
 - live synthetic test: submit generated synthetic rows for the default teaching demo, then export once, analyze once, and build slides; use `--limit 1` plus `--resume` only for an explicitly cautious first-row check;
 - real responses: export/download from Qualtrics, keep raw files ignored, clean with Stata or Python, then build figures and slides.
 

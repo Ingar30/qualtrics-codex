@@ -18,8 +18,8 @@ Please:
 4. Create Beamer slides and native Python/HTML fallback slides.
 5. Verify QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set without printing their values, using check-auth for the first API check.
 6. Ask me before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses.
-7. Generate 100 local synthetic rows with realistic synthetic_weights where useful.
-8. Submit the generated synthetic responses to the Qualtrics test survey.
+7. Prepare 100 synthetic rows for submission to the Qualtrics test survey.
+8. Submit the prepared synthetic responses to the Qualtrics test survey.
 9. Export the generated Qualtrics responses into the ignored raw data folder.
 10. Clean the downloaded data in Stata if available, otherwise Python.
 11. Generate summary tables and figures.
@@ -35,7 +35,7 @@ Do not print secrets, survey IDs, response IDs, reusable links, raw data, or pri
 Use this version when you do not want Codex to call Qualtrics:
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring. Use survey_key discrimination_beliefs_demo. Generate 100 synthetic responses locally, clean the generated data with Stata if available and Python otherwise, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API.
+Create a public opinion survey on beliefs about discrimination in hiring. Use survey_key discrimination_beliefs_demo. Generate 100 disposable local smoke-test responses, clean the generated data with Stata if available and Python otherwise, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API.
 ```
 
 After collecting real responses, you can ask for the local export and rebuild:

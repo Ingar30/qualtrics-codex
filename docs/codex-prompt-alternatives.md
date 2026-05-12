@@ -25,7 +25,7 @@ Clone https://github.com/Ingar30/qualtrics-codex into this folder, inspect the R
 Prompt:
 
 ```text
-Create a new Qualtrics research workflow using prompts/start-with-codex.md. Use survey_key <survey_key>, survey_name <survey_name>, topic <topic>, and audience <audience>. Generate synthetic responses and run the first smoke test. Do not call the live Qualtrics API.
+Create a new Qualtrics research workflow using prompts/start-with-codex.md. Use survey_key <survey_key>, survey_name <survey_name>, topic <topic>, and audience <audience>. Generate disposable local responses only for the first smoke test. Do not call the live Qualtrics API.
 ```
 
 Optional first-run preference prompt:
@@ -48,13 +48,13 @@ For Stata workflows, export SPSS/SAV. For Python workflows, export CSV.
 Prompt for the lean live test:
 
 ```text
-Create the Qualtrics draft survey, generate 100 synthetic responses locally, submit those synthetic rows to the test survey, export the responses once, clean them, and build slides. Keep credentials, metadata, response IDs, and reusable links private.
+Create the Qualtrics draft survey, prepare 100 synthetic rows for that survey, submit them to the Qualtrics test survey, export the responses once, clean them, and build slides. Keep credentials, metadata, response IDs, and reusable links private.
 ```
 
 Local-only prompt:
 
 ```text
-Create a public opinion survey on beliefs about discrimination in hiring. Use survey_key discrimination_beliefs. Generate 100 synthetic responses locally, clean the generated data with Stata if available and Python otherwise, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API.
+Create a public opinion survey on beliefs about discrimination in hiring. Use survey_key discrimination_beliefs. Generate 100 disposable local smoke-test responses, clean the generated data with Stata if available and Python otherwise, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Do not call the live Qualtrics API.
 ```
 
 Prompt for a live test link:
@@ -94,7 +94,7 @@ python scripts/build_slides.py --survey-key repo_smoke_test
 Prompt alternative:
 
 ```text
-Run the repository smoke test without calling Qualtrics: generate synthetic responses for repo_smoke_test, analyze them, and build the slides. If Stata or LaTeX is missing, use the repository fallbacks.
+Run the repository smoke test without calling Qualtrics: generate disposable local responses for repo_smoke_test, analyze them, and build the slides. If Stata or LaTeX is missing, use the repository fallbacks.
 ```
 
 ## Install Requirements
@@ -222,7 +222,7 @@ python scripts/run_live_validation.py --survey-key <survey_key> --survey-name "<
 Prompt alternative:
 
 ```text
-Dry-run the live validation helper for this survey. Do not call Qualtrics. Confirm the sequence creates a draft survey, saves the private link locally, generates local synthetic rows, submits them to the test survey, exports once, analyzes once, and builds slides.
+Dry-run the live validation helper for this survey. Do not call Qualtrics. Confirm the sequence creates a draft survey, saves the private link locally, prepares synthetic rows, submits them to the Qualtrics test survey, exports once, analyzes once, and builds slides.
 ```
 
 Use `--export-format spss` for a Stata/SAV validation and the default CSV export for Python-first validation.

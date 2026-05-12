@@ -28,8 +28,8 @@ Then ask short questions covering:
    - Native Markdown/HTML only.
 
 4. Live API behavior:
-   - Local synthetic smoke tests first, no Qualtrics calls until I explicitly ask.
-   - Live draft/test surveys are allowed only after explicit confirmation.
+   - Local smoke tests only when needed to check analysis and slides without credentials.
+   - Live draft/test surveys and Qualtrics synthetic response submission are allowed only after explicit confirmation.
 
 5. Public/private boundary:
    - Keep new code/<survey_key>/ and slides/<survey_key>/ folders ignored unless I explicitly promote them.
@@ -37,7 +37,7 @@ Then ask short questions covering:
 
 After I answer, update AGENTS.override.md with my local preferences. Do not store secrets, API tokens, survey IDs, response IDs, or reusable links there.
 
-If Stata or LaTeX is missing, ask whether to continue with Python/native fallbacks or help configure the local executable path. If I do not answer, proceed with the simplest default setup: Stata-first if available, Python fallback, CSV for Python workflows, SAV for Stata workflows, Beamer-first with native fallback, local synthetic smoke tests first, and public GitHub Pages synthetic-only.
+If Stata or LaTeX is missing, ask whether to continue with Python/native fallbacks or help configure the local executable path. If I do not answer, proceed with the simplest default setup: Stata-first if available, Python fallback, CSV for Python workflows, SAV for Stata workflows, Beamer-first with native fallback, local synthetic smoke tests only when useful, Qualtrics-submitted synthetic responses for live demos, and public GitHub Pages synthetic-only.
 ```
 
 Suggested `AGENTS.override.md` shape:
@@ -48,6 +48,6 @@ Suggested `AGENTS.override.md` shape:
 - Analysis: Stata-first with Python fallback.
 - Qualtrics export: SAV/SPSS for Stata workflows; CSV for Python workflows.
 - Slides: Beamer-first with native Markdown/HTML fallback.
-- Live API: local synthetic smoke tests first; ask before every live Qualtrics mutation/export.
+- Live API: local smoke tests only when needed; ask before every live Qualtrics mutation/export, including synthetic response submission.
 - Public/private: keep ad hoc survey folders and all live artifacts ignored unless explicitly promoted.
 ```

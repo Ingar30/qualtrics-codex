@@ -8,8 +8,8 @@ The intended user experience is:
 2. Codex turns the idea into a `survey_spec.json`, analysis scripts, and slide files.
 3. Codex decides whether it has enough information to proceed. It asks only when the answer changes live API use, privacy, or core survey design.
 4. Codex asks or infers the run mode:
-   - synthetic-only local test;
-   - live draft/test link;
+   - quick local smoke test;
+   - live Qualtrics test survey with synthetic response submission;
    - export/download existing real responses.
    - live synthetic response submission for a test survey.
 5. Codex generates or downloads responses.
@@ -18,13 +18,13 @@ The intended user experience is:
 8. Codex compiles Beamer slides when available and native HTML slides otherwise.
 9. Codex reports the outputs and keeps private artifacts private.
 
-On first use, Codex can ask the optional preference questions in `prompts/configure-local-preferences.md` and write the answers to ignored `AGENTS.override.md`. If the user does not answer, Codex should proceed with the defaults: Stata-first when available, Python fallback, Beamer-first with native fallback, local synthetic smoke tests first, public Pages synthetic-only.
+On first use, Codex can ask the optional preference questions in `prompts/configure-local-preferences.md` and write the answers to ignored `AGENTS.override.md`. If the user does not answer, Codex should proceed with the defaults: Stata-first when available, Python fallback, Beamer-first with native fallback, local synthetic smoke tests only when needed, Qualtrics-submitted synthetic responses for live demos, public Pages synthetic-only.
 
 When the user chooses Stata, live exports should use SPSS/SAV and Stata should import with `import spss`. When the user chooses Python, live exports should use CSV and Python analysis should filter Qualtrics metadata rows when `ResponseId` is available.
 
 ## Default Mode
 
-Default to a synthetic local test. This validates the full analysis and slide path without Qualtrics credentials:
+Use a local synthetic smoke test only to validate the analysis and slide path without Qualtrics credentials:
 
 ```bash
 python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100
@@ -46,7 +46,7 @@ python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --write-
 
 ## Live Synthetic Response Mode
 
-For a new live test survey, keep the default path lean: submit the generated synthetic rows, export once, analyze once, then build slides.
+For a new live test survey, keep the default path lean: create the survey in Qualtrics, prepare synthetic rows, submit them to the Qualtrics test survey, export once, analyze once, then build slides.
 
 ```bash
 python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100
@@ -111,7 +111,7 @@ Codex should interpret that as a live Qualtrics test loop:
 - compile Beamer slides if available, otherwise native HTML slides;
 - report the files created and any fallback used.
 
-For a no-credentials smoke test, ask Codex to generate the 100 synthetic responses locally rather than on Qualtrics.
+For a no-credentials smoke test, ask Codex to generate disposable local responses only to check analysis and slides.
 
 ## Recent Live Prompt Validation
 

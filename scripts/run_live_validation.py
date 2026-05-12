@@ -89,7 +89,7 @@ def build_steps(args: argparse.Namespace) -> list[ValidationStep]:
     add("get-private-link", qwf, link_args)
 
     add(
-        "generate-local-synthetic-rows",
+        "prepare-synthetic-rows",
         generator,
         ["--survey-key", survey_key, "--spec-file", spec_display, "--output", fixture_display, "--n", str(args.n)],
     )

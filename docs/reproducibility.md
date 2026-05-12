@@ -7,7 +7,7 @@ python scripts/run_analysis.py --survey-key <survey_key>
 python scripts/build_slides.py --survey-key <survey_key>
 ```
 
-Before real responses exist, generate disposable synthetic responses and run the same analysis path against them:
+Before live Qualtrics responses exist, generate disposable local smoke-test responses only to check the analysis and slide path:
 
 ```bash
 python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv
@@ -15,7 +15,7 @@ python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/
 python scripts/build_slides.py --survey-key <survey_key>
 ```
 
-This local smoke test does not call Qualtrics and should not write to `data/<survey_key>/raw/`.
+This local smoke test does not call Qualtrics and should not write to `data/<survey_key>/raw/`. It is not the main live-demo output.
 
 ## Live Qualtrics Test Loop
 
@@ -42,7 +42,7 @@ The repository is meant to support a single user request such as:
 Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-Codex should interpret that as a live Qualtrics test loop. It should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. For a no-credentials smoke test, ask Codex to generate synthetic responses locally instead.
+Codex should interpret that as a live Qualtrics test loop. It should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. For a no-credentials smoke test, ask Codex to generate disposable local responses only to check analysis and slides.
 
 ## Analysis Contract
 

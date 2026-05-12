@@ -148,9 +148,9 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
   </section>
   <section>
     <h2>Codex Loop</h2>
-    <p>Ask Codex for a survey from exact questions or a broad idea. It should scaffold the survey, ask whether you want a synthetic local test, a live draft/test link, or a real response export, then clean data and build figures and slides.</p>
+    <p>Ask Codex for a survey from exact questions or a broad idea. It should scaffold the survey, ask whether you want a quick local smoke test, a live Qualtrics test survey with synthetic response submission, or a real response export, then clean data and build figures and slides.</p>
     <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.</code></pre>
-    <p>Because this prompt asks for work on Qualtrics, Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate the synthetic responses locally.</p>
+    <p>Because this prompt asks for work on Qualtrics, Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate disposable local responses only to check analysis and slides.</p>
     <p>For local preferences, start with <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a>. Stata workflows use SPSS/SAV exports; Python workflows use CSV exports.</p>
     <p>For the full conversational workflow, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/intended-codex-loop.md">docs/intended-codex-loop.md</a>.</p>
     <p>For the discrimination-beliefs prompt, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/discrimination-beliefs-example.md">prompts/discrimination-beliefs-example.md</a>.</p>
@@ -260,7 +260,7 @@ def build_validation(output_dir: Path) -> None:
 <main>
   <section>
     <h2>What Was Validated</h2>
-    <p>A local live run validated the repository command loop directly: create a Qualtrics test survey, save the reusable link only to ignored local files, submit 100 synthetic responses, export responses once, clean to 100 rows, generate figures, and build slides.</p>
+    <p>A local live run validated the repository command loop directly: create a Qualtrics test survey, save the reusable link only to ignored local files, prepare and submit 100 synthetic responses through Qualtrics, export responses once, clean to 100 rows, generate figures, and build slides.</p>
     <p>On May 12, 2026, the labor-market and immigration prompt completed through the same local loop with 100 synthetic Qualtrics submissions. This page records only the sanitized validation result.</p>
   </section>
   <section>

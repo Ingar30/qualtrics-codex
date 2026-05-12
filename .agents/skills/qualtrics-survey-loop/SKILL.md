@@ -1,6 +1,6 @@
 ---
 name: qualtrics-survey-loop
-description: Use when the user asks Codex to create, test, download, analyze, or present a Qualtrics survey workflow with local synthetic responses, live Qualtrics draft/test links, Qualtrics exports, Stata/Python analysis, and Beamer/native slides.
+description: Use when the user asks Codex to create, test, download, analyze, or present a Qualtrics survey workflow with a live Qualtrics test survey, synthetic responses submitted to Qualtrics, Qualtrics exports, Stata/Python analysis, and Beamer/native slides.
 metadata:
   short-description: Run Qualtrics survey workflow
 ---
@@ -15,10 +15,10 @@ The intended loop is:
 2. Codex offers `prompts/configure-local-preferences.md` on first use or when local preferences are unclear, then uses ignored `AGENTS.override.md` if present.
 3. Codex creates or updates `code/<survey_key>/survey_spec.json`, analysis scripts, and slide files.
 4. Codex determines the next mode:
-   - synthetic-only smoke test with no live API call;
-   - live draft/test link, only after explicit user approval and local secrets are loaded;
+   - local smoke test with no live API call, only to check analysis and slides;
+   - live draft/test link and synthetic response submission, only after explicit user approval and local secrets are loaded;
    - export/download existing real responses, only after explicit user approval and local secrets are loaded.
-5. Codex generates or downloads responses.
+5. Codex prepares synthetic rows for smoke tests or Qualtrics submission, submits them to Qualtrics for the live demo, or downloads real responses.
 6. Codex cleans data with `scripts/run_analysis.py`, using SPSS/SAV exports for Stata workflows and CSV exports for Python workflows.
 7. Codex builds slides with `scripts/build_slides.py`, preferring Beamer when available and falling back to native HTML slides.
 8. Codex reports artifact paths and the public/private boundary.
@@ -27,7 +27,7 @@ The intended loop is:
 
 - If the user gives a broad survey idea, infer a simple 4-8 question survey and state the assumptions.
 - Ask a short clarification only when the answer changes a live API action, privacy boundary, or core research design.
-- Default to local synthetic responses before live Qualtrics calls. Use `scripts/run_live_validation.py --dry-run` when packaging or explaining the lean live demo loop.
+- Use local synthetic responses only for smoke tests or as staging files for Qualtrics submission. For a live teaching demo, bias toward creating the survey in Qualtrics and submitting synthetic responses there. Use `scripts/run_live_validation.py --dry-run` when packaging or explaining the lean live demo loop.
 - If the user chooses Stata, export/download Qualtrics responses as SPSS/SAV and import with Stata. If the user chooses Python, export/download responses as CSV and analyze with Python.
 - For live credentials, use `check-auth` rather than `list-surveys`; full listing is only for explicit survey browsing.
 - Treat "test link" as a live Qualtrics action: it requires local `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN`, and the user must explicitly ask for it.
@@ -42,13 +42,13 @@ The intended loop is:
 
 ## Commands
 
-Generate local synthetic responses:
+Prepare local smoke-test or submission rows:
 
 ```bash
 python scripts/generate_synthetic_responses.py --survey-key <survey_key> --output build/fixtures/<survey_key>_responses.csv --n 100
 ```
 
-Analyze synthetic responses:
+Analyze local smoke-test rows:
 
 ```bash
 python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv
@@ -121,4 +121,4 @@ python scripts/build_slides.py --survey-key <survey_key>
 Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.
 ```
 
-For that prompt, treat survey creation, synthetic response submission on Qualtrics, and export/download as live API actions. Verify credentials without printing them and ask before each live mutation/export. If the user wants a no-credentials smoke test, generate local synthetic responses instead.
+For that prompt, treat survey creation, synthetic response submission on Qualtrics, and export/download as live API actions. Verify credentials without printing them and ask before each live mutation/export. If the user wants a no-credentials smoke test, generate disposable local responses only to check analysis and slides.
