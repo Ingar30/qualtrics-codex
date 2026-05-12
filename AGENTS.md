@@ -52,6 +52,8 @@ site/
 ## Local Preferences
 
 On first use, or when workflow preferences are unclear, offer the user `prompts/configure-local-preferences.md`.
+Before asking those preference questions, inspect local tool availability for Python dependencies, Stata, LaTeX/Beamer, and Qualtrics environment variables.
+Report only presence or absence for secrets; never print values and never ask users to paste API tokens into Codex.
 If the user answers, summarize their choices in ignored `AGENTS.override.md`; never store secrets there.
 If the user does not answer, continue with the default setup: Stata-first when available, Python fallback, Beamer-first with native fallback, CSV for Python, SAV for Stata, local synthetic smoke tests before live Qualtrics calls, and public Pages synthetic-only.
 

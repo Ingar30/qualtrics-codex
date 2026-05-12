@@ -5,7 +5,15 @@ Use this prompt after cloning the repository, before asking Codex to build the f
 ```text
 Before we scaffold survey workflows in this repository, ask me how I want Codex to operate locally.
 
-Please ask short questions covering:
+First, inspect the local environment without changing files or calling Qualtrics:
+
+- Check that Python and the repository dependencies are available.
+- Check whether Stata is discoverable through `STATA_EXE`, PATH, or common local install paths.
+- Check whether LaTeX/Beamer tools are discoverable, especially `latexmk`, `xelatex`, and `pdflatex`.
+- Check only whether `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN` are set; do not print their values.
+- If Qualtrics keys are missing, point me to `docs/local-qualtrics-secrets.md` and `$HOME\.secrets\qualtrics.env.ps1` on Windows or `$HOME/.secrets/qualtrics.env` on macOS/Linux. Do not ask me to paste secrets into Codex.
+
+Then ask short questions covering:
 
 1. Analysis stack:
    - Stata-first when available, with Python fallback.
@@ -29,7 +37,7 @@ Please ask short questions covering:
 
 After I answer, update AGENTS.override.md with my local preferences. Do not store secrets, API tokens, survey IDs, response IDs, or reusable links there.
 
-If I do not answer, proceed with the simplest default setup: Stata-first if available, Python fallback, CSV for Python workflows, SAV for Stata workflows, Beamer-first with native fallback, local synthetic smoke tests first, and public GitHub Pages synthetic-only.
+If Stata or LaTeX is missing, ask whether to continue with Python/native fallbacks or help configure the local executable path. If I do not answer, proceed with the simplest default setup: Stata-first if available, Python fallback, CSV for Python workflows, SAV for Stata workflows, Beamer-first with native fallback, local synthetic smoke tests first, and public GitHub Pages synthetic-only.
 ```
 
 Suggested `AGENTS.override.md` shape:

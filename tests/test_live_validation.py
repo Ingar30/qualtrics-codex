@@ -181,3 +181,19 @@ def test_preference_prompt_maps_stata_to_sav_and_python_to_csv() -> None:
     assert "import spss" in combined
     assert "--format spss" in combined
     assert "--format csv" in combined
+
+
+def test_preference_prompt_checks_tools_without_secret_values() -> None:
+    prompt = (PROJECT_ROOT / "prompts" / "configure-local-preferences.md").read_text(encoding="utf-8")
+    agents = (PROJECT_ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    combined = f"{prompt}\n{agents}"
+
+    assert "Stata" in combined
+    assert "latexmk" in combined
+    assert "xelatex" in combined
+    assert "pdflatex" in combined
+    assert "QUALTRICS_DATACENTER" in combined
+    assert "QUALTRICS_API_TOKEN" in combined
+    assert "do not print their values" in combined
+    assert "Do not ask me to paste secrets into Codex" in combined
+    assert "docs/local-qualtrics-secrets.md" in combined
