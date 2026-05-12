@@ -151,6 +151,7 @@ def build_index(output_dir: Path, artifact_names: list[str]) -> None:
     <p>Ask Codex for a survey from exact questions or a broad idea. It should scaffold the survey, ask whether you want a synthetic local test, a live draft/test link, or a real response export, then clean data and build figures and slides.</p>
     <pre><code>Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics. Then generate 100 synthetic responses on Qualtrics, download and clean the generated data, create figures, and compile slides that summarize the workflow, survey design, synthetic response patterns, and main figures. Include the survey link in the slides.</code></pre>
     <p>Because this prompt asks for work on Qualtrics, Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses, or exporting responses. For a no-credentials smoke test, ask Codex to generate the synthetic responses locally.</p>
+    <p>For local preferences, start with <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/configure-local-preferences.md">prompts/configure-local-preferences.md</a>. Stata workflows use SPSS/SAV exports; Python workflows use CSV exports.</p>
     <p>For the full conversational workflow, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/docs/intended-codex-loop.md">docs/intended-codex-loop.md</a>.</p>
     <p>For the discrimination-beliefs prompt, see <a href="https://github.com/Ingar30/qualtrics-codex/blob/main/prompts/discrimination-beliefs-example.md">prompts/discrimination-beliefs-example.md</a>.</p>
   </section>
@@ -173,7 +174,12 @@ python scripts/build_slides.py --survey-key repo_smoke_test</code></pre>
   </section>
   <section>
     <h2>Live Qualtrics Loop</h2>
-    <p>Store credentials outside the repository, start with <code>check-auth</code>, save reusable links only to ignored local files, submit one synthetic response first, then resume after local inspection. See <a href="walkthrough.html">the walkthrough</a>.</p>
+    <p>Store credentials outside the repository, start with <code>check-auth</code>, save reusable links only to ignored local files, submit one synthetic response first, then resume after local inspection. See <a href="walkthrough.html">the walkthrough</a> and <a href="validation.html">the validation notes</a>.</p>
+  </section>
+  <section>
+    <h2>Validated Full Loop</h2>
+    <p>A local live run validated the full command loop with 100 synthetic Qualtrics submissions, export, analysis, Beamer output, and native slide output. Public Pages artifacts remain synthetic-only; live validation runs locally with user secrets.</p>
+    <pre><code>python scripts/run_live_validation.py --survey-key &lt;survey_key&gt; --survey-name "&lt;survey name&gt;" --spec-file code/&lt;survey_key&gt;/survey_spec.json --n 100 --dry-run --i-understand-this-calls-qualtrics</code></pre>
   </section>
 </main>
 <footer>
@@ -209,8 +215,10 @@ export QUALTRICS_PUBLIC_HOST="yourbrand.qualtrics.com"</code></pre>
   <pre><code>source "$HOME/.secrets/qualtrics.env"</code></pre>
 
   <h2>2. Export Responses</h2>
+  <p>Use CSV for Python analysis and SPSS/SAV for Stata analysis.</p>
   <pre><code>python scripts/qualtrics_workflow.py check-auth
-python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id SV_... --format csv</code></pre>
+python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id &lt;survey_id&gt; --format csv
+python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id &lt;survey_id&gt; --format spss</code></pre>
 
   <h2>3. Live Synthetic Test</h2>
   <pre><code>python scripts/qualtrics_workflow.py get-link --survey-key my_survey --write-slide-inputs
@@ -237,6 +245,40 @@ python scripts/build_slides.py --survey-key my_survey</code></pre>
 """
     (output_dir / "walkthrough.html").write_text(page_template("Local workflow", body), encoding="utf-8")
 
+
+
+def build_validation(output_dir: Path) -> None:
+    body = """
+<header>
+  <div class="inner">
+    <h1>Validated Full Loop</h1>
+    <p>Public artifacts are synthetic-only. Live Qualtrics validation is local, guarded, and credential-dependent.</p>
+  </div>
+</header>
+<main>
+  <section>
+    <h2>What Was Validated</h2>
+    <p>A local live run validated the repository command loop directly: create a Qualtrics test survey, save the reusable link only to ignored local files, submit 100 synthetic responses, export responses, clean to 100 rows, generate figures, build Beamer output, and build native HTML/PDF slide output.</p>
+    <p>On May 12, 2026, the labor-market and immigration prompt completed through the same local loop with 100 synthetic Qualtrics submissions. This page records only the sanitized validation result.</p>
+  </section>
+  <section>
+    <h2>Public Boundary</h2>
+    <p>CI and GitHub Pages never call Qualtrics. They do not publish survey IDs, response IDs, reusable links, raw rows, metadata, tokens, or Qualtrics URLs. Public downloads are built from synthetic fixture data only.</p>
+  </section>
+  <section>
+    <h2>Guarded Helper</h2>
+    <pre><code>python scripts/run_live_validation.py --survey-key &lt;survey_key&gt; --survey-name "&lt;survey name&gt;" --spec-file code/&lt;survey_key&gt;/survey_spec.json --n 100 --dry-run --i-understand-this-calls-qualtrics</code></pre>
+    <p>Remove <code>--dry-run</code> only when you explicitly want local live Qualtrics calls with your own secrets.</p>
+    <p>Add <code>--export-format spss</code> for the Stata/SAV validation path. Use the default CSV export for Python-first validation.</p>
+  </section>
+  <section>
+    <h2>Cleanup</h2>
+    <p>Live validation creates a draft or test survey in Qualtrics. Archive or delete test surveys manually in the Qualtrics UI after validation.</p>
+  </section>
+</main>
+<footer><div class="inner"><a href="index.html">Back to demo artifacts</a></div></footer>
+"""
+    (output_dir / "validation.html").write_text(page_template("Validated full loop", body), encoding="utf-8")
 
 def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None) -> Path:
     output_dir = output_dir or project_root / "site"
@@ -340,6 +382,8 @@ def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None
 
     build_walkthrough(output_dir)
     copied.append("walkthrough.html")
+    build_validation(output_dir)
+    copied.append("validation.html")
     build_index(output_dir, copied)
     (output_dir / ".nojekyll").write_text("", encoding="utf-8")
     (output_dir / ".gitkeep").write_text("", encoding="utf-8")

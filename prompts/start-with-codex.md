@@ -14,6 +14,7 @@ Inputs:
 - audience: <respondents or class context>
 
 Please scaffold the workflow using the repository's existing patterns:
+0. If this is my first workflow here, offer to use `prompts/configure-local-preferences.md`. If I do not answer, proceed with the repository defaults.
 1. Confirm dependencies are installed, or tell me to run `.\scripts\setup.ps1` on Windows.
 2. Create code/<survey_key>/survey_spec.json with 4-8 simple questions.
 3. For Stata-first workflows, create code/<survey_key>/cleaning/run.do and code/<survey_key>/figures/run.do; for compact workflows, code/<survey_key>/analysis/run.do is acceptable.
@@ -35,6 +36,7 @@ Safety rules:
 - Keep secrets outside the repository, preferably in $HOME/.secrets/qualtrics.env.ps1 on Windows or $HOME/.secrets/qualtrics.env on macOS/Linux.
 - If checking secrets, verify only that QUALTRICS_DATACENTER and QUALTRICS_API_TOKEN are set; never print their values.
 - Prefer Stata and Beamer when available, but fall back to Python and native HTML slides if they are missing.
+- If I choose Stata, export/download Qualtrics responses as SPSS/SAV and import with Stata. If I choose Python, export/download responses as CSV and analyze with Python.
 - For live synthetic response submission, submit one response first and then use --resume for the remaining rows after export/inspection.
 - If analyzing a Qualtrics CSV export, filter out metadata rows by keeping rows where ResponseId starts with R_ when that column exists.
 

@@ -58,16 +58,15 @@ macOS/Linux users can set `STATA_EXE` to the local `stata-mp`, `stata-se`, or `s
 
 ## Data Flow
 
-1. Export CSV or SPSS/SAV from Qualtrics:
+1. Export SPSS/SAV from Qualtrics for the Stata path. Use CSV for Python workflows.
 
    ```bash
-   python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
    python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format spss
    ```
 
-2. `scripts/run_analysis.py` passes the newest raw CSV or SAV to Stata when Stata is available.
-3. Stata or Python writes `data/<survey_key>/processed/clean.csv`.
-4. Stata or Python writes slide inputs under `slides/<survey_key>/inputs/`.
+2. Stata imports the newest raw `.sav` with `import spss`.
+3. Stata writes `data/<survey_key>/processed/clean.dta` and any CSV/table outputs needed by the slides.
+4. Stata writes slide inputs under `slides/<survey_key>/inputs/`.
 5. Figure PDFs are for Beamer; figure PNGs are for the Python HTML fallback.
 6. `scripts/build_slides.py` builds Beamer slides from those inputs or falls back to `slides/<survey_key>/slides.md`.
 

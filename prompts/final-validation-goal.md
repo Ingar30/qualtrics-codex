@@ -16,6 +16,8 @@ Validate that:
 6. Python analysis and native HTML slides work as fallbacks;
 7. GitHub Pages builds only synthetic/demo artifacts;
 8. README instructions are enough for a new researcher to clone the repo, open it in Codex, scaffold a project, run a synthetic smoke test, and then opt into live Qualtrics export.
+9. Stata examples use SPSS/SAV export and Stata import, while Python examples use CSV export and Python analysis.
+10. optional local preferences are documented with ignored AGENTS.override.md and no secrets.
 
 Run the shortest appropriate validation commands, including pytest and the synthetic site build. Do not call the live Qualtrics API. Do not expose secrets. Report any remaining blockers, then give the exact next commands for a user who wants to run the workflow locally.
 ```

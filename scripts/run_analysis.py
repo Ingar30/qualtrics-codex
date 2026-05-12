@@ -206,7 +206,7 @@ def run_analysis(
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run survey analysis with Stata first, then Python fallback.")
     parser.add_argument("--survey-key", default="repo_smoke_test")
-    parser.add_argument("--input", help="CSV response export. Defaults to newest data/<survey_key>/raw/*.csv.")
+    parser.add_argument("--input", help="CSV or SAV response export. Stata can use SAV; Python expects CSV.")
     parser.add_argument("--mode", choices=["auto", "stata", "python"], default="auto")
     parser.add_argument("--stata-exe", help="Path to a Stata executable. Overrides STATA_EXE.")
     return parser

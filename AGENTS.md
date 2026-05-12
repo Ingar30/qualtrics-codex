@@ -46,6 +46,14 @@ site/
 - `scripts/render_slides.py` handles Markdown-to-HTML slide rendering with the Python standard library.
 - `scripts/build_site.py` builds the synthetic-data public Pages site.
 - Qualtrics CSV exports often include metadata rows after the header; cleaning code should keep real rows where `ResponseId` starts with `R_` when that column exists.
+- Stata workflows should use Qualtrics SPSS/SAV export (`export-responses --format spss`) and Stata `import spss`.
+- Python workflows should use Qualtrics CSV export (`export-responses --format csv`) and Python analysis.
+
+## Local Preferences
+
+On first use, or when workflow preferences are unclear, offer the user `prompts/configure-local-preferences.md`.
+If the user answers, summarize their choices in ignored `AGENTS.override.md`; never store secrets there.
+If the user does not answer, continue with the default setup: Stata-first when available, Python fallback, Beamer-first with native fallback, CSV for Python, SAV for Stata, local synthetic smoke tests before live Qualtrics calls, and public Pages synthetic-only.
 
 ## Expected Agent Loop
 

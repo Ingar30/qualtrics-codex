@@ -106,6 +106,14 @@ prompts/start-with-codex.md
 
 That prompt tells Codex to inspect the repository, scaffold a new survey workflow, generate synthetic responses, run the local smoke test, and avoid live Qualtrics calls until you explicitly ask.
 
+If you want Codex to remember local workflow preferences before scaffolding, start with:
+
+```text
+prompts/configure-local-preferences.md
+```
+
+Those preferences should be written to ignored `AGENTS.override.md`, never to committed docs. The default is Stata-first when available with Python fallback, Beamer-first with native fallback, local synthetic smoke tests before live Qualtrics calls, SAV/SPSS exports for Stata workflows, and CSV exports for Python workflows.
+
 You do not need Qualtrics API keys for the synthetic smoke test. Before asking Codex to create surveys, list surveys, or export real responses, store your keys outside the repository. See `docs/local-qualtrics-secrets.md`.
 
 If you prefer to ask Codex in plain language instead of running commands yourself, see:
@@ -195,6 +203,7 @@ The base repo optimizes for a Stata-first workflow with a Python fallback:
 - Run `scripts/run_analysis.py`.
 - Let Codex diagnose Stata locally when it can.
 - Fall back to Python analysis without installing Stata.
+- Use SPSS/SAV exports for Stata workflows and CSV exports for Python workflows.
 
 Both analysis paths write the same reproducible outputs:
 
@@ -222,6 +231,13 @@ For SPSS/SAV exports and lab-style Stata scripts:
 ```bash
 python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format spss
 python scripts/run_analysis.py --survey-key <survey_key> --mode stata
+```
+
+For Python analysis of a live export:
+
+```bash
+python scripts/qualtrics_workflow.py export-responses --survey-key <survey_key> --format csv
+python scripts/run_analysis.py --survey-key <survey_key> --mode python
 ```
 
 Windows users can use the compatibility wrappers:
@@ -444,6 +460,12 @@ For a shorter scaffold-only version, use:
 prompts/scaffold-workflow.md
 ```
 
+For an optional first-run preference conversation, use:
+
+```text
+prompts/configure-local-preferences.md
+```
+
 It asks Codex to create a new `code/<survey_key>/` folder, lab-style Stata cleaning/figure scripts or a compact Stata analysis script, a Python analysis fallback, a Beamer deck, a Python-native Markdown fallback deck, and safe ignored output folders.
 
 For the complete survey-to-responses-to-slides loop, use:
@@ -473,6 +495,7 @@ prompts/final-validation-goal.md
 - Local Qualtrics secrets: `docs/local-qualtrics-secrets.md`
 - Codex prompt alternatives: `docs/codex-prompt-alternatives.md`
 - Reproducibility notes: `docs/reproducibility.md`
+- Local preference prompt: `prompts/configure-local-preferences.md`
 
 These document the traditional economist stack and the fallback contract. The base repo should still produce slides even when Stata, LaTeX, Quarto, R, Node, Jinja2, and YAML are unavailable.
 
@@ -485,3 +508,10 @@ These document the traditional economist stack and the fallback contract. The ba
 - Live API actions require explicit commands and environment variables.
 - API tokens are never printed intentionally by the scripts.
 - New `code/<survey_key>/` and `slides/<survey_key>/` folders are ignored by default unless explicitly allowlisted as public demos.
+
+
+For guarded local live validation, see `docs/live-validation.md` or dry-run the sequence first:
+
+```powershell
+python scripts/run_live_validation.py --survey-key "<survey_key>" --survey-name "<survey name>" --spec-file "code/<survey_key>/survey_spec.json" --n 100 --dry-run --i-understand-this-calls-qualtrics
+```

@@ -41,6 +41,9 @@ def test_index_uses_generated_synthetic_responses(tmp_path: Path) -> None:
     assert "docs/codex-prompt-alternatives.md" in index
     assert "docs/intended-codex-loop.md" in index
     assert "docs/setup-troubleshooting.md" in index
+    assert "prompts/configure-local-preferences.md" in index
+    assert "SPSS/SAV exports" in index
+    assert "CSV exports" in index
     assert "Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics" in index
     assert "generate the synthetic responses locally" in index
     assert "prompts/discrimination-beliefs-example.md" in index
@@ -55,3 +58,6 @@ def test_walkthrough_mentions_qualtrics_metadata_and_link_privacy(tmp_path: Path
     assert "R_" in walkthrough
     assert "Reusable links" in walkthrough
     assert "Draft or inactive surveys" in walkthrough
+    assert "--format csv" in walkthrough
+    assert "--format spss" in walkthrough
+    assert "SPSS/SAV" in walkthrough

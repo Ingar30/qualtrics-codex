@@ -2,12 +2,14 @@
 .env
 *.env
 .secrets/
+AGENTS.override.md
 .Rhistory
 
 # Python
 .venv/
 __pycache__/
 .pytest_cache/
+pytest-cache-files-*/
 
 # Qualtrics data and generated outputs
 data/*/raw/

@@ -28,6 +28,12 @@ Prompt:
 Create a new Qualtrics research workflow using prompts/start-with-codex.md. Use survey_key <survey_key>, survey_name <survey_name>, topic <topic>, and audience <audience>. Generate synthetic responses and run the first smoke test. Do not call the live Qualtrics API.
 ```
 
+Optional first-run preference prompt:
+
+```text
+Use prompts/configure-local-preferences.md to ask how I want Codex to operate in this folder. If I choose Stata, use SPSS/SAV exports and Stata import. If I choose Python, use CSV exports and Python analysis. Save the answers in ignored AGENTS.override.md and do not store secrets there.
+```
+
 ## Full Survey-To-Slides Loop
 
 Canonical prompt:
@@ -37,6 +43,7 @@ Create a public opinion survey on beliefs about discrimination in hiring in Qual
 ```
 
 This is a live API workflow. Codex should verify credentials without printing them and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. If slides should include the link, Codex should save it with `get-link --write-slide-inputs` rather than printing it.
+For Stata workflows, export SPSS/SAV. For Python workflows, export CSV.
 
 Prompt for the safer one-response live test:
 
@@ -60,6 +67,18 @@ Prompt for real responses after data collection:
 
 ```text
 Export the real Qualtrics responses for discrimination_beliefs, clean the newest local export in Stata if available and Python otherwise, regenerate figures, and rebuild the slides. Keep raw data, processed real data, metadata, and reusable links private by default.
+```
+
+Stata-specific real-response prompt:
+
+```text
+Export the real Qualtrics responses for <survey_key> as SPSS/SAV, import the .sav file with Stata, clean it to clean.dta, regenerate Stata figures, and rebuild the Beamer/native slides. Keep raw exports, metadata, and reusable links private.
+```
+
+Python-specific real-response prompt:
+
+```text
+Export the real Qualtrics responses for <survey_key> as CSV, clean the newest CSV export with Python, regenerate figures, and rebuild the slides. Filter Qualtrics metadata rows by keeping ResponseId values that start with R_ when that column exists.
 ```
 
 ## Fresh Synthetic Demo
@@ -160,19 +179,19 @@ python scripts/qualtrics_workflow.py list-surveys
 Command:
 
 ```bash
-python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id SV_... --format csv
+python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id <survey_id> --format csv
 ```
 
 Prompt alternative:
 
 ```text
-Export CSV responses for survey id SV_... into this repo's ignored raw data folder for survey key my_survey. Do not commit raw data or metadata, and do not print secrets.
+Export CSV responses for survey id <survey_id> into this repo's ignored raw data folder for survey key my_survey. Do not commit raw data or metadata, and do not print secrets.
 ```
 
 For Stata/SPSS:
 
 ```bash
-python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id SV_... --format spss
+python scripts/qualtrics_workflow.py export-responses --survey-key my_survey --survey-id <survey_id> --format spss
 python scripts/run_analysis.py --survey-key my_survey --mode stata
 ```
 
@@ -190,3 +209,20 @@ Prompt alternative:
 ```text
 Analyze the newest local Qualtrics export for my_survey, then build the slides. Prefer Stata and Beamer if available; otherwise use Python fallbacks.
 ```
+
+
+## Guarded Live Validation
+
+Command:
+
+```bash
+python scripts/run_live_validation.py --survey-key <survey_key> --survey-name "<survey name>" --spec-file code/<survey_key>/survey_spec.json --n 100 --dry-run --i-understand-this-calls-qualtrics
+```
+
+Prompt alternative:
+
+```text
+Dry-run the guarded live validation helper for this survey. Do not call Qualtrics. Confirm the sequence creates a draft survey, saves the private link locally, submits one synthetic row first, exports/analyzes/builds, resumes the remaining rows, exports/analyzes/builds again, and builds native slides.
+```
+
+Use `--export-format spss` for a Stata/SAV validation and the default CSV export for Python-first validation.

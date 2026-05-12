@@ -18,7 +18,8 @@ Please:
 5. Clean the synthetic responses in Stata if available, otherwise Python.
 6. Generate tables and figures.
 7. Compile slides with a short description of the survey and the response patterns.
-8. Tell me what command I would run later to check auth, create a live draft survey, submit one synthetic response, resume the remaining synthetic responses, get a test link, and export real responses.
+8. If I choose Stata, plan for SPSS/SAV export and Stata import. If I choose Python, plan for CSV export and Python analysis.
+9. Tell me what command I would run later to check auth, create a live draft survey, submit one synthetic response, resume the remaining synthetic responses, get a test link, and export real responses.
 
 Do not call the live Qualtrics API unless I explicitly ask. Do not print or store secrets. Keep raw real data, processed real data, survey metadata, and reusable survey links private by default.
 ```
@@ -30,6 +31,7 @@ Create a public opinion survey on beliefs about discrimination in hiring in Qual
 ```
 
 Use this only when you want a live Qualtrics test loop. Codex should verify credentials without printing them, use `check-auth` for the first API check, and ask before creating the draft survey, submitting synthetic responses to Qualtrics, or exporting responses. The safer live path saves the reusable link to ignored slide inputs with `get-link --write-slide-inputs`, submits one synthetic response first, exports/checks it locally, then submits the remaining rows with `--resume`.
+For Stata workflows, export SPSS/SAV and import with Stata. For Python workflows, export CSV and analyze with Python.
 
 Local-only version:
 

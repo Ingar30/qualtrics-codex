@@ -1,24 +1,44 @@
 ---
 name: get-survey-link
-description: Use when the user asks Codex to retrieve or save the reusable anonymous Qualtrics link for a local survey workflow.
+description: Retrieve or construct the reusable anonymous Qualtrics link for an existing survey and save it to ignored local metadata and slide inputs.
 metadata:
   short-description: Get survey link
 ---
 
 # Get Survey Link
 
-Use only after the user explicitly asks for a live Qualtrics link action.
+Use this when the user needs a local reusable Qualtrics test/respondent link.
 
-```bash
-python scripts/qualtrics_workflow.py get-link --survey-key <survey_key>
-```
+## Command
 
-By default, the command saves the reusable link to ignored local metadata without printing it. Use `--show-private-link` only when the user needs to see the link in the local terminal. Never commit or publish reusable links by default.
-
-If the user asks to include the link in local slides, use:
+Save link inputs without printing the link:
 
 ```bash
 python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --write-slide-inputs
 ```
 
-This writes ignored `slides/<survey_key>/inputs/survey_link.tex` and `slides/<survey_key>/inputs/survey_link.md` files without printing the link.
+Use a respondent-facing branded host when the API datacenter host is not the public survey host:
+
+```bash
+python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --public-host <brand>.qualtrics.com --write-slide-inputs
+```
+
+Print the link only when the user explicitly needs to see it locally:
+
+```bash
+python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --show-private-link
+```
+
+## Expected Outputs
+
+- Ignored local metadata under `data/<survey_key>/metadata/`.
+- Ignored slide inputs:
+  - `slides/<survey_key>/inputs/survey_link.tex`
+  - `slides/<survey_key>/inputs/survey_link.md`
+
+## Safety
+
+- Do not publish reusable links to GitHub Pages.
+- Do not print links by default.
+- Preserve private link inputs through analysis/build steps.
+- If the link says inactive, inspect survey status and flow in Qualtrics rather than modifying the survey without user approval.

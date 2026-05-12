@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import importlib.util
+import shutil
 import sys
 from pathlib import Path
 
@@ -59,3 +61,42 @@ def test_stata_setup_guidance_mentions_windows_env_var(monkeypatch) -> None:
     assert "STATA_EXE" in message
     assert "Stata19" in message
     assert "qualtrics.env.ps1" in message
+
+
+def load_repo_smoke_analysis(tmp_path: Path):
+    source = PROJECT_ROOT / "code" / "repo_smoke_test" / "analysis" / "run.py"
+    target = tmp_path / "code" / "repo_smoke_test" / "analysis" / "run.py"
+    target.parent.mkdir(parents=True)
+    shutil.copy2(source, target)
+    spec = importlib.util.spec_from_file_location("tmp_repo_smoke_analysis", target)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_python_analysis_preserves_private_survey_link_inputs(tmp_path: Path) -> None:
+    module = load_repo_smoke_analysis(tmp_path)
+    fixture = PROJECT_ROOT / "tests" / "fixtures" / "repo_smoke_test_responses.csv"
+    link_tex = tmp_path / "slides" / "repo_smoke_test" / "inputs" / "survey_link.tex"
+    link_md = tmp_path / "slides" / "repo_smoke_test" / "inputs" / "survey_link.md"
+    link_tex.parent.mkdir(parents=True)
+    link_tex.write_text("\\url{private-link}\n", encoding="utf-8")
+    link_md.write_text("Reusable test link: private-link\n", encoding="utf-8")
+
+    module.run_analysis(fixture, project_root=tmp_path)
+
+    assert link_tex.read_text(encoding="utf-8") == "\\url{private-link}\n"
+    assert link_md.read_text(encoding="utf-8") == "Reusable test link: private-link\n"
+
+
+def test_repo_smoke_summary_tex_uses_valid_latex_row_terminators(tmp_path: Path) -> None:
+    module = load_repo_smoke_analysis(tmp_path)
+    fixture = PROJECT_ROOT / "tests" / "fixtures" / "repo_smoke_test_responses.csv"
+
+    outputs = module.run_analysis(fixture, project_root=tmp_path)
+    summary_tex = outputs["summary_tex"].read_text(encoding="utf-8")
+
+    assert "Role & " in summary_tex
+    assert "Role & 10 & 5 \\\\" in summary_tex
+    assert "Role & 10 & 5 \\\n" not in summary_tex

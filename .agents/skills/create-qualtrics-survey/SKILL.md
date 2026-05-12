@@ -1,28 +1,48 @@
 ---
 name: create-qualtrics-survey
-description: Use when the user asks Codex to create a live Qualtrics draft survey from code/<survey_key>/survey_spec.json using the repository helper, while keeping survey IDs and metadata private.
+description: Create a live Qualtrics draft survey from a simple JSON survey specification and save private local metadata for later link, export, or synthetic-response steps.
 metadata:
   short-description: Create Qualtrics survey
 ---
 
 # Create Qualtrics Survey
 
-Use only after the user explicitly asks for a live Qualtrics survey action.
+Use this only when the user explicitly asks for a live Qualtrics survey action.
 
 ## Workflow
 
-1. Verify `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN` are set without printing values.
-2. Confirm `code/<survey_key>/survey_spec.json` exists.
-3. Run a lightweight auth check:
+Check credentials without printing values:
 
 ```bash
 python scripts/qualtrics_workflow.py check-auth
 ```
 
-4. Create the draft survey:
+Create a draft survey from a spec:
 
 ```bash
-python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --survey-name "<survey_name>" --spec-file code/<survey_key>/survey_spec.json
+python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --survey-name "<survey name>" --spec-file code/<survey_key>/survey_spec.json
 ```
 
-Do not print or commit survey IDs, metadata, reusable links, or token values. Survey metadata is written under ignored `data/<survey_key>/metadata/`.
+Activate only when the user explicitly intends to collect responses:
+
+```bash
+python scripts/qualtrics_workflow.py create-survey --survey-key <survey_key> --survey-name "<survey name>" --spec-file code/<survey_key>/survey_spec.json --activate
+```
+
+## Expected Inputs
+
+- `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN` set in the shell.
+- A simple JSON survey spec with short snake_case question tags.
+- A folder-safe `survey_key`.
+
+## Expected Outputs
+
+- A live Qualtrics draft/test survey.
+- Private ignored metadata under `data/<survey_key>/metadata/`.
+
+## Safety
+
+- Do not print or store API tokens.
+- Do not print survey IDs unless a user explicitly needs them locally.
+- Do not assume draft/inactive surveys are safe from API-created test responses.
+- Use `get-link --write-slide-inputs` to save private slide-link inputs without printing the reusable link.

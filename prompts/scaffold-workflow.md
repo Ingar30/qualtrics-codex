@@ -13,6 +13,7 @@ Inputs:
 - outputs: Stata-first cleaning, Python fallback cleaning, summary table, 3-5 simple figures, Beamer slides, and Python fallback slides
 
 Please:
+0. If I have not configured local preferences, offer `prompts/configure-local-preferences.md`. If I do not answer, proceed with the defaults.
 1. Confirm dependencies are installed, or tell me to run `.\scripts\setup.ps1` on Windows.
 2. Create code/<survey_key>/survey_spec.json with 4-8 simple questions. Use short snake_case tags. Use "mc" for multiple choice and "text" for one optional open-ended question.
 3. Create lab-style Stata scripts in code/<survey_key>/cleaning/run.do and code/<survey_key>/figures/run.do when the workflow should mimic the economist Stata/SPSS path. A compact code/<survey_key>/analysis/run.do is acceptable for simpler CSV-only examples.
@@ -27,7 +28,8 @@ Please:
 12. Keep raw data under data/<survey_key>/raw/ and processed data under data/<survey_key>/processed/.
 13. Do not add Quarto, R, Node, Jinja2, YAML, or new slide dependencies unless I explicitly ask for that extension.
 14. If I ask to include a reusable Qualtrics link in slides, make the decks read ignored `inputs/survey_link.tex` and `inputs/survey_link.md` files.
-15. After scaffolding, tell me the commands to generate synthetic responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv`, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, run `check-auth`, create a live draft/test link with `get-link --write-slide-inputs` when needed, submit one synthetic response, resume the remaining synthetic responses, and export CSV or SPSS responses.
+15. If the analysis path is Stata, use SPSS/SAV exports and Stata `import spss`; if the analysis path is Python, use CSV exports and Python analysis.
+16. After scaffolding, tell me the commands to generate synthetic responses, run analysis with `python scripts/run_analysis.py --survey-key <survey_key> --input build/fixtures/<survey_key>_responses.csv`, build slides with `python scripts/build_slides.py --survey-key <survey_key>`, run `check-auth`, create a live draft/test link with `get-link --write-slide-inputs` when needed, submit one synthetic response, resume the remaining synthetic responses, and export CSV or SPSS responses according to the chosen analysis path.
 ```
 
 Recommended follow-up after reviewing the scaffold:
