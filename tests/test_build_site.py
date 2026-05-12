@@ -34,9 +34,10 @@ def test_index_starts_with_codex_preferences(tmp_path: Path) -> None:
     build_site.build_index(tmp_path, ["slides.pdf"])
 
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
-    assert "Ask me about my local preferences" in index
-    assert "Stata vs Python" in index
-    assert "prompts/start-with-codex.md" in index
+    assert "Open prompts/configure-local-preferences.md and follow it as instructions" in index
+    assert "Do not summarize it" in index
+    assert "QUALTRICS_API_TOKEN" in index
+    assert "If Stata, LaTeX, or Qualtrics secrets are missing" in index
     assert "docs/codex-prompt-alternatives.md" in index
     assert "docs/intended-codex-loop.md" in index
     assert "docs/setup-troubleshooting.md" in index
@@ -44,7 +45,6 @@ def test_index_starts_with_codex_preferences(tmp_path: Path) -> None:
     assert "SPSS/SAV exports" in index
     assert "CSV exports" in index
     assert "Create a public opinion survey on beliefs about discrimination in hiring in Qualtrics" in index
-    assert "generate disposable local responses only to check analysis and slides" in index
     assert "prompts/discrimination-beliefs-example.md" in index
 
 

@@ -25,13 +25,13 @@ Clone https://github.com/Ingar30/qualtrics-codex into this folder, inspect the R
 Reusable prompt:
 
 ```text
-Use prompts/configure-local-preferences.md to ask how I want Codex to operate in this folder. If I choose Stata, use SPSS/SAV exports and Stata import. If I choose Python, use CSV exports and Python analysis. Save the answers in ignored AGENTS.override.md and do not store secrets there.
+Open prompts/configure-local-preferences.md and follow it as instructions for this Codex session. Do not summarize it. Inspect Python, Stata, LaTeX, and Qualtrics environment-variable status first. If Stata, LaTeX, or Qualtrics secrets are missing, tell me where to configure them or which fallback to use. Then ask the needed follow-up questions and save my answers in ignored AGENTS.override.md without secrets.
 ```
 
 Plain-language version:
 
 ```text
-Ask me about my local preferences for this Qualtrics workflow before we build anything. Cover Stata vs Python, SPSS/SAV vs CSV exports, Beamer vs native HTML slides, live Qualtrics safety, and what to do if Stata or LaTeX is missing. Save the answers in ignored AGENTS.override.md and do not store secrets.
+Ask me about my local preferences for this Qualtrics workflow before we build anything. First inspect Python, Stata, LaTeX, and Qualtrics environment-variable status without printing secrets. If Stata, LaTeX, or Qualtrics secrets are missing, tell me where to configure them or which fallback to use. Then ask the needed follow-up questions and save my answers in ignored AGENTS.override.md without secrets.
 ```
 
 ## Scaffold A New Workflow

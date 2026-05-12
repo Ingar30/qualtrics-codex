@@ -1,23 +1,29 @@
 # Configure Local Preferences
 
-Use this prompt after cloning the repository, before asking Codex to build the first real workflow. It is optional. If you skip it, Codex should use the repository defaults.
-
 ```text
-Before we scaffold survey workflows in this repository, ask me how I want Codex to operate locally.
+You are being given this file as an instruction prompt for the current Codex session.
 
-First, inspect the local environment without changing files or calling Qualtrics:
+Do not summarize, explain, or quote this file back to me. Follow it now.
+
+Goal: inspect whether this machine is ready for the Qualtrics-to-analysis-to-slides teaching workflow, then ask me only the follow-up questions needed to choose local defaults.
+
+First, inspect the local environment without changing files and without calling Qualtrics:
 
 - Check that Python and the repository dependencies are available.
-- Check whether Stata is discoverable through `STATA_EXE`, PATH, or common local install paths.
+- Check whether Stata is discoverable through `STATA_EXE`, PATH, or common install paths.
+- If Stata is not found, ask whether I have Stata installed and where the executable is. Mention that on Windows it often looks like `C:\Program Files\Stata19\StataMP-64.exe`, and that the path can be supplied with `STATA_EXE`.
 - Check whether LaTeX/Beamer tools are discoverable, especially `latexmk`, `xelatex`, and `pdflatex`.
 - Check only whether `QUALTRICS_DATACENTER` and `QUALTRICS_API_TOKEN` are set; do not print their values.
-- If Qualtrics keys are missing, point me to `docs/local-qualtrics-secrets.md` and `$HOME\.secrets\qualtrics.env.ps1` on Windows or `$HOME/.secrets/qualtrics.env` on macOS/Linux. Do not ask me to paste secrets into Codex.
+- If Qualtrics keys are missing, always tell me where to put and load them: `docs/local-qualtrics-secrets.md`, `$HOME\.secrets\qualtrics.env.ps1` on Windows, or `$HOME/.secrets/qualtrics.env` on macOS/Linux. Ask whether I want help creating or loading that local file. Do not ask me to paste secrets into Codex.
 
-Then ask short questions covering:
+Then report a short environment status summary with no secret values.
+
+Then ask short questions covering only what is needed:
 
 1. Analysis stack:
    - Stata-first when available, with Python fallback.
    - Python-only.
+   - If Stata was not found, ask whether to continue with Python fallback or help locate Stata.
 
 2. Qualtrics export format:
    - If I choose Stata, use SPSS/SAV exports and Stata import with `import spss`.
@@ -29,7 +35,7 @@ Then ask short questions covering:
 
 4. Live API behavior:
    - Local smoke tests only when needed to check analysis and slides without credentials.
-   - Live draft/test surveys and Qualtrics synthetic response submission are allowed only after explicit confirmation.
+   - For the main live teaching demo, create the survey in Qualtrics and submit Codex-generated synthetic responses to Qualtrics only after explicit confirmation.
 
 5. Public/private boundary:
    - Keep new code/<survey_key>/ and slides/<survey_key>/ folders ignored unless I explicitly promote them.
