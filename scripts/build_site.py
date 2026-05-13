@@ -330,9 +330,7 @@ def build_site(project_root: Path = PROJECT_ROOT, output_dir: Path | None = None
         copied.extend([f"{prefix}-figures.zip", f"{prefix}-tables.zip"])
 
     build_walkthrough(output_dir)
-    copied.append("walkthrough.html")
     build_validation(output_dir)
-    copied.append("validation.html")
     build_index(output_dir, copied)
     (output_dir / ".nojekyll").write_text("", encoding="utf-8")
     (output_dir / ".gitkeep").write_text("", encoding="utf-8")

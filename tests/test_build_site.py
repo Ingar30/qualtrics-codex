@@ -61,3 +61,26 @@ def test_walkthrough_mentions_qualtrics_metadata_and_link_privacy(tmp_path: Path
     assert "--format csv" in walkthrough
     assert "--format spss" in walkthrough
     assert "SPSS/SAV" in walkthrough
+
+
+def test_build_site_index_does_not_link_root_pages_as_artifacts(tmp_path: Path, monkeypatch) -> None:
+    def no_op_command(command: list[str], project_root: Path) -> None:
+        return None
+
+    monkeypatch.setattr(build_site, "run_command", no_op_command)
+    demo_key = build_site.DEMO_SURVEY_KEY
+    slide_dir = tmp_path / "build" / "slides" / demo_key
+    inputs_dir = tmp_path / "slides" / demo_key / "inputs"
+    slide_dir.mkdir(parents=True)
+    inputs_dir.mkdir(parents=True)
+    (slide_dir / "slides.pdf").write_bytes(b"%PDF test")
+    (slide_dir / "slides.html").write_text("<html></html>", encoding="utf-8")
+    (inputs_dir / "summary.md").write_text("| item | value |\n", encoding="utf-8")
+
+    output_dir = build_site.build_site(project_root=tmp_path, output_dir=tmp_path / "site")
+    index = (output_dir / "index.html").read_text(encoding="utf-8")
+
+    assert 'href="artifacts/walkthrough.html"' not in index
+    assert 'href="artifacts/validation.html"' not in index
+    assert 'href="walkthrough.html"' in index
+    assert 'href="validation.html"' in index

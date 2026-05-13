@@ -14,8 +14,7 @@ pytest-cache-files-*/
 # Qualtrics data and generated outputs
 data/*/raw/
 data/*/processed/
-data/*/metadata/*.json
-data/*/metadata/*.log
+data/*/metadata/
 
 # Survey specs and slide folders are private by default.
 # Promote only canonical public demos by allowlisting them here.
