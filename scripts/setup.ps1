@@ -9,10 +9,23 @@ function Invoke-RepoPython {
 
     if (Get-Command py -ErrorAction SilentlyContinue) {
         & py -3 @Arguments
-        return
+    }
+    else {
+        & python @Arguments
     }
 
-    & python @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "Python command failed with exit code ${LASTEXITCODE}: $($Arguments -join ' ')"
+    }
+}
+
+function Invoke-VenvPython {
+    param([string[]]$Arguments)
+
+    & ".\.venv\Scripts\python.exe" @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "Virtual environment Python command failed with exit code ${LASTEXITCODE}: $($Arguments -join ' ')"
+    }
 }
 
 if ($User) {
@@ -29,7 +42,7 @@ if (Test-Path ".venv") {
     Invoke-RepoPython @("-m", "venv", ".venv")
 }
 
-& ".\.venv\Scripts\python.exe" -m pip install --upgrade pip
-& ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
+Invoke-VenvPython @("-m", "pip", "install", "--upgrade", "pip")
+Invoke-VenvPython @("-m", "pip", "install", "-r", "requirements.txt")
 
 Write-Host "Environment ready. Activate with: .\.venv\Scripts\Activate.ps1"

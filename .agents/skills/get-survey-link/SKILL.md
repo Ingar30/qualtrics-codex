@@ -41,4 +41,5 @@ python scripts/qualtrics_workflow.py get-link --survey-key <survey_key> --show-p
 - Do not publish reusable links to GitHub Pages.
 - Do not print links by default.
 - Preserve private link inputs through analysis/build steps.
+- State in slide inputs that the survey must be activated before the respondent-facing link can be used.
 - If the link says inactive, inspect survey status and flow in Qualtrics rather than modifying the survey without user approval.

@@ -76,6 +76,13 @@ Load it before live API calls:
 . $HOME\.secrets\qualtrics.env.ps1
 ```
 
+If PowerShell blocks the local secrets file because of execution policy, use a process-scoped bypass for the current terminal session and then load the file again:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+. $HOME\.secrets\qualtrics.env.ps1
+```
+
 Check that the required variables are present without printing their values:
 
 ```powershell

@@ -1,6 +1,6 @@
 ---
 name: qualtrics-survey-loop
-description: Use when the user asks Codex to run the main live Qualtrics workflow: create a survey, submit synthetic responses through Qualtrics, export, analyze, and build slides.
+description: "Use when the user asks Codex to run the main live Qualtrics workflow: create a survey, submit synthetic responses through Qualtrics, export, analyze, and build slides."
 metadata:
   short-description: Run Qualtrics workflow
 ---
@@ -27,7 +27,7 @@ The intended loop is:
 - If the user chooses Stata, export/download Qualtrics responses as SPSS/SAV and import with Stata. If the user chooses Python, export/download responses as CSV and analyze with Python.
 - Use `check-auth` for the first read-only API check.
 - Treat API-created response submission as a live mutation even if the survey is draft or inactive.
-- Save reusable links to ignored slide inputs with `get-link --write-slide-inputs` instead of printing them.
+- Save reusable links to ignored slide inputs with `get-link --write-slide-inputs` instead of printing them; note in slides that the survey must be activated before respondent-facing links can be used.
 - Preserve `slides/<survey_key>/inputs/survey_link.tex` and `survey_link.md` when analysis regenerates slide inputs.
 - Never print token values, survey metadata, reusable links, survey IDs, response IDs, raw response contents, or local secret file contents.
 

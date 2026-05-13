@@ -64,6 +64,13 @@ Offline checks do not need Qualtrics credentials. Live commands such as `check-a
 . $HOME\.secrets\qualtrics.env.ps1
 ```
 
+If PowerShell blocks that local file, use a process-scoped bypass for the current terminal session:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+. $HOME\.secrets\qualtrics.env.ps1
+```
+
 Check presence without printing values:
 
 ```powershell
@@ -87,3 +94,5 @@ Do not assume a draft or inactive survey means no data can be added through the 
 ## Reusable Links And Metadata
 
 `get-link` writes the reusable Qualtrics link to ignored metadata under `data/<survey_key>/metadata/`. It does not print the link unless you pass `--show-private-link`. If local slides should include the link, run `get-link --write-slide-inputs`; that writes ignored `slides/<survey_key>/inputs/survey_link.tex` and `slides/<survey_key>/inputs/survey_link.md` files without printing the link. Do not commit, paste, or publish reusable links or metadata by default.
+
+Respondent-facing links generally need the survey to be activated in Qualtrics before people can use them. Activating a survey is a live Qualtrics change, so Codex should ask before doing it.

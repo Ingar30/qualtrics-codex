@@ -122,8 +122,12 @@ def test_write_survey_link_slide_inputs_uses_ignored_inputs_folder(
 
     assert tex_path == tmp_path / "slides" / "demo" / "inputs" / "survey_link.tex"
     assert md_path == tmp_path / "slides" / "demo" / "inputs" / "survey_link.md"
-    assert tex_path.read_text(encoding="utf-8") == f"\\url{{{link}}}\n"
-    assert md_path.read_text(encoding="utf-8") == f"Reusable test link: [{link}]({link})\n"
+    tex_text = tex_path.read_text(encoding="utf-8")
+    assert tex_text.startswith(f"\\url{{{link}}}\n")
+    assert "Activate the survey in Qualtrics before using this respondent-facing link." in tex_text
+    md_text = md_path.read_text(encoding="utf-8")
+    assert md_text.startswith(f"Reusable test link: [{link}]({link})\n")
+    assert "Activate the survey in Qualtrics before using this respondent-facing link." in md_text
 
 
 def test_parser_includes_live_workflow_commands() -> None:

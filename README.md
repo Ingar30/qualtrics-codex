@@ -94,6 +94,12 @@ cd qualtrics-codex
 codex
 ```
 
+If PowerShell blocks local `.ps1` files, use a process-scoped bypass for that terminal session:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
 If you open Codex somewhere else, point it at this repo:
 
 ```powershell

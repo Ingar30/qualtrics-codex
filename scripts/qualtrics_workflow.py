@@ -136,8 +136,12 @@ def write_survey_link_slide_inputs(survey_key: str, reusable_link: str) -> tuple
     inputs_dir.mkdir(parents=True, exist_ok=True)
     tex_path = inputs_dir / "survey_link.tex"
     md_path = inputs_dir / "survey_link.md"
-    tex_path.write_text(f"\\url{{{reusable_link}}}\n", encoding="utf-8")
-    md_path.write_text(f"Reusable test link: [{reusable_link}]({reusable_link})\n", encoding="utf-8")
+    activation_note = "Activate the survey in Qualtrics before using this respondent-facing link."
+    tex_path.write_text(f"\\url{{{reusable_link}}}\n\n\\par {activation_note}\n", encoding="utf-8")
+    md_path.write_text(
+        f"Reusable test link: [{reusable_link}]({reusable_link})\n\n{activation_note}\n",
+        encoding="utf-8",
+    )
     return tex_path, md_path
 
 

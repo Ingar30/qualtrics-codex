@@ -17,7 +17,12 @@ else {
 
 $SecretsFile = Join-Path $HOME ".secrets\qualtrics.env.ps1"
 if (Test-Path $SecretsFile) {
-    . $SecretsFile
+    try {
+        . $SecretsFile
+    }
+    catch {
+        throw "Found the local Qualtrics secrets file, but PowerShell could not load it. For this session, run: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass. Then rerun this script. The original error was not printed because the file may contain secrets."
+    }
     Write-Host "Loaded local Qualtrics secrets file without printing secret values."
 }
 elseif ($RequireQualtrics) {
